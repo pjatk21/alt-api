@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  nest-app:
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      MONGO_URL: 'mongodb://database/altiapi'
+    restart: unless-stopped
+  database:
+    image: mongo:latest
+    restart: unless-stopped

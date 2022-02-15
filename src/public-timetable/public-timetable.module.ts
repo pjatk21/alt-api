@@ -6,8 +6,12 @@ import { PublicTimetableController } from './public-timetable.controller'
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/alt-pja'),
-    MongooseModule.forFeature([{ name: Timetable.name, schema: TimetableSchema }]),
+    MongooseModule.forRoot(
+      process.env.MONGO_URL ?? 'mongodb://localhost/alt-pja',
+    ),
+    MongooseModule.forFeature([
+      { name: Timetable.name, schema: TimetableSchema },
+    ]),
   ],
   providers: [PublicTimetableService],
   controllers: [PublicTimetableController],
