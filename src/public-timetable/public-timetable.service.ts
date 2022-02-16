@@ -5,6 +5,7 @@ import { Model } from 'mongoose'
 import { ScheduleEntry } from 'pja-scrapper/dist/interfaces'
 import { GroupCoder } from 'pja-scrapper/dist/groupCoder'
 import { Chance } from 'chance'
+import { GroupDecoded } from 'pja-scrapper/dist/types'
 
 @Injectable()
 export class PublicTimetableService {
@@ -16,6 +17,33 @@ export class PublicTimetableService {
   async create(timetable: ScheduleEntry): Promise<TimetableDocument> {
     const createdTimetable = new this.timetableModel(timetable)
     return createdTimetable.save()
+  }
+
+  /**
+   * Updates all occurances in selected date (removeMany + save)
+   * @param timetable array of schedule entries
+   * @param date date string
+   * @returns 
+   */
+  async sink(timetable: ScheduleEntry[], date: string) {
+    const removed = await this.timetableModel.deleteMany({ 'entry.dateString': date })
+    console.log(removed)
+
+    for (const entry of timetable) {
+      await new this.timetableModel({ entry }).save()
+    }
+
+    return {
+      result: removed.deletedCount ? 'replaced' : 'added',
+    }
+  }
+
+  async timetableForGroup(date: string, group: string | GroupDecoded) {
+    const groupSafe = typeof group === 'string' ? new GroupCoder().decode(group) : group
+    return await this.timetableModel.find({
+      'entry.dateString': date,
+      'entry.groups': { $elemMatch: groupSafe },
+    })
   }
 
   async createMock(): Promise<TimetableDocument> {
