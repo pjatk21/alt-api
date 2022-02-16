@@ -22,6 +22,13 @@ async function bootstrap() {
     ),
   )
 
+  app.setViewEngine({
+    engine: {
+      handlebars: require('handlebars'),
+    },
+    templates: './views',
+  })
+
   await app.listen(3000)
 }
 bootstrap()
