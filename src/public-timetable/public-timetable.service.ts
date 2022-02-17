@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Timetable, TimetableDocument } from './schemas/timetable.schema'
 import { Model } from 'mongoose'
@@ -9,6 +9,8 @@ import { GroupDecoded } from 'pja-scrapper/dist/types'
 
 @Injectable()
 export class PublicTimetableService {
+  private readonly log = new Logger('Public timetables')
+
   constructor(
     @InjectModel(Timetable.name)
     private timetableModel: Model<TimetableDocument>,
@@ -23,11 +25,11 @@ export class PublicTimetableService {
    * Updates all occurances in selected date (removeMany + save)
    * @param timetable array of schedule entries
    * @param date date string
-   * @returns 
+   * @returns
    */
   async sink(timetable: ScheduleEntry[], date: string) {
     const removed = await this.timetableModel.deleteMany({ 'entry.dateString': date })
-    console.log(removed)
+    this.log.verbose(`Overriding ${removed.deletedCount} results`)
 
     for (const entry of timetable) {
       await new this.timetableModel({ entry }).save()
@@ -36,6 +38,12 @@ export class PublicTimetableService {
     return {
       result: removed.deletedCount ? 'replaced' : 'added',
     }
+  }
+
+  async timetableForDay(date: string) {
+    return await this.timetableModel.find({
+      'entry.dateString': date,
+    })
   }
 
   async timetableForGroup(date: string, group: string | GroupDecoded) {

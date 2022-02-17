@@ -4404,7 +4404,7 @@ pirates@^4.0.4:
 
 "pja-scrapper@https://github.com/pjatk21/pja-scrapper":
   version "1.2.0-alpha.1"
-  resolved "https://github.com/pjatk21/pja-scrapper#b949b77b5107960e9bde59ffd0fd585bfa83675d"
+  resolved "https://github.com/pjatk21/pja-scrapper#ab0dcb9edeeba279f171383f024b5f32a87cc82a"
   dependencies:
     "@types/jsdom" "^16.2.13"
     "@types/luxon" "^2.0.9"

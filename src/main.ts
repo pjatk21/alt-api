@@ -16,8 +16,9 @@ async function bootstrap() {
     SwaggerModule.createDocument(
       app,
       new DocumentBuilder()
-        .setTitle('Alternative PJATK API')
+        .setTitle('Altapi')
         .setDescription('Scrapper based alternative for blocked and outdated APIs.')
+        .setVersion(process.env.npm_package_version ?? 'uhmm')
         .build(),
     ),
   )

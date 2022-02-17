@@ -31,6 +31,7 @@
     "chance": "^1.1.8",
     "fastify-swagger": "^4.15.0",
     "handlebars": "^4.7.7",
+    "luxon": "^2.3.0",
     "mongoose": "^6.2.1",
     "pja-scrapper": "https://github.com/pjatk21/pja-scrapper",
     "point-of-view": "^5.1.0",
