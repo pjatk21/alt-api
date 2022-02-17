@@ -1,5 +1,11 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { GroupDecoded, PJALevel, PJALocations, PJAMasterSubjects, PJAStudyMode } from "pja-scrapper/dist/types";
+import { ApiProperty } from '@nestjs/swagger'
+import {
+  GroupDecoded,
+  PJALevel,
+  PJALocations,
+  PJAMasterSubjects,
+  PJAStudyMode,
+} from 'pja-scrapper/dist/types'
 
 export class GroupDecodedDto implements GroupDecoded {
   @ApiProperty({ enum: PJALocations, example: PJALocations.WARSAW })

@@ -1,7 +1,7 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { ScheduleEntry } from "pja-scrapper";
-import { GroupDecoded } from "pja-scrapper/dist/types";
-import { GroupDecodedDto } from "./group-decoded.dto";
+import { ApiProperty } from '@nestjs/swagger'
+import { ScheduleEntry } from 'pja-scrapper'
+import { GroupDecoded } from 'pja-scrapper/dist/types'
+import { GroupDecodedDto } from './group-decoded.dto'
 import { DateTime } from 'luxon'
 
 export class ScheduleEntryDto implements ScheduleEntry {
