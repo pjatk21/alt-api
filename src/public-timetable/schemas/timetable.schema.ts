@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
-import { ScheduleEntry } from 'pja-scrapper/dist/interfaces'
+import { ScheduleEntryDto } from '../dto/schedule-entry.dto'
 
 export type TimetableDocument = Timetable & Document
 
@@ -9,8 +9,8 @@ export class Timetable {
   @Prop({ required: true, default: Date.now })
   uploadedAt: Date
 
-  @Prop({ required: true, type: Object })
-  entry: ScheduleEntry
+  @Prop({ required: true, type: ScheduleEntryDto })
+  entry: ScheduleEntryDto
 }
 
 export const TimetableSchema = SchemaFactory.createForClass(Timetable)

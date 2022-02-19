@@ -1,39 +1,71 @@
 <!DOCTYPE html>
 <html lang="pl">
-    <head>
-        <meta charset="UTF-8">
-        <title>Altapi</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link href="https://fonts.googleapis.com/css2?family=Mea+Culpa&display=swap" rel="stylesheet">
-        <style>
-            html, body {
-                height: 100%;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container is-flex is-flex-direction-column is-justify-content-center" style="height: 100%;">
-            <div class="box" style="width: fit-content;">
-                <h1 class="is-size-1" style="font-family: 'Mea Culpa', cursive;">Altapi</h1>
-                <p style="color: grey;"><small><i>alta paɪ</i></small></p>
-                <p>Alternatywne API dla stron PJATK, otwarte, szybkie i troszkę niestabilne...</p>
-                <p style="margin-top: 20px;">
-                    <a href="/docs" class="button is-primary icon-text" role="button">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Altapi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Mea+Culpa&display=swap" rel="stylesheet">
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container is-flex is-flex-direction-column is-justify-content-center" style="height: 100%;">
+        <div class="box" style="width: fit-content;">
+            <h1 class="is-size-1" style="font-family: 'Mea Culpa', cursive;">Altapi</h1>
+            <p style="color: grey;"><small><i>alta paɪ</i></small></p>
+            <p>Alternatywne API dla stron PJATK, otwarte, szybkie i troszkę niestabilne...</p>
+            <p style="margin-top: 20px;">
+                <a href="/docs" class="button is-primary icon-text" role="button">
                     <span class="icon"><i class="fa-solid fa-book"></i></span>
                     <span>Docs (OpenAPI)</span>
-                    </a>
-                    <a href="https://github.com/pjatk21/alt-api" class="button is-link icon-text" role="button">
-                        <span class="icon"><i class="fa-brands fa-github"></i></span>
-                        <span>Github</span>
-                    </a>
-                    <a href="mailto:krystian@postek.eu?subject=Nadu%C5%BCycia%20Altapi" class="button is-dark icon-text" role="button">
-                        <span class="icon"><i class="fa-solid fa-skull-crossbones"></i></span>
-                        <span>Zgłoś nadużycie</span>
-                    </a>
-                </p>
+                </a>
+                <a href="https://github.com/pjatk21/alt-api" class="button is-link icon-text" role="button">
+                    <span class="icon"><i class="fa-brands fa-github"></i></span>
+                    <span>Github</span>
+                </a>
+                <a href="mailto:krystian@postek.eu?subject=Nadu%C5%BCycia%20Altapi" class="button is-dark icon-text"
+                    role="button">
+                    <span class="icon"><i class="fa-solid fa-skull-crossbones"></i></span>
+                    <span>Zgłoś nadużycie</span>
+                </a>
+            </p>
+        </div>
+        <div class="is-flex is-flex-direction-row is-flex-wrap-wrap">
+            <div class="box" style="width: fit-content;">
+                <h1 class="title">Status</h1>
+                <p>Ostatnia aktualizacja planu ogólnego: <span class="tag is-success is-light">3 minuty temu</span></p>
+                <p>Aktywni scrappujący (dzisiaj): <span class="tag is-dark">2</span></p>
+                <p>Średni czas odpowiedzi (ogólnie): <span class="tag is-success is-light">21ms</span></p>
+            </div>
+            <div class="box" style="width: fit-content; margin-bottom: 24px; margin-left: 24px;">
+                <h1 class="title">Wspieraj mnie!</h1>
+                <p style="margin-bottom: 20px;">Będę wdzięczny jak docenisz moją pracę</p>
+                <a href="#" class="button is-link is-light icon-text" role="button">
+                    <span class="icon"><i class="fa-solid fa-hand-holding-dollar"></i></span>
+                    <span>Wyślij dotację</span>
+                </a>
+                <a href="#" class="button is-primary is-light icon-text" role="button">
+                    <span class="icon"><i class="fa-solid fa-users-gear"></i></span>
+                    <span>Zostań scrapperem</span>
+                </a>
             </div>
         </div>
-    </body>
+    </div>
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>Altapi by <strong>Krystian Postek</strong></p>
+        </div>
+    </footer>
+</body>
+
 </html>
