@@ -9,6 +9,6 @@ import { StatsService } from './stats.service'
     MongooseModule.forFeature([{ name: StatLog.name, schema: StatLogSchema }]),
   ],
   providers: [StatsService],
-  exports: [MongooseModule.forFeature([{ name: StatLog.name, schema: StatLogSchema }])]
+  exports: [MongooseModule.forFeature([{ name: StatLog.name, schema: StatLogSchema }])],
 })
 export class StatsModule {}

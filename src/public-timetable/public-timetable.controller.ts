@@ -1,11 +1,9 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common'
 import { ApiBody, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { ScheduleEntry } from 'pja-scrapper'
 import { GroupCoder } from 'pja-scrapper/dist/groupCoder'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
 import { ScheduleResponseDto } from './dto/schedule-response.dto'
 import { PublicTimetableService } from './public-timetable.service'
-import { TimetableDocument } from './schemas/timetable.schema'
 
 @ApiTags('Timetables')
 @Controller('/public/timetable')
@@ -27,23 +25,19 @@ export class PublicTimetableController {
 
   @Get('/:date')
   @ApiResponse({ type: ScheduleResponseDto })
-  async byDate(@Param('date') date: string) {
-    const entries = await this.timetableService.timetableForDay(date)
+  @ApiParam({ name: 'date', example: '2022-03-07' })
+  @ApiQuery({
+    name: 'groups',
+    type: [String],
+    required: false,
+    example: ['WIs I.2 - 46c', 'WIs I.2 - 40c'],
+  })
+  async byDate(@Param('date') date: string, @Query('groups') groups?: string[] | string) {
+    const safeGroups = typeof groups === 'string' ? [groups] : groups
+
+    const entries = await this.timetableService.timetableForDay(date, safeGroups)
 
     return {
-      entries: entries.map((e) => e.entry),
-    }
-  }
-
-  @Get('/group/:group/:date')
-  @ApiParam({ name: 'date', example: '2022-01-21' })
-  @ApiParam({ name: 'group', example: 'WIs I.1 - 40c' })
-  @ApiResponse({ type: ScheduleResponseDto })
-  async byGroup(@Param('group') groupRaw: string, @Param('date') date: string) {
-    const entries = await this.timetableService.timetableForGroup(date, groupRaw)
-
-    return {
-      group: new GroupCoder().decode(groupRaw),
       entries: entries.map((e) => e.entry),
     }
   }

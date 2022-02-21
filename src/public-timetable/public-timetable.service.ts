@@ -5,7 +5,6 @@ import { Model } from 'mongoose'
 import { ScheduleEntry } from 'pja-scrapper/dist/interfaces'
 import { GroupCoder } from 'pja-scrapper/dist/groupCoder'
 import { Chance } from 'chance'
-import { GroupDecoded } from 'pja-scrapper/dist/types'
 
 @Injectable()
 export class PublicTimetableService {
@@ -40,19 +39,17 @@ export class PublicTimetableService {
     }
   }
 
-  async timetableForDay(date: string) {
-    return await this.timetableModel.find({
+  async timetableForDay(date: string, groups?: string[]) {
+    let query = {
       'entry.dateString': date,
-    })
-  }
+    }
 
-  async timetableForGroup(date: string, group: string | GroupDecoded) {
-    // await new Promise((resolve) => setTimeout(resolve, 1000))
-    const groupSafe = typeof group === 'string' ? new GroupCoder().decode(group) : group
-    return await this.timetableModel.find({
-      'entry.dateString': date,
-      'entry.groups': { $elemMatch: groupSafe },
-    })
+    if (groups)
+      query = Object.assign(query, {
+        'entry.groups': { $elemMatch: { raw: { $in: groups } } },
+      })
+
+    return await this.timetableModel.find(query)
   }
 
   async createMock(): Promise<TimetableDocument> {
