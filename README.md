@@ -40,7 +40,7 @@ Dla `pja-scrapper` zmień zmienną środowiskową `ALTAPI_URL` na URL twojego se
 
 ## Wydajność
 No cache, TTFB (dla dnia 07-03-2022):
-Orginalny plan zajęć: ~1950ms
-Altapi: 130.20ms
+ - Orginalny plan zajęć: ~1950ms
+ - Altapi: 130.20ms
 
 Werdykt: Altapi jest ok. 15 razy szybsze niż orginalny plan zajęć.

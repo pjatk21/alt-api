@@ -11,5 +11,8 @@ import { PublicTimetableController } from './public-timetable.controller'
   ],
   providers: [PublicTimetableService],
   controllers: [PublicTimetableController],
+  exports: [
+    MongooseModule.forFeature([{ name: Timetable.name, schema: TimetableSchema }]),
+  ],
 })
 export class PublicTimetableModule {}

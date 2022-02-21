@@ -1,14 +1,22 @@
 import { Controller, Get, Render } from '@nestjs/common'
-import { AppService } from './app.service'
+import { PublicTimetableService } from './public-timetable/public-timetable.service'
+import { StatsService } from './stats/stats.service'
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly statsService: StatsService,
+    private readonly timetableService: PublicTimetableService,
+  ) {}
 
   @Get()
   @Render('home')
-  getHello() {
-    // return this.appService.getHello()
-    return { oof: 'oofies' }
+  async getHello() {
+    const s = await this.statsService.medianOfResponseTime(3)
+    const stats = {
+      responseTime: s.meanValue.toFixed(2),
+      lastUpdate: await this.timetableService.lastUpdate(),
+    }
+    return stats
   }
 }

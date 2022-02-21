@@ -47,6 +47,7 @@ export class PublicTimetableService {
   }
 
   async timetableForGroup(date: string, group: string | GroupDecoded) {
+    // await new Promise((resolve) => setTimeout(resolve, 1000))
     const groupSafe = typeof group === 'string' ? new GroupCoder().decode(group) : group
     return await this.timetableModel.find({
       'entry.dateString': date,
@@ -81,5 +82,12 @@ export class PublicTimetableService {
       entry,
     })
     return mockTimetable.save()
+  }
+
+  async lastUpdate() {
+    const lastValue = await this.timetableModel
+      .findOne()
+      .sort({ uploadedAt: 'descending' })
+    return lastValue.uploadedAt.toISOString()
   }
 }
