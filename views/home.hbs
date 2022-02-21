@@ -19,7 +19,7 @@
 </head>
 
 <body>
-    <div class="container is-flex is-flex-direction-column is-justify-content-center" style="height: 100%;">
+    <div class="container is-flex is-flex-direction-column is-justify-content-center" style="min-height: 100%;">
         <div class="box" style="width: fit-content;">
             <h1 class="is-size-1" style="font-family: 'Mea Culpa', cursive;">Altapi</h1>
             <p style="color: grey;"><small><i>alta paɪ</i></small></p>
@@ -40,25 +40,22 @@
                 </a>
             </p>
         </div>
-        <div class="is-flex is-flex-direction-row is-flex-wrap-wrap">
-            <div class="box" style="width: fit-content;">
-                <h1 class="title">Status</h1>
-                <p>Ostatnia aktualizacja planu ogólnego: <span class="tag is-success is-light">3 minuty temu</span></p>
-                <p>Aktywni scrappujący (dzisiaj): <span class="tag is-dark">2</span></p>
-                <p>Średni czas odpowiedzi (ogólnie): <span class="tag is-success is-light">21ms</span></p>
-            </div>
-            <div class="box" style="width: fit-content; margin-bottom: 24px; margin-left: 24px;">
-                <h1 class="title">Wspieraj mnie!</h1>
-                <p style="margin-bottom: 20px;">Będę wdzięczny jak docenisz moją pracę</p>
-                <a href="#" class="button is-link is-light icon-text" role="button">
-                    <span class="icon"><i class="fa-solid fa-hand-holding-dollar"></i></span>
-                    <span>Wyślij dotację</span>
-                </a>
-                <a href="#" class="button is-primary is-light icon-text" role="button">
-                    <span class="icon"><i class="fa-solid fa-users-gear"></i></span>
-                    <span>Zostań scrapperem</span>
-                </a>
-            </div>
+        <div class="box" style="width: fit-content;">
+            <h1 class="title">Status</h1>
+            <p>Ostatnia aktualizacja planu ogólnego: <span class="tag is-primary is-light">{{lastUpdate}}</span></p>
+            <p>Średni czas odpowiedzi (ogólnie): <span class="tag is-success is-light">{{responseTime}}ms</span></p>
+        </div>
+        <div class="box" style="width: fit-content">
+            <h1 class="title">Wspieraj mnie!</h1>
+            <p style="margin-bottom: 20px;">Będę wdzięczny jak docenisz moją pracę</p>
+            <a href="https://revolut.me/kpostekk" class="button is-link is-light icon-text" role="button">
+                <span class="icon"><i class="fa-solid fa-hand-holding-dollar"></i></span>
+                <span>Wyślij dotację</span>
+            </a>
+            <a href="#" class="button is-primary is-light icon-text" role="button">
+                <span class="icon"><i class="fa-solid fa-users-gear"></i></span>
+                <span>Zostań scrapperem</span>
+            </a>
         </div>
     </div>
     <footer class="footer">
