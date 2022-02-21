@@ -1,6 +1,8 @@
-FROM node:lts
+FROM node:lts-alpine
 
-RUN adduser --disabled-login --shell /bin/bash altiapi
+RUN apk add git
+
+RUN adduser -D -s /bin/bash altiapi
 
 WORKDIR /app
 
@@ -14,9 +16,6 @@ RUN yarn install
 
 RUN yarn build
 
-# Reduce size of node_modules folder
-RUN yarn install --production
-
 EXPOSE 3000
 
-ENTRYPOINT yarn start:prod
+ENTRYPOINT node dist/main.js

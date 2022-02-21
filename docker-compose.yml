@@ -3,6 +3,7 @@ version: '3'
 services:
   altapi:
     build: .
+    image: kpostekk/altapi
     ports:
       - 3000:3000
     environment:
@@ -11,6 +12,10 @@ services:
   scrapper:
     image: kpostekk/pja-scrapper
     restart: unless-stopped
+    cap_add:
+      - "SYS_ADMIN"
+    environment:
+      ALTAPI_URL: 'http://altapi:3000/'
   database:
     image: mongo:latest
     restart: unless-stopped
