@@ -37,7 +37,7 @@ async function bootstrap() {
   // Init upload key
   if (process.env.ALTAPI_UPLOAD_KEY === undefined) {
     if (existsSync('.uploadkey')) {
-      process.env.ALTAPI_UPLOAD_KEY = readFileSync('.uploadkey').toString()
+      process.env.ALTAPI_UPLOAD_KEY = readFileSync('.uploadkey').toString().trim()
     } else {
       const ukl = new Logger('Upload key')
       ukl.warn('NO UPLOAD KEY PRESENT IN ENV!')

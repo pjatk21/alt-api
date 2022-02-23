@@ -27,7 +27,7 @@ export class PublicTimetableService {
    * @param date date string
    * @returns
    */
-  async flushAndSink(timetable: ScheduleEntry[], date: string) {
+  async flushAndSink(timetable: ScheduleEntryDto[], date: string) {
     const removed = await this.timetableModel.deleteMany({ 'entry.dateString': date })
     this.log.verbose(`Overriding ${removed.deletedCount} results`)
 

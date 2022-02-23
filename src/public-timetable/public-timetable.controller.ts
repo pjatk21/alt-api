@@ -1,16 +1,25 @@
 import { Body, Controller, Get, Headers, Param, Post, Query, UnauthorizedException } from '@nestjs/common'
 import {
   ApiBody,
+  ApiCreatedResponse,
   ApiExcludeEndpoint,
+  ApiHeader,
   ApiOperation,
   ApiParam,
+  ApiProperty,
   ApiQuery,
   ApiResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
 import { ScheduleResponseDto } from './dto/schedule-response.dto'
 import { PublicTimetableService } from './public-timetable.service'
+
+class UploadResponseMock {
+  @ApiProperty({ enum: ['replaced', 'added'] })
+  result: string
+}
 
 @ApiTags('Timetables')
 @Controller('/public/timetable')
@@ -32,7 +41,7 @@ export class PublicTimetableController {
 
   @Get('/:date')
   @ApiOperation({
-    summary: 'Download schedule for date',
+    summary: 'Download schedule for a date',
     description:
       'You can pass groups as a query param, if none passed, all entries are returned.',
   })
@@ -55,8 +64,18 @@ export class PublicTimetableController {
   }
 
   @Post('/upload/:date')
+  @ApiOperation({
+    summary: 'Upload a schedule for a selected date',
+    description:
+      "Endpoint dedicated for scrappers to provide new data. Regular users won't use that.",
+  })
   @ApiBody({ type: [ScheduleEntryDto] })
-  @ApiExcludeEndpoint()
+  @ApiHeader({ name: 'X-Upload-key' })
+  @ApiCreatedResponse({
+    description: 'Created/updated schedule',
+    type: UploadResponseMock,
+  })
+  @ApiUnauthorizedResponse({ description: 'Missing or invalid X-Upload-key' })
   async upload(
     @Body() entry: ScheduleEntryDto[],
     @Param('date') date: string,
