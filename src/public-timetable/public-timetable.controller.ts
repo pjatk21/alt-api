@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Param, Post, Query, UnauthorizedException } from '@nestjs/common'
+import { Body, CacheInterceptor, Controller, Get, Headers, Param, Post, Query, UnauthorizedException, UseInterceptors } from '@nestjs/common'
 import {
   ApiBody,
   ApiCreatedResponse,
@@ -55,6 +55,7 @@ export class PublicTimetableController {
     example: ['WIs I.2 - 46c', 'WIs I.2 - 40c'],
   })
   @ApiOkResponse({ type: ScheduleResponseDto })
+  @UseInterceptors(CacheInterceptor)
   @ApiTooManyRequestsResponse({ description: 'Throttled' })
   async byDate(@Param('date') date: string, @Query('groups') groups?: string[] | string) {
     const safeGroups = typeof groups === 'string' ? [groups] : groups

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { CacheModule, Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 import { Timetable, TimetableSchema } from './schemas/timetable.schema'
 import { PublicTimetableService } from './public-timetable.service'
@@ -8,6 +8,7 @@ import { PublicTimetableController } from './public-timetable.controller'
   imports: [
     MongooseModule.forRoot(process.env.MONGO_URL ?? 'mongodb://localhost/alt-pja'),
     MongooseModule.forFeature([{ name: Timetable.name, schema: TimetableSchema }]),
+    CacheModule.register({ ttl: 60 * 5 }), // 5 minutes
   ],
   providers: [PublicTimetableService],
   controllers: [PublicTimetableController],
