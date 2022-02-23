@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common'
+import { Body, Controller, Get, Headers, Param, Post, Query, UnauthorizedException } from '@nestjs/common'
 import {
   ApiBody,
   ApiExcludeEndpoint,
@@ -8,7 +8,6 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger'
-import { GroupCoder } from 'pja-scrapper/dist/groupCoder'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
 import { ScheduleResponseDto } from './dto/schedule-response.dto'
 import { PublicTimetableService } from './public-timetable.service'
@@ -58,7 +57,16 @@ export class PublicTimetableController {
   @Post('/upload/:date')
   @ApiBody({ type: [ScheduleEntryDto] })
   @ApiExcludeEndpoint()
-  async upload(@Body() entry: ScheduleEntryDto[], @Param('date') date: string) {
+  async upload(
+    @Body() entry: ScheduleEntryDto[],
+    @Param('date') date: string,
+    @Headers('X-Upload-key') uploadKey?: string,
+  ) {
+    // TODO: implement REAL auth module
+    if (uploadKey !== process.env.ALTAPI_UPLOAD_KEY) {
+      throw new UnauthorizedException()
+    }
+
     return await this.timetableService.sink(entry, date)
   }
 }
