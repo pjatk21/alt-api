@@ -87,7 +87,10 @@ export class PublicTimetableController {
     @Headers('X-Upload-key') uploadKey?: string,
   ) {
     // TODO: implement REAL auth module
-    if (uploadKey !== process.env.ALTAPI_UPLOAD_KEY) {
+    if (
+      uploadKey !== process.env.ALTAPI_UPLOAD_KEY ||
+      process.env.ALTAPI_UNSECURE == '1'
+    ) {
       throw new UnauthorizedException()
     }
 
