@@ -1,5 +1,13 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common'
-import { ApiBody, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
+import {
+  ApiBody,
+  ApiExcludeEndpoint,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger'
 import { GroupCoder } from 'pja-scrapper/dist/groupCoder'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
 import { ScheduleResponseDto } from './dto/schedule-response.dto'
@@ -24,6 +32,11 @@ export class PublicTimetableController {
   } */
 
   @Get('/:date')
+  @ApiOperation({
+    summary: 'Download schedule for date',
+    description:
+      'You can pass groups as a query param, if none passed, all entries are returned.',
+  })
   @ApiResponse({ type: ScheduleResponseDto })
   @ApiParam({ name: 'date', example: '2022-03-07' })
   @ApiQuery({
@@ -44,6 +57,7 @@ export class PublicTimetableController {
 
   @Post('/upload/:date')
   @ApiBody({ type: [ScheduleEntryDto] })
+  @ApiExcludeEndpoint()
   async upload(@Body() entry: ScheduleEntryDto[], @Param('date') date: string) {
     return await this.timetableService.sink(entry, date)
   }

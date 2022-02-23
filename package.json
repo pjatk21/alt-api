@@ -35,6 +35,7 @@
     "lodash": "^4.17.21",
     "luxon": "^2.3.0",
     "mongoose": "^6.2.1",
+    "nestjs-redoc": "^2.2.2",
     "pja-scrapper": "https://github.com/pjatk21/pja-scrapper",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
