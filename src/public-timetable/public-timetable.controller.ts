@@ -4,12 +4,14 @@ import {
   ApiCreatedResponse,
   ApiExcludeEndpoint,
   ApiHeader,
+  ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiProperty,
   ApiQuery,
   ApiResponse,
   ApiTags,
+  ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
@@ -45,7 +47,6 @@ export class PublicTimetableController {
     description:
       'You can pass groups as a query param, if none passed, all entries are returned.',
   })
-  @ApiResponse({ type: ScheduleResponseDto })
   @ApiParam({ name: 'date', example: '2022-03-07' })
   @ApiQuery({
     name: 'groups',
@@ -53,6 +54,8 @@ export class PublicTimetableController {
     required: false,
     example: ['WIs I.2 - 46c', 'WIs I.2 - 40c'],
   })
+  @ApiOkResponse({ type: ScheduleResponseDto })
+  @ApiTooManyRequestsResponse({ description: 'Throttled' })
   async byDate(@Param('date') date: string, @Query('groups') groups?: string[] | string) {
     const safeGroups = typeof groups === 'string' ? [groups] : groups
 
@@ -76,6 +79,7 @@ export class PublicTimetableController {
     type: UploadResponseMock,
   })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid X-Upload-key' })
+  @ApiTooManyRequestsResponse({ description: 'Throttled' })
   async upload(
     @Body() entry: ScheduleEntryDto[],
     @Param('date') date: string,
