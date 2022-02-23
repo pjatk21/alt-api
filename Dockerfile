@@ -18,4 +18,4 @@ RUN yarn build
 
 EXPOSE 3000
 
-ENTRYPOINT node dist/main.js
+ENTRYPOINT yarn start:prod
