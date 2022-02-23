@@ -5,6 +5,7 @@ import { Model } from 'mongoose'
 import { ScheduleEntry } from 'pja-scrapper/dist/interfaces'
 import { GroupCoder } from 'pja-scrapper/dist/groupCoder'
 import { Chance } from 'chance'
+import { ScheduleEntryDto } from './dto/schedule-entry.dto'
 
 @Injectable()
 export class PublicTimetableService {
@@ -26,7 +27,7 @@ export class PublicTimetableService {
    * @param date date string
    * @returns
    */
-  async sink(timetable: ScheduleEntry[], date: string) {
+  async flushAndSink(timetable: ScheduleEntry[], date: string) {
     const removed = await this.timetableModel.deleteMany({ 'entry.dateString': date })
     this.log.verbose(`Overriding ${removed.deletedCount} results`)
 

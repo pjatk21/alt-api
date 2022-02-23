@@ -67,6 +67,6 @@ export class PublicTimetableController {
       throw new UnauthorizedException()
     }
 
-    return await this.timetableService.sink(entry, date)
+    return await this.timetableService.flushAndSink(entry, date)
   }
 }
