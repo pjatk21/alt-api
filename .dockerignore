@@ -5,3 +5,5 @@ Dockerfile
 docker-compose.yml
 .dockerignore
 .uploadkey
+alt-api-ui/dist
+alt-api-ui/node_modules
