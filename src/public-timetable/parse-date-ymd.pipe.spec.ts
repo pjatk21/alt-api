@@ -1,7 +1,7 @@
-import { ParseDateYmdPipe } from './parse-date-ymd.pipe';
+import { ParseDateYmdPipe } from './parse-date-ymd.pipe'
 
 describe('ParseDateYmdPipe', () => {
   it('should be defined', () => {
-    expect(new ParseDateYmdPipe()).toBeDefined();
-  });
-});
+    expect(new ParseDateYmdPipe()).toBeDefined()
+  })
+})

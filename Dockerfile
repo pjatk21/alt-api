@@ -16,6 +16,14 @@ RUN yarn install
 
 RUN yarn build
 
-EXPOSE 3000
+WORKDIR /app/alt-api-ui
+
+RUN yarn install
+
+RUN yarn build
+
+WORKDIR /app
+
+EXPOSE 4000
 
 ENTRYPOINT yarn start:prod

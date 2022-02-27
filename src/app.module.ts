@@ -4,9 +4,17 @@ import { PublicTimetableModule } from './public-timetable/public-timetable.modul
 import { APP_GUARD } from '@nestjs/core'
 import { PublicTimetableService } from './public-timetable/public-timetable.service'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
+import { ServeStaticModule } from '@nestjs/serve-static'
+import { join } from 'path'
 
 @Module({
-  imports: [PublicTimetableModule, ThrottlerModule.forRoot({ ttl: 300, limit: 1000 })],
+  imports: [
+    PublicTimetableModule,
+    ThrottlerModule.forRoot({ ttl: 300, limit: 1000 }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'alt-api-ui', 'dist'),
+    }),
+  ],
   controllers: [AppController],
   providers: [
     PublicTimetableService,

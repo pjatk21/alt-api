@@ -5,8 +5,7 @@ import { PublicTimetableService } from './public-timetable/public-timetable.serv
 export class AppController {
   constructor(private readonly timetableService: PublicTimetableService) {}
 
-  @Get()
-  @Render('home')
+  @Get('lastUpdate')
   async getHello() {
     const stats = {
       lastUpdate: await this.timetableService.lastUpdate(),

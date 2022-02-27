@@ -27,7 +27,7 @@ export class PublicTimetableService {
    */
   async flushAndSink(timetable: ScheduleEntryDto[], date: DateTime) {
     const removed = await this.timetableModel.deleteMany({
-      begin: {
+      'entry.begin': {
         $gte: date.toBSON(),
         $lte: date.endOf('day').toBSON(),
       },
@@ -45,7 +45,7 @@ export class PublicTimetableService {
 
   async timetableForDay(date: DateTime, groups?: string[]) {
     let query = {
-      begin: {
+      'entry.begin': {
         $gte: date.toBSON(),
         $lte: date.endOf('day').toBSON(),
       },

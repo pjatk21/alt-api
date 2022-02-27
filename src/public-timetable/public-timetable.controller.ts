@@ -75,7 +75,10 @@ export class PublicTimetableController {
   @ApiTooManyRequestsResponse({ description: 'Throttled' })
   async byDate(
     @Param('date', new ParseDateYmdPipe()) date: DateTime,
-    @Query('groups', new ParseArrayPipe({ items: String, separator: ',', always: false }))
+    @Query(
+      'groups',
+      new ParseArrayPipe({ items: String, separator: ',', optional: true }),
+    )
     groups?: string[],
   ) {
     const entries = await this.timetableService.timetableForDay(date, groups)

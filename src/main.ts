@@ -10,7 +10,7 @@ import { Chance } from 'chance'
 import { existsSync, readFileSync } from 'fs'
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule)
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: true })
 
   // Redoc init
   const docOpts = new DocumentBuilder()
@@ -31,9 +31,6 @@ async function bootstrap() {
   // Allow HUGE POSTs
   app.use(bodyParser.json({ limit: '500kB' }))
 
-  app.setBaseViewsDir('./views')
-  app.setViewEngine('hbs')
-
   // Init upload key
   if (process.env.ALTAPI_UPLOAD_KEY === undefined) {
     if (existsSync('.uploadkey')) {
@@ -50,6 +47,6 @@ async function bootstrap() {
     }
   }
 
-  await app.listen(3000)
+  await app.listen(4000)
 }
 bootstrap()
