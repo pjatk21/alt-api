@@ -1,4 +1,18 @@
-import { Body, CacheInterceptor, Controller, Get, Headers, Param, Post, Query, UnauthorizedException, UseInterceptors } from '@nestjs/common'
+import {
+  Body,
+  CacheInterceptor,
+  Controller,
+  Get,
+  Headers,
+  Param,
+  ParseArrayPipe,
+  Post,
+  Query,
+  UnauthorizedException,
+  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common'
 import {
   ApiBody,
   ApiCreatedResponse,
@@ -14,8 +28,10 @@ import {
   ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
+import { DateTime } from 'luxon'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
 import { ScheduleResponseDto } from './dto/schedule-response.dto'
+import { ParseDateYmdPipe } from './parse-date-ymd.pipe'
 import { PublicTimetableService } from './public-timetable.service'
 
 class UploadResponseMock {
@@ -57,10 +73,12 @@ export class PublicTimetableController {
   @ApiOkResponse({ type: ScheduleResponseDto })
   @UseInterceptors(CacheInterceptor)
   @ApiTooManyRequestsResponse({ description: 'Throttled' })
-  async byDate(@Param('date') date: string, @Query('groups') groups?: string[] | string) {
-    const safeGroups = typeof groups === 'string' ? [groups] : groups
-
-    const entries = await this.timetableService.timetableForDay(date, safeGroups)
+  async byDate(
+    @Param('date', new ParseDateYmdPipe()) date: DateTime,
+    @Query('groups', new ParseArrayPipe({ items: String, separator: ',', always: false }))
+    groups?: string[],
+  ) {
+    const entries = await this.timetableService.timetableForDay(date, groups)
 
     return {
       entries: entries.map((e) => e.entry),
@@ -82,8 +100,9 @@ export class PublicTimetableController {
   @ApiUnauthorizedResponse({ description: 'Missing or invalid X-Upload-key' })
   @ApiTooManyRequestsResponse({ description: 'Throttled' })
   async upload(
-    @Body() entry: ScheduleEntryDto[],
-    @Param('date') date: string,
+    @Body(new ParseArrayPipe({ items: ScheduleEntryDto, enableDebugMessages: true }))
+    entry: ScheduleEntryDto[],
+    @Param('date', new ParseDateYmdPipe()) date: DateTime,
     @Headers('X-Upload-key') uploadKey?: string,
   ) {
     // TODO: implement REAL auth module

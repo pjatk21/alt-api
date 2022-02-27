@@ -1,36 +1,54 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { ScheduleEntry } from 'pja-scrapper'
-import { GroupDecodedDto } from './group-decoded.dto'
+import { Type } from 'class-transformer'
+import { IsDate } from 'class-validator'
 import { DateTime } from 'luxon'
 
-export class ScheduleEntryDto implements ScheduleEntry {
-  @ApiProperty({ required: false, example: 'Podstawy programowania w Javie' })
-  name?: string
+class ScheduleEntryRawComponentsDto {
+  @ApiProperty({ example: 'WIs I.1 - 1w' })
+  groups: string
 
-  @ApiProperty({ required: false, example: 'PPJ' })
-  code?: string
+  @ApiProperty({ example: '07.03.2022' })
+  date: string
 
-  @ApiProperty({ required: false, example: 'wykład' })
-  type?: string
+  @ApiProperty({ example: '08:30:00' })
+  begin: string
 
-  @ApiProperty({ type: [GroupDecodedDto] })
-  groups?: GroupDecodedDto[]
+  @ApiProperty({ example: '10:00:00' })
+  end: string
+}
 
-  @ApiProperty({ required: false })
-  building?: string
+export class ScheduleEntryDto {
+  @ApiProperty({ example: 'Podstawy programowania w Javie' })
+  name: string
 
-  @ApiProperty({ required: false })
-  room?: string
+  @ApiProperty({ example: 'PPJ' })
+  code: string
+
+  @ApiProperty({ example: 'wykład' })
+  type: string
+
+  @ApiProperty({ type: [String], example: ['WIs I.1 - 1w'] })
+  groups: string[]
 
   @ApiProperty()
+  building: string
+
+  @ApiProperty()
+  room: string
+
+  @Type(() => Date)
+  @IsDate()
+  @ApiProperty({ example: DateTime.now().toJSDate() })
   begin: Date
 
-  @ApiProperty()
+  @Type(() => Date)
+  @IsDate()
+  @ApiProperty({ example: DateTime.now().plus({ hour: 1, minutes: 30 }).toJSDate() })
   end: Date
 
-  @ApiProperty({ example: DateTime.now().toFormat('yyyy-MM-dd') })
-  dateString: string
+  @ApiProperty({ nullable: true, example: '🥰 Michał Tomaszewski ❤️' })
+  tutor: string | null
 
-  @ApiProperty({ required: false, example: '🥰 Michał Tomaszewski ❤️' })
-  tutor?: string
+  @ApiProperty({ type: ScheduleEntryRawComponentsDto })
+  raw: ScheduleEntryRawComponentsDto
 }

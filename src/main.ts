@@ -29,7 +29,7 @@ async function bootstrap() {
   SwaggerModule.setup('/swagger', app, doc)
 
   // Allow HUGE POSTs
-  app.use(bodyParser.json({ limit: '100mb' }))
+  app.use(bodyParser.json({ limit: '500kB' }))
 
   app.setBaseViewsDir('./views')
   app.setViewEngine('hbs')

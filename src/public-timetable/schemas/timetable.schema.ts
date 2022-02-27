@@ -7,7 +7,7 @@ export type TimetableDocument = Timetable & Document
 
 @Schema()
 export class Timetable {
-  @Prop({ required: true, default: () => DateTime.now().toJSDate() })
+  @Prop({ required: true, default: () => DateTime.local().toJSDate() })
   uploadedAt: Date
 
   @Prop({ required: true, type: ScheduleEntryDto })
