@@ -26,4 +26,7 @@ WORKDIR /app
 
 EXPOSE 4000
 
+ENV NODE_ENV=production \
+    TZ=Europe/Warsaw
+
 ENTRYPOINT yarn start:prod
