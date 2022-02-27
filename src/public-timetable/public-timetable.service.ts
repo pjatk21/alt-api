@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Timetable, TimetableDocument } from './schemas/timetable.schema'
 import { Model } from 'mongoose'
-import { Chance } from 'chance'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
 import { DateTime } from 'luxon'
 
