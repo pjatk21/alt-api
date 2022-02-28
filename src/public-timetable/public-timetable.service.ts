@@ -5,6 +5,11 @@ import { Model } from 'mongoose'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
 import { DateTime } from 'luxon'
 
+type ScheduleOptionalFilters = {
+  groups?: string[]
+  tutors?: string[]
+}
+
 @Injectable()
 export class PublicTimetableService {
   private readonly log = new Logger('Public timetables')
@@ -43,20 +48,41 @@ export class PublicTimetableService {
     }
   }
 
-  async timetableForDay(date: DateTime, groups?: string[]) {
-    let query = {
+  async timetableForDay(date: DateTime, optionalFilters: ScheduleOptionalFilters) {
+    return await this.timetableForDateRange(
+      {
+        from: date,
+        to: date.endOf('day'),
+      },
+      optionalFilters,
+    )
+  }
+
+  async timetableForDateRange(
+    dateRange: { from: DateTime; to: DateTime },
+    optionalFilters: ScheduleOptionalFilters,
+  ) {
+    const dateRangeQuery = {
       'entry.begin': {
-        $gte: date.toBSON(),
-        $lte: date.endOf('day').toBSON(),
+        $gte: dateRange.from.toBSON(),
+        $lte: dateRange.to.toBSON(),
       },
     }
 
-    if (groups)
-      query = Object.assign(query, {
-        'entry.groups': { $in: groups },
-      })
+    const groupsQuery = optionalFilters.groups?.length
+      ? {
+          'entry.groups': { $in: optionalFilters.groups },
+        }
+      : undefined
+    const tutorsQuery = optionalFilters.tutors?.length
+      ? {
+          'entry.tutor': { $in: optionalFilters.tutors },
+        }
+      : undefined
 
-    return await this.timetableModel.find(query)
+    return await this.timetableModel.find(
+      Object.assign(dateRangeQuery, groupsQuery, tutorsQuery),
+    )
   }
 
   async lastUpdate() {
