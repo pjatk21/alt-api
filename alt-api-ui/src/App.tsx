@@ -16,7 +16,7 @@ import {
 import useSWR from 'swr'
 import { DateTime } from 'luxon'
 
-function TryMe({ group, date }: { group: string; date: string }) {
+function TryMeStudentEdition({ group, date }: { group: string; date: string }) {
   if (!date.match(/^\d{4}-\d{2}-\d{2}$/) || !group.match(/\d+\w/)) return <Loading />
 
   const fetcher = (url: string) => fetch(url).then((r) => r.json())
@@ -25,12 +25,33 @@ function TryMe({ group, date }: { group: string; date: string }) {
   if (!data) return <Loading />
   if (data.entries.length === 0) return <Text i>brak zajęć w bazie na ten dzień</Text>
 
-  return data.entries.map((e: any) => (
+  return <ol>
+    {data.entries.map((e: any) => (
     <li key={e.begin + e.code + e.raw.groups}>
       {DateTime.fromISO(e.begin).toFormat('HH:mm')} - {e.code}@{e.room}
     </li>
-  ))
+  ))}
+  </ol>
 }
+
+function TryMeTutorEdition({ tutor, date }: { tutor: string; date: string }) {
+  if (!date.match(/^\d{4}-\d{2}-\d{2}$/)) return <Loading />
+
+  const fetcher = (url: string) => fetch(url).then((r) => r.json())
+  const { data, error } = useSWR(`/public/timetable/date/${date}?tutors=${tutor}`, fetcher)
+  if (error) return <Text>failed to load</Text>
+  if (!data) return <Loading />
+  if (data.entries.length === 0) return <Text i>brak zajęć w bazie na ten dzień</Text>
+
+  return <ol>
+    {data.entries.map((e: any) => (
+    <li key={e.begin + e.code + e.raw.groups}>
+      {DateTime.fromISO(e.begin).toFormat('HH:mm')} - {e.code}@{e.room}
+    </li>
+  ))}
+  </ol>
+}
+
 
 function LastUpdate() {
   const fetcher = (url: string) => fetch(url).then((r) => r.json())
@@ -43,6 +64,7 @@ function LastUpdate() {
 function App() {
   const [testGroup, setTestGroup] = useState('WIs I.2 - 46c')
   const [testDate, setTestDate] = useState(DateTime.local().toFormat('yyyy-MM-dd'))
+  const [testTutor, setTestTutor] = useState("")
   const darkTheme = createTheme({
     type: 'dark',
   })
@@ -110,8 +132,25 @@ function App() {
                     />
                   </p>
                   <ol>
-                    <TryMe group={testGroup} date={testDate} />
+                    <TryMeStudentEdition group={testGroup} date={testDate} />
                   </ol>
+                </Container>
+                <Container>
+                <p>
+                    Zajęcia dla ćwiczeniowca/wykładowcy
+                    <Input
+                      value={testTutor}
+                      underlined
+                      onChange={({ target }) => setTestTutor(target.value)}
+                    />
+                    w dniu
+                    <Input
+                      value={testDate}
+                      underlined
+                      onChange={({ target }) => setTestDate(target.value)}
+                    />
+                  </p>
+                  <TryMeTutorEdition tutor={testTutor} date={testDate} />
                 </Container>
               </Card.Body>
             </Card>
