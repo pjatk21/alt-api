@@ -20,7 +20,7 @@ function TryMe({ group, date }: { group: string; date: string }) {
   if (!date.match(/^\d{4}-\d{2}-\d{2}$/) || !group.match(/\d+\w/)) return <Loading />
 
   const fetcher = (url: string) => fetch(url).then((r) => r.json())
-  const { data, error } = useSWR(`/public/timetable/${date}?groups=${group}`, fetcher)
+  const { data, error } = useSWR(`/public/timetable/date/${date}?groups=${group}`, fetcher)
   if (error) return <Text>failed to load</Text>
   if (!data) return <Loading />
   if (data.entries.length === 0) return <Text i>brak zajęć w bazie na ten dzień</Text>
