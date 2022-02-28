@@ -3,6 +3,6 @@ import { ApiProperty } from '@nestjs/swagger'
 import { ScheduleEntryDto } from './schedule-entry.dto'
 
 export class ScheduleResponseDto {
-  @ApiProperty({ type: [ScheduleEntryDto] })
+  @ApiProperty({ type: [ScheduleEntryDto], description: 'Lista zajęć' })
   entries: ScheduleEntryDto[]
 }

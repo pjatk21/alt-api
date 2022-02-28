@@ -18,37 +18,63 @@ class ScheduleEntryRawComponentsDto {
 }
 
 export class ScheduleEntryDto {
-  @ApiProperty({ example: 'Podstawy programowania w Javie' })
+  @ApiProperty({
+    example: 'Podstawy programowania w Javie',
+    description: 'Nazwa przedmiotu',
+  })
   name: string
 
-  @ApiProperty({ example: 'PPJ' })
+  @ApiProperty({ example: 'PPJ', description: 'Kod przedmiotu' })
   code: string
 
-  @ApiProperty({ example: 'wykład' })
+  @ApiProperty({ example: 'Wykład', description: 'Typ zajęć zapisany w planie zajęć' })
   type: string
 
-  @ApiProperty({ type: [String], example: ['WIs I.1 - 1w'] })
+  @ApiProperty({
+    type: [String],
+    example: ['WIs I.1 - 1w'],
+    description: 'Lista grup biorąca udział w zajęciach',
+  })
   groups: string[]
 
-  @ApiProperty()
+  @ApiProperty({
+    example: 'A2020',
+    description:
+      'Nazwa budynku w którym odbywają się zajęcia, często niepotrzebne, ponieważ jest to już zawarte w numerze sali',
+  })
   building: string
 
-  @ApiProperty()
+  @ApiProperty({ example: 'A/358', description: 'Numer sali' })
   room: string
 
   @Type(() => Date)
   @IsDate()
-  @ApiProperty({ example: DateTime.now().toJSDate() })
+  @ApiProperty({
+    example: DateTime.fromFormat('07.03.2022 08:30:00', 'dd.MM.yyyy HH:mm:ss').toJSDate(),
+    description: 'Czas ISO rozpoczęcia zajęć, przechowywany jako czas UTC',
+  })
   begin: Date
 
   @Type(() => Date)
   @IsDate()
-  @ApiProperty({ example: DateTime.now().plus({ hour: 1, minutes: 30 }).toJSDate() })
+  @ApiProperty({
+    example: DateTime.fromFormat('07.03.2022 08:30:00', 'dd.MM.yyyy HH:mm:ss')
+      .plus({ hour: 1.5 })
+      .toJSDate(),
+    description: 'Czas ISO zakończenia zajęć, przechowywany jako czas UTC',
+  })
   end: Date
 
-  @ApiProperty({ nullable: true, example: '🥰 Michał Tomaszewski ❤️' })
+  @ApiProperty({
+    nullable: true,
+    example: '🥰 Michał Tomaszewski ❤️',
+    description: 'Wykładowca/ćwiczeniowiec przypisany do zajęć',
+  })
   tutor: string | null
 
-  @ApiProperty({ type: ScheduleEntryRawComponentsDto })
+  @ApiProperty({
+    type: ScheduleEntryRawComponentsDto,
+    description: 'Resztki danych ze scarpu, przydatne przy debugu',
+  })
   raw: ScheduleEntryRawComponentsDto
 }
