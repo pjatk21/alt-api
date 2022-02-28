@@ -1,7 +1,7 @@
-import { ParseDateIsoPipe } from './parse-date-iso.pipe';
+import { ParseDateIsoPipe } from './parse-date-iso.pipe'
 
 describe('ParseDateIsoPipe', () => {
   it('should be defined', () => {
-    expect(new ParseDateIsoPipe()).toBeDefined();
-  });
-});
+    expect(new ParseDateIsoPipe()).toBeDefined()
+  })
+})

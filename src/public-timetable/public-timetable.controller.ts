@@ -10,22 +10,17 @@ import {
   Query,
   UnauthorizedException,
   UseInterceptors,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common'
 import {
   ApiBody,
   ApiCreatedResponse,
-  ApiExcludeEndpoint,
   ApiHeader,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiProperty,
   ApiQuery,
-  ApiResponse,
   ApiTags,
-  ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { DateTime } from 'luxon'
@@ -44,19 +39,6 @@ class UploadResponseMock {
 @Controller('/public/timetable')
 export class PublicTimetableController {
   constructor(private timetableService: PublicTimetableService) {}
-
-  /* @Get('/mocks')
-  @ApiQuery({ name: 'amount', required: false })
-  async mock(@Query('amount') amount = 1): Promise<string[]> {
-    const timetables: TimetableDocument[] = []
-
-    for (let i = 0; i < amount; i++) {
-      const timetable = await this.timetableService.createMock()
-      timetables.push(timetable)
-    }
-
-    return timetables.map((t) => t.id)
-  } */
 
   @Get('/date/:date')
   @UseInterceptors(CacheInterceptor)
