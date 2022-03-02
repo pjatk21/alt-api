@@ -43,7 +43,7 @@ export class PublicTimetableController {
   @Get('/date/:date')
   @UseInterceptors(CacheInterceptor)
   @ApiOperation({
-    summary: 'Download schedule for a specified day',
+    summary: 'Get a schedule for a specified day',
     description:
       'You can pass groups as a query param, if none passed, all entries are returned.',
   })
@@ -84,7 +84,7 @@ export class PublicTimetableController {
   @Get('range')
   @UseInterceptors(CacheInterceptor)
   @ApiOperation({
-    summary: 'Download schedule for a specified date range',
+    summary: 'Get a schedule for a specified date range',
   })
   @ApiQuery({
     name: 'from',
@@ -139,14 +139,22 @@ export class PublicTimetableController {
   }
 
   @Get('/groups')
-  @ApiOperation({ summary: 'Lists all available groups' })
+  @UseInterceptors(CacheInterceptor)
+  @ApiOperation({
+    summary: 'Get all available groups',
+    description: 'Useful for auto-complete controls',
+  })
   @ApiOkResponse({ type: GroupsAvailableDto })
   async getAvailableGroups(): Promise<GroupsAvailableDto> {
     return await this.timetableService.listAvailableGroups()
   }
 
   @Get('/tutors')
-  @ApiOperation({ summary: 'Lists all available tutors' })
+  @UseInterceptors(CacheInterceptor)
+  @ApiOperation({
+    summary: 'Get all available tutors',
+    description: 'Useful for auto-complete controls',
+  })
   @ApiOkResponse({ type: TutorsAvailableDto })
   async getAvailableTutors(): Promise<TutorsAvailableDto> {
     return await this.timetableService.listAvailableTutors()
