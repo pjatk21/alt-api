@@ -58,7 +58,11 @@ function LastUpdate() {
   const { data, error } = useSWR(`/lastUpdate`, fetcher)
   if (error) return null
   if (!data) return <Loading />
-  return <Text>Ostatnia aktualizacja:<br/>{data.lastUpdate}</Text>
+  const { lastUpdate, groupsOnBoard, tutorsOnBoard } = data
+  return <>
+    <Text>Ostatnia aktualizacja:<br/>{lastUpdate}</Text>
+    <Text>Zawiera dane dla {groupsOnBoard} grup wraz z {tutorsOnBoard} wykładowcami/ćwiczeniowcami</Text>
+  </>
 }
 
 function App() {
@@ -131,9 +135,7 @@ function App() {
                       onChange={({ target }) => setTestDate(target.value)}
                     />
                   </p>
-                  <ol>
-                    <TryMeStudentEdition group={testGroup} date={testDate} />
-                  </ol>
+                  <TryMeStudentEdition group={testGroup} date={testDate} />
                 </Container>
                 <Container>
                 <p>
