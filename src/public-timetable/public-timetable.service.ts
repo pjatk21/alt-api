@@ -85,6 +85,66 @@ export class PublicTimetableService {
     )
   }
 
+  async listAvailableGroups() {
+    return this.timetableModel
+      .aggregate([
+        { $unwind: '$entry.groups' },
+        {
+          $project: {
+            group: '$entry.groups',
+          },
+        },
+        {
+          $group: {
+            _id: '$group',
+          },
+        },
+        {
+          $project: {
+            _id: false,
+            groupName: '$_id',
+          },
+        },
+        {
+          $group: {
+            _id: 'groupsAvaliable',
+            groupsAvailable: { $push: '$groupName' },
+          },
+        },
+        {
+          $project: {
+            _id: false,
+          },
+        },
+      ])
+      .exec()
+      .then((r) => r[0])
+  }
+
+  async listAvailableTutors() {
+    return this.timetableModel
+      .aggregate([
+        {
+          $match: {
+            $expr: { $ne: ['$entry.tutor', null] },
+          },
+        },
+        {
+          $group: {
+            _id: 'tutors',
+            tutorsAvailable: { $addToSet: '$entry.tutor' },
+          },
+        },
+        {
+          $project: {
+            _id: false,
+          },
+        },
+      ])
+      .exec()
+      .then((r) => r[0])
+  }
+
   async lastUpdate() {
     const lastValue = await this.timetableModel
       .findOne()

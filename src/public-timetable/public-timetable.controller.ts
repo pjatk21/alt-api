@@ -24,8 +24,10 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { DateTime } from 'luxon'
+import { GroupsAvailableDto } from './dto/groups-available.dto'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
 import { ScheduleResponseDto } from './dto/schedule-response.dto'
+import { TutorsAvailableDto } from './dto/tutors-available.dto'
 import { ParseDateIsoPipe } from './parse-date-iso.pipe'
 import { ParseDateYmdPipe } from './parse-date-ymd.pipe'
 import { PublicTimetableService } from './public-timetable.service'
@@ -136,6 +138,20 @@ export class PublicTimetableController {
     return {
       entries: entries.map((e) => e.entry),
     }
+  }
+
+  @Get('/groups')
+  @ApiOperation({ summary: 'Lists all available groups' })
+  @ApiOkResponse({ type: GroupsAvailableDto })
+  async getAvailableGroups(): Promise<GroupsAvailableDto> {
+    return await this.timetableService.listAvailableGroups()
+  }
+
+  @Get('/tutors')
+  @ApiOperation({ summary: 'Lists all available tutors' })
+  @ApiOkResponse({ type: TutorsAvailableDto })
+  async getAvailableTutors(): Promise<TutorsAvailableDto> {
+    return await this.timetableService.listAvailableTutors()
   }
 
   @Post('/upload/:date')
