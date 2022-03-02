@@ -20,7 +20,6 @@ import {
   ApiParam,
   ApiProperty,
   ApiQuery,
-  ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { DateTime } from 'luxon'
@@ -37,7 +36,6 @@ class UploadResponseMock {
   result: string
 }
 
-@ApiTags('Timetables')
 @Controller('/public/timetable')
 export class PublicTimetableController {
   constructor(private timetableService: PublicTimetableService) {}
