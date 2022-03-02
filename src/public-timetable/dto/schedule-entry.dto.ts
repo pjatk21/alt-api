@@ -20,38 +20,38 @@ class ScheduleEntryRawComponentsDto {
 export class ScheduleEntryDto {
   @ApiProperty({
     example: 'Podstawy programowania w Javie',
-    description: 'Nazwa przedmiotu',
+    description: 'Class name',
   })
   name: string
 
-  @ApiProperty({ example: 'PPJ', description: 'Kod przedmiotu' })
+  @ApiProperty({ example: 'PPJ', description: 'Class short code' })
   code: string
 
-  @ApiProperty({ example: 'Wykład', description: 'Typ zajęć zapisany w planie zajęć' })
+  @ApiProperty({ example: 'Wykład', description: 'Class type (lecture/exercises)' })
   type: string
 
   @ApiProperty({
     type: [String],
     example: ['WIs I.1 - 1w'],
-    description: 'Lista grup biorąca udział w zajęciach',
+    description: 'List of groups assigned to the class',
   })
   groups: string[]
 
   @ApiProperty({
     example: 'A2020',
     description:
-      'Nazwa budynku w którym odbywają się zajęcia, często niepotrzebne, ponieważ jest to już zawarte w numerze sali',
+      'Name of a building, usually obsolete, because building is already in room name',
   })
   building: string
 
-  @ApiProperty({ example: 'A/358', description: 'Numer sali' })
+  @ApiProperty({ example: 'A/358', description: 'Room name' })
   room: string
 
   @Type(() => Date)
   @IsDate()
   @ApiProperty({
     example: DateTime.fromFormat('07.03.2022 08:30:00', 'dd.MM.yyyy HH:mm:ss').toJSDate(),
-    description: 'Czas ISO rozpoczęcia zajęć, przechowywany jako czas UTC',
+    description: 'ISO time of beginning of the class, UTC time',
   })
   begin: Date
 
@@ -61,20 +61,20 @@ export class ScheduleEntryDto {
     example: DateTime.fromFormat('07.03.2022 08:30:00', 'dd.MM.yyyy HH:mm:ss')
       .plus({ hour: 1.5 })
       .toJSDate(),
-    description: 'Czas ISO zakończenia zajęć, przechowywany jako czas UTC',
+    description: 'ISO time of end of the class, UTC time',
   })
   end: Date
 
   @ApiProperty({
     nullable: true,
     example: '🥰 Michał Tomaszewski ❤️',
-    description: 'Wykładowca/ćwiczeniowiec przypisany do zajęć',
+    description: 'Lecutrer assigned to the class',
   })
   tutor: string | null
 
   @ApiProperty({
     type: ScheduleEntryRawComponentsDto,
-    description: 'Resztki danych ze scarpu, przydatne przy debugu',
+    description: 'Shards of data left from scrap, not really useful',
   })
   raw: ScheduleEntryRawComponentsDto
 }
