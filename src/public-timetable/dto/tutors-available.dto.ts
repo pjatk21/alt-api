@@ -6,5 +6,5 @@ export class TutorsAvailableDto {
     description: 'List of available tutors',
     example: ['Michał Tomaszewski'],
   })
-  tutorsAvaliable: string[]
+  tutorsAvailable: string[]
 }

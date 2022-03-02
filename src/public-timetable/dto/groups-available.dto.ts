@@ -6,5 +6,5 @@ export class GroupsAvailableDto {
     description: 'List of available groups',
     example: ['WIs I.2 - 1w', 'WIs I.2 - 46c'],
   })
-  groupsAvaliable: string[]
+  groupsAvailable: string[]
 }
