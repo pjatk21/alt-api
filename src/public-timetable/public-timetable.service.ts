@@ -4,6 +4,8 @@ import { Timetable, TimetableDocument } from './schemas/timetable.schema'
 import { Model } from 'mongoose'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
 import { DateTime } from 'luxon'
+import { GroupsAvailableDto } from './dto/groups-available.dto'
+import { TutorsAvailableDto } from './dto/tutors-available.dto'
 
 type ScheduleOptionalFilters = {
   groups?: string[]
@@ -85,7 +87,7 @@ export class PublicTimetableService {
     )
   }
 
-  async listAvailableGroups() {
+  async listAvailableGroups(): Promise<GroupsAvailableDto> {
     return this.timetableModel
       .aggregate([
         { $unwind: '$entry.groups' },
@@ -121,7 +123,7 @@ export class PublicTimetableService {
       .then((r) => r[0])
   }
 
-  async listAvailableTutors() {
+  async listAvailableTutors(): Promise<TutorsAvailableDto> {
     return this.timetableModel
       .aggregate([
         {
