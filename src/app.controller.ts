@@ -15,6 +15,7 @@ export class AppController {
       tutorsOnBoard: await this.timetableService
         .listAvailableTutors()
         .then((r) => r.tutorsAvailable.length),
+      lastEntries: await this.timetableService.dataFetchedToDate(),
     }
     return stats
   }

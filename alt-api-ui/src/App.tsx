@@ -58,10 +58,11 @@ function LastUpdate() {
   const { data, error } = useSWR(`/lastUpdate`, fetcher)
   if (error) return null
   if (!data) return <Loading />
-  const { lastUpdate, groupsOnBoard, tutorsOnBoard } = data
+  const { lastUpdate, groupsOnBoard, tutorsOnBoard, lastEntries } = data
   return <>
     <Text>Ostatnia aktualizacja:<br/>{lastUpdate}</Text>
     <Text>Zawiera dane dla {groupsOnBoard} grup wraz z {tutorsOnBoard} wykładowcami/ćwiczeniowcami</Text>
+    <Text>Baza danych jest uzupełniona do dnia {lastEntries}</Text>
   </>
 }
 

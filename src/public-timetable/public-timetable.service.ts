@@ -153,4 +153,24 @@ export class PublicTimetableService {
       .sort({ uploadedAt: 'descending' })
     return DateTime.fromJSDate(lastValue.uploadedAt).toISO()
   }
+
+  async dataFetchedToDate() {
+    const lastEntry = await this.timetableModel
+      .aggregate([
+        {
+          $project: {
+            _id: false,
+            date: '$entry.end',
+          },
+        },
+        {
+          $sort: { date: -1 },
+        },
+        {
+          $limit: 1,
+        },
+      ])
+      .exec()
+    return DateTime.fromJSDate(lastEntry[0].date).toISO()
+  }
 }
