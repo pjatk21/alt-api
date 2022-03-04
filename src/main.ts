@@ -5,12 +5,17 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 import { PublicTimetableModule } from './public-timetable/public-timetable.module'
 import { RedocModule, RedocOptions } from 'nestjs-redoc'
-import { Logger } from '@nestjs/common'
+import { Logger, VersioningType } from '@nestjs/common'
 import { Chance } from 'chance'
 import { existsSync, readFileSync } from 'fs'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: true })
+
+  // Enable versioning
+  app.enableVersioning({
+    type: VersioningType.URI,
+  })
 
   // Redoc init
   const docOpts = new DocumentBuilder()
@@ -28,7 +33,7 @@ async function bootstrap() {
   await RedocModule.setup('/redoc', app, doc, redocOpts)
   SwaggerModule.setup('/swagger', app, doc)
 
-  // Allow HUGE POSTs
+  // Allow little bigger POSTs
   app.use(bodyParser.json({ limit: '500kB' }))
 
   // Init upload key
