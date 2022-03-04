@@ -1,0 +1,30 @@
+name: Docker CI
+
+on:
+  push:
+    tags:
+      - "v*"
+    branches:
+      - "main"
+      - "gh-actions-build-docker"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to Github registry
+        uses: docker/login-action@v1 
+        with:
+          registry: 'ghcr.io/pjatk21'
+          username: ${{ github.actor }}
+          password: ${{ secrets.GH_PAT }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: pjatk21/altapi:latest pjatk21/altapi:${GITHUB_SHA:7} pjatk21/altapi:${{github.ref_name}}
+        
