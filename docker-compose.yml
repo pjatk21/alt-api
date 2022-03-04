@@ -2,8 +2,7 @@ version: '3'
 
 services:
   altapi:
-    build: .
-    image: kpostekk/altapi
+    image: ghcr.io/pjatk21/altapi:main
     ports:
       - 4000:4000
     environment:
