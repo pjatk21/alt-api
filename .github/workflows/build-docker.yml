@@ -31,5 +31,4 @@ jobs:
           push: true
           tags: |
             ghcr.io/pjatk21/altapi:latest
-            ghcr.io/pjatk21/altapi:${{github.sha}}
             ghcr.io/pjatk21/altapi:${{github.ref_name}}
