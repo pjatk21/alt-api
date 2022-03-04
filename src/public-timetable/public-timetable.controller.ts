@@ -12,12 +12,15 @@ import {
   UseInterceptors,
   Response,
   HttpException,
+  NotFoundException,
 } from '@nestjs/common'
+import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util'
 import {
   ApiBadRequestResponse,
   ApiBody,
   ApiCreatedResponse,
   ApiHeader,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
@@ -30,6 +33,7 @@ import {
 } from '@nestjs/swagger'
 import { Response as Res } from 'express'
 import { DateTime } from 'luxon'
+import { HttpExceptionResponseDto } from 'src/dto/http-exception-response.dto'
 import { GroupsAvailableDto } from './dto/groups-available.dto'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
 import { ScheduleResponseDto } from './dto/schedule-response.dto'
@@ -148,6 +152,38 @@ export class PublicTimetableController {
     }
   }
 
+  @Get('/single')
+  @ApiOperation({
+    summary: 'Get single schedule entry',
+    description:
+      'Get a single schedule entry, just a shorthand for filtering /timetable/range.',
+  })
+  @ApiQuery({
+    name: 'at',
+    description: 'ISO format of date of begin of the class/entry',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'group',
+    description: 'Name of the group',
+    example: 'WIs I.2 - 46c',
+    type: String,
+  })
+  @ApiOkResponse({
+    type: ScheduleEntryDto,
+  })
+  @ApiNotFoundResponse({
+    type: HttpExceptionResponseDto,
+  })
+  async getSingleEntry(
+    @Query('at', new ParseDateIsoPipe()) atDate: DateTime,
+    @Query('group') group: string,
+  ) {
+    const se = await this.timetableService.findSingleEntry(atDate, group)
+    if (se) return se
+    else throw new NotFoundException()
+  }
+
   @Get('/groups')
   @UseInterceptors(CacheInterceptor)
   @ApiOperation({
@@ -223,7 +259,10 @@ export class PublicTimetableController {
     description: 'Created/updated schedule',
     type: UploadResponseMock,
   })
-  @ApiUnauthorizedResponse({ description: 'Missing or invalid X-Upload-key' })
+  @ApiUnauthorizedResponse({
+    description: 'Missing or invalid X-Upload-key',
+    type: UnauthorizedException,
+  })
   async upload(
     @Body(new ParseArrayPipe({ items: ScheduleEntryDto, enableDebugMessages: true }))
     entry: ScheduleEntryDto[],

@@ -34,7 +34,10 @@ async function bootstrap() {
     include: [PublicTimetableModule],
   })
 
-  const redocOpts: RedocOptions = {}
+  const redocOpts: RedocOptions = {
+    hideLoading: true,
+    docName: 'openapi',
+  }
 
   await RedocModule.setup('/redoc', app, doc, redocOpts)
   // SwaggerModule.setup('/swagger', app, doc)

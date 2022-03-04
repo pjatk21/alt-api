@@ -116,9 +116,9 @@ export class PublicTimetableService {
     const events: EventAttributes[] = rawEntries.map((re) => {
       const begin = DateTime.fromJSDate(re.begin).setZone()
       const end = DateTime.fromJSDate(re.end).setZone()
-      const previewUrl = new URL('https://alatapi.kpostek.dev/preview/')
-      previewUrl.searchParams.append('when', begin.toISO())
-      for (const g of re.groups) previewUrl.searchParams.append('who', g)
+      const previewUrl = new URL('https://localhost:4000/v1/timetable/single')
+      previewUrl.searchParams.append('at', begin.toISO())
+      previewUrl.searchParams.append('group', re.groups[0])
 
       return {
         start: [begin.year, begin.month, begin.day, begin.hour, begin.minute],
@@ -131,7 +131,19 @@ export class PublicTimetableService {
       }
     })
     // return 'err' // REMOVE ME
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return createEvents(events).value! // REMOVE ME
+  }
+
+  async findSingleEntry(
+    at: DateTime,
+    group: string,
+  ): Promise<ScheduleEntryDto | undefined> {
+    const entry = await this.timetableModel.findOne({
+      'entry.begin': at.toBSON(),
+      'entry.groups': { $in: [group] },
+    })
+    return entry?.entry ?? undefined
   }
 
   async listAvailableGroups(): Promise<GroupsAvailableDto> {
