@@ -26,5 +26,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: pjatk21/altapi:latest pjatk21/altapi:${{github.ref_name}}
-        
+          tags: pjatk21/altapi:latest,pjatk21/altapi:${{github.ref_name}}
