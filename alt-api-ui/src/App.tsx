@@ -154,7 +154,9 @@ function AppHome() {
               </Container>
             </Card.Body>
           </Card>
-          <Spacer y={3} />
+          <Spacer />
+          <Text style={{textAlign: 'center', opacity: 0.4}}>Created with ❤️ && ☕️ by @kpostekk</Text>
+          <Spacer />
         </Col>
       </Container>
     </NextUIProvider>
