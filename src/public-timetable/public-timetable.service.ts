@@ -123,10 +123,9 @@ export class PublicTimetableService {
       return {
         start: [begin.year, begin.month, begin.day, begin.hour, begin.minute],
         end: [end.year, end.month, end.day, end.hour, end.minute],
-        title: `${re.code} (${re.room})`,
-        description: `${re.name}@${re.room} \\w ${re.tutor}`,
+        title: `${re.type} z ${re.code} (${re.room})`,
+        description: `${re.type} z ${re.name} w budynku ${re.room} prowadzone przez ${re.tutor}.`,
         busyStatus: 'BUSY',
-        categories: [re.type],
         url: previewUrl.toString(),
       }
     })
