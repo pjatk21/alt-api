@@ -1,7 +1,9 @@
-import { Controller, Get } from '@nestjs/common'
+import { Controller, Get, VERSION_NEUTRAL } from '@nestjs/common'
 import { PublicTimetableService } from './public-timetable/public-timetable.service'
 
-@Controller()
+@Controller({
+  version: VERSION_NEUTRAL,
+})
 export class AppController {
   constructor(private readonly timetableService: PublicTimetableService) {}
 
