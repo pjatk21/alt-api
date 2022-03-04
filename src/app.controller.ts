@@ -8,14 +8,16 @@ export class AppController {
   @Get('lastUpdate')
   async getHello() {
     const stats = {
-      lastUpdate: await this.timetableService.lastUpdate(),
-      groupsOnBoard: await this.timetableService
-        .listAvailableGroups()
-        .then((r) => r.groupsAvailable.length),
-      tutorsOnBoard: await this.timetableService
-        .listAvailableTutors()
-        .then((r) => r.tutorsAvailable.length),
-      lastEntries: await this.timetableService.dataFetchedToDate(),
+      lastScrapperUpload: await this.timetableService.lastUpdate(),
+      dataUpTo: await this.timetableService.dataFetchedToDate(),
+      count: {
+        groups: await this.timetableService
+          .listAvailableGroups()
+          .then((r) => r.groupsAvailable.length),
+        tutors: await this.timetableService
+          .listAvailableTutors()
+          .then((r) => r.tutorsAvailable.length),
+      },
     }
     return stats
   }
