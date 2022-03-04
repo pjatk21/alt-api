@@ -116,7 +116,7 @@ export class PublicTimetableService {
     const events: EventAttributes[] = rawEntries.map((re) => {
       const begin = DateTime.fromJSDate(re.begin).setZone()
       const end = DateTime.fromJSDate(re.end).setZone()
-      const previewUrl = new URL('https://localhost:4000/v1/timetable/single')
+      const previewUrl = new URL('https://altapi.kpostek.dev/preview')
       previewUrl.searchParams.append('at', begin.toISO())
       previewUrl.searchParams.append('group', re.groups[0])
 
