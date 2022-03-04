@@ -1,3 +1,5 @@
+import { faCopy, faDownload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Checkbox, Grid, Input, Link, Loading, Spacer, Text } from "@nextui-org/react";
 import React, { useMemo, useState } from "react";
 import useSWR from "swr";
@@ -23,10 +25,10 @@ function CalendarUrl({ groups }: CalendarUrlProps) {
   if (groups.length < 2) return <Button auto disabled color={"error"}>Select at least 2 groups</Button>
   
   return (<>
-    <Button auto onClick={() => navigator.clipboard.writeText(icsUrl.toString())}>Copy ICS URL</Button>
+    <Button icon={<FontAwesomeIcon icon={faCopy} />} auto onClick={() => navigator.clipboard.writeText(icsUrl.toString())}>Copy ICS URL</Button>
     <Spacer />
     <Link href={icsUrl.toString()}>
-      <Button auto>Download ICS</Button>
+      <Button icon={<FontAwesomeIcon icon={faDownload} />} auto>Download ICS</Button>
     </Link>
   </>)
 }
