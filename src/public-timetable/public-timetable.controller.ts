@@ -10,18 +10,24 @@ import {
   Query,
   UnauthorizedException,
   UseInterceptors,
+  Response,
+  HttpException,
 } from '@nestjs/common'
 import {
+  ApiBadRequestResponse,
   ApiBody,
   ApiCreatedResponse,
   ApiHeader,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
+  ApiProduces,
   ApiProperty,
   ApiQuery,
+  ApiResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
+import { Response as Res } from 'express'
 import { DateTime } from 'luxon'
 import { GroupsAvailableDto } from './dto/groups-available.dto'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
@@ -36,7 +42,10 @@ class UploadResponseMock {
   result: string
 }
 
-@Controller('/public/timetable')
+@Controller({
+  version: '1',
+  path: '/timetable',
+})
 export class PublicTimetableController {
   constructor(private timetableService: PublicTimetableService) {}
 
@@ -158,6 +167,46 @@ export class PublicTimetableController {
   @ApiOkResponse({ type: TutorsAvailableDto })
   async getAvailableTutors(): Promise<TutorsAvailableDto> {
     return await this.timetableService.listAvailableTutors()
+  }
+
+  @Get('/index.ics')
+  @ApiOperation({
+    summary: 'Subscribe to ICS calendar',
+    description:
+      'Returns ICS file of your whole available schedule. Can be used as a subscription feed for calendar.',
+  })
+  @ApiQuery({
+    name: 'groups',
+    type: [String],
+    example: ['WIs I.2 - 46c', 'WIs I.2 - 1w'],
+    description: 'Group names to fetch calendar.',
+    schema: {
+      minItems: 2,
+    },
+  })
+  @ApiProduces('text/calendar')
+  @ApiOkResponse({
+    type: String,
+    description: 'Returns an ICS file, defaults filename to AltapiSchedule.ics',
+  })
+  @ApiBadRequestResponse({
+    type: Object,
+    description: 'Usually raised if not enough groups are passed',
+  })
+  async getIcsSchedule(
+    @Response() res: Res,
+    @Query('groups', new ParseArrayPipe({ items: String, separator: ',' }))
+    groups: string[],
+  ) {
+    if ((groups ?? []).length < 2)
+      throw new HttpException('You have to choose at least two groups!', 400)
+
+    const ics = await this.timetableService.createICS({
+      groups,
+    })
+
+    //return res.send(ics)
+    return res.contentType('.ics').attachment('AltapiSchedule.ics').send(ics)
   }
 
   @Post('/upload/:date')

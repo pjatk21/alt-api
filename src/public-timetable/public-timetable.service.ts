@@ -6,6 +6,7 @@ import { ScheduleEntryDto } from './dto/schedule-entry.dto'
 import { DateTime } from 'luxon'
 import { GroupsAvailableDto } from './dto/groups-available.dto'
 import { TutorsAvailableDto } from './dto/tutors-available.dto'
+import { createEvents, EventAttributes } from 'ics'
 
 type ScheduleOptionalFilters = {
   groups?: string[]
@@ -85,6 +86,52 @@ export class PublicTimetableService {
     return await this.timetableModel.find(
       Object.assign(dateRangeQuery, groupsQuery, tutorsQuery),
     )
+  }
+
+  async createICS(optionalFilters: ScheduleOptionalFilters): Promise<string> {
+    if (!(optionalFilters.groups || optionalFilters.tutors))
+      throw new Error('Specify groups or tutor!')
+
+    const rawEntries: ScheduleEntryDto[] = await this.timetableModel
+      .aggregate([
+        {
+          $project: {
+            entry: true,
+            group: '$entry.groups',
+          },
+        },
+        {
+          $unwind: '$group',
+        },
+        {
+          $match: {
+            $expr: {
+              $or: [{ $in: ['$group', optionalFilters.groups] }],
+            },
+          },
+        },
+      ])
+      .exec()
+      .then((rows) => rows.map((row) => row.entry))
+    const events: EventAttributes[] = rawEntries.map((re) => {
+      const begin = DateTime.fromJSDate(re.begin).setZone()
+      const end = DateTime.fromJSDate(re.end).setZone()
+      const previewUrl = new URL('https://alatapi.kpostek.dev/preview/')
+      previewUrl.searchParams.append('when', begin.toISO())
+      for (const g of re.groups) previewUrl.searchParams.append('who', g)
+
+      return {
+        start: [begin.year, begin.month, begin.day, begin.hour, begin.minute],
+        end: [end.year, end.month, end.day, end.hour, end.minute],
+        title: `${re.code} (${re.room})`,
+        description: `${re.name}@${re.room} \\w ${re.tutor}`,
+        busyStatus: 'BUSY',
+        categories: [re.type],
+        url: previewUrl.toString(),
+      }
+    })
+    // return 'err' // REMOVE ME
+    return createEvents(events).value! // REMOVE ME
   }
 
   async listAvailableGroups(): Promise<GroupsAvailableDto> {
