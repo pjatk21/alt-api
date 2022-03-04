@@ -89,7 +89,7 @@ function UsefulLinks() {
         </Link>
       </Grid>
       <Grid>
-        <Link href="mailto:krystian@postek.eu?subject=Nadu%C5%BCycia%20Altapi">
+        <Link href="https://github.com/pjatk21/Pie-Schedule">
           <Button
             icon={<FontAwesomeIcon icon={faApple} />}
             bordered
