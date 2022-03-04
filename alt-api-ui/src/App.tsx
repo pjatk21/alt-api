@@ -118,7 +118,7 @@ function AppHome() {
             <Card.Body>
               <Container>
                 <Text margin={1}>
-                  Query PJA schedule in milliseconds. A great alternative to orginal webpage from 2010.
+                  Query PJA schedule in milliseconds. A great alternative to original webpage from 2010.
                 </Text>
                 <LastUpdate />
                 <UsefulLinks />
@@ -145,20 +145,11 @@ function AppHome() {
   )
 }
 
-function Status() {
-  return (
-    <>
-      <p>A</p>
-    </>
-  )
-}
-
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<AppHome />} />
-        <Route path="status/" element={<Status />} />
         <Route path="preview/" element={<Preview />} />
       </Routes>
     </BrowserRouter>
