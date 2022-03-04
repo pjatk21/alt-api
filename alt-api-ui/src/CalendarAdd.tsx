@@ -1,5 +1,5 @@
-import { Button, Checkbox, createTheme, Grid, Input, Link, Loading, Spacer, Text } from "@nextui-org/react";
-import React, { useEffect, useMemo, useState } from "react";
+import { Button, Checkbox, Grid, Input, Loading, Spacer, Text } from "@nextui-org/react";
+import React, { useMemo, useState } from "react";
 import useSWR from "swr";
 
 const baseUrl = import.meta.env.DEV
@@ -22,7 +22,7 @@ function CalendarUrl({ groups }: CalendarUrlProps) {
   
   if (groups.length < 2) return <Button auto disabled color={"error"}>Select at least 2 groups</Button>
   
-  return <Button auto onClick={() => navigator.clipboard.writeText(icsUrl.toString())}>Copy ICS url</Button>
+  return <Button auto onClick={() => navigator.clipboard.writeText(icsUrl.toString())}>Copy ICS URL</Button>
 }
 
 export function CalendarAdd() {

@@ -14,11 +14,12 @@ import {
 } from '@nextui-org/react'
 import useSWR from 'swr'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
+import { faApple, faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faBook, faWarning } from '@fortawesome/free-solid-svg-icons'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Preview } from './Preview'
 import { CalendarAdd } from './CalendarAdd'
+import { NotFound } from './NotFound'
 
 const baseUrl = import.meta.env.DEV
   ? 'http://krystians-mac-pro.local:4000'
@@ -87,6 +88,18 @@ function UsefulLinks() {
           </Button>
         </Link>
       </Grid>
+      <Grid>
+        <Link href="mailto:krystian@postek.eu?subject=Nadu%C5%BCycia%20Altapi">
+          <Button
+            icon={<FontAwesomeIcon icon={faApple} />}
+            bordered
+            ghost
+            auto
+          >
+            iOS app (alpha)
+          </Button>
+        </Link>
+      </Grid>
     </Grid.Container>
   </>
   )
@@ -101,6 +114,7 @@ function AppHome() {
     <NextUIProvider theme={darkTheme}>
       <Container sm>
         <Col>
+          <Spacer />
           <Card>
             <Card.Header>
               <Container>
@@ -129,7 +143,9 @@ function AppHome() {
           <Card>
             <Card.Header>
               <Container>
-                <Text h2>Subscribe to ICS</Text>
+                <Text h2 css={{
+                  textGradient: 'to bottom left, #3EE5FF 0%, #FF38F2 100%',
+                }}>Subscribe to ICS</Text>
               </Container>
             </Card.Header>
             <Card.Body>
@@ -151,6 +167,7 @@ function App() {
       <Routes>
         <Route path="/" element={<AppHome />} />
         <Route path="preview/" element={<Preview />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )
