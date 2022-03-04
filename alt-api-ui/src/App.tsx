@@ -9,6 +9,7 @@ import {
   Link,
   Loading,
   NextUIProvider,
+  Spacer,
   Text,
 } from '@nextui-org/react'
 import useSWR from 'swr'
@@ -16,6 +17,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faBook, faWarning } from '@fortawesome/free-solid-svg-icons'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Preview } from './Preview'
+import { CalendarAdd } from './CalendarAdd'
 
 const baseUrl = import.meta.env.DEV
   ? 'http://krystians-mac-pro.local:4000'
@@ -96,7 +99,7 @@ function AppHome() {
 
   return (
     <NextUIProvider theme={darkTheme}>
-      <Container sm={true}>
+      <Container sm>
         <Col>
           <Card>
             <Card.Header>
@@ -122,6 +125,20 @@ function AppHome() {
               </Container>
             </Card.Body>
           </Card>
+          <Spacer />
+          <Card>
+            <Card.Header>
+              <Container>
+                <Text h2>Subscribe to ICS</Text>
+              </Container>
+            </Card.Header>
+            <Card.Body>
+              <Container>
+                <CalendarAdd />
+              </Container>
+            </Card.Body>
+          </Card>
+          <Spacer y={3} />
         </Col>
       </Container>
     </NextUIProvider>
@@ -141,7 +158,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<AppHome />} />
-        <Route path="status" element={<Status />} />
+        <Route path="status/" element={<Status />} />
+        <Route path="preview/" element={<Preview />} />
       </Routes>
     </BrowserRouter>
   )
