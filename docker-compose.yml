@@ -12,7 +12,7 @@ services:
     depends_on:
       - database
   scrapper:
-    image: alt-scrap
+    image: ghcr.io/pjatk21/alt-scrap:main
     restart: unless-stopped
     cap_add:
       - "SYS_ADMIN"
