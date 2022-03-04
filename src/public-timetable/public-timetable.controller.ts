@@ -25,6 +25,7 @@ import {
   ApiProperty,
   ApiQuery,
   ApiResponse,
+  ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { Response as Res } from 'express'
@@ -215,6 +216,7 @@ export class PublicTimetableController {
     description:
       "Endpoint dedicated for scrappers to provide new data. Regular users won't use that.",
   })
+  @ApiTags('Admin')
   @ApiBody({ type: [ScheduleEntryDto] })
   @ApiHeader({ name: 'X-Upload-key' })
   @ApiCreatedResponse({

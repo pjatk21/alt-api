@@ -20,8 +20,14 @@ async function bootstrap() {
   // Redoc init
   const docOpts = new DocumentBuilder()
     .setTitle('Altapi')
-    .setDescription('Scrapper based alternative for blocked and outdated APIs.')
-    .setVersion(process.env.npm_package_version ?? 'uhmm')
+    .setDescription(
+      'Query PJA schedule in milliseconds. A great alternative to orginal webpage from 2010.<br>[![Run in Insomnia](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Altapi&uri=https%3A%2F%2Faltapi.kpostek.dev%2Fredoc%2Fswagger.json)',
+    )
+    .setVersion(
+      process.env.npm_package_version ??
+        'RUN THIS BY "yarn start:prod" || "npm run start:prod"',
+    )
+    .setContact('Krystian Postek', undefined, 'kpostekk@pjwstk.edu.pl')
     .build()
 
   const doc = SwaggerModule.createDocument(app, docOpts, {
@@ -31,7 +37,7 @@ async function bootstrap() {
   const redocOpts: RedocOptions = {}
 
   await RedocModule.setup('/redoc', app, doc, redocOpts)
-  SwaggerModule.setup('/swagger', app, doc)
+  // SwaggerModule.setup('/swagger', app, doc)
 
   // Allow little bigger POSTs
   app.use(bodyParser.json({ limit: '500kB' }))
