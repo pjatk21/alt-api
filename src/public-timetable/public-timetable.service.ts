@@ -6,7 +6,7 @@ import { ScheduleEntryDto } from './dto/schedule-entry.dto'
 import { DateTime } from 'luxon'
 import { GroupsAvailableDto } from './dto/groups-available.dto'
 import { TutorsAvailableDto } from './dto/tutors-available.dto'
-import { createEvents, EventAttributes } from 'ics'
+import { Alarm, createEvents, EventAttributes } from 'ics'
 
 type ScheduleOptionalFilters = {
   groups?: string[]
@@ -127,11 +127,17 @@ export class PublicTimetableService {
         description: `${re.type} z ${re.name} w budynku ${re.room} prowadzone przez ${re.tutor}.`,
         busyStatus: 'BUSY',
         url: previewUrl.toString(),
+        alarm: {
+          action: 'display',
+          trigger: {
+            before: true,
+            minutes: 15,
+          },
+        } as Alarm,
       }
     })
-    // return 'err' // REMOVE ME
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return createEvents(events).value! // REMOVE ME
+    return createEvents(events).value!
   }
 
   async findSingleEntry(
