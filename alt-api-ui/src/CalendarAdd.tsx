@@ -44,7 +44,7 @@ export function CalendarAdd() {
   const [groups, setGroups] = useState<string[]>([])
   const [groupSearch, setGroupSearch] = useState<string>("")
   const groupsFiltered = useMemo(
-    () => groupsAvailable.filter((group) => !groups.includes(group)).filter((group) => group.includes(groupSearch)).sort(),
+    () => groupsAvailable.filter((group) => !groups.includes(group)).filter((group) => group.toLowerCase().includes(groupSearch.toLowerCase())).sort(),
     [groups, groupsAvailable, groupSearch]
   )
   
