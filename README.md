@@ -1,6 +1,6 @@
 # Altapi
 
-Twórz zapytania do planu zajęć PJATK w ciągu milisekund. Dobra alternatywa dla orginalnej strony z 2010.
+Twórz zapytania do planu zajęć PJATK w ciągu milisekund. Dobra alternatywa dla oryginalnej strony z 2010.
 
 ## Feature'y
 
