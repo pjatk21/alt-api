@@ -55,7 +55,6 @@ function UsefulLinks() {
           <Button
             icon={<FontAwesomeIcon icon={faBook} />}
             bordered
-            ghost
             auto
           >
             ReDoc
@@ -67,7 +66,6 @@ function UsefulLinks() {
           <Button
             icon={<FontAwesomeIcon icon={faGithub} />}
             bordered
-            ghost
             auto
             color={'secondary'}
           >
@@ -80,7 +78,6 @@ function UsefulLinks() {
           <Button
             icon={<FontAwesomeIcon icon={faWarning} />}
             bordered
-            ghost
             auto
             color="warning"
           >
@@ -93,8 +90,11 @@ function UsefulLinks() {
           <Button
             icon={<FontAwesomeIcon icon={faApple} />}
             bordered
-            ghost
             auto
+            css={{
+              color: '#cfd4d4',
+              borderColor: '#cfd4d4',
+            }}
           >
             iOS app (alpha)
           </Button>
