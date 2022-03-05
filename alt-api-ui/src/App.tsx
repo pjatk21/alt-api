@@ -14,7 +14,7 @@ import {
 } from '@nextui-org/react'
 import useSWR from 'swr'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faApple, faGithub } from '@fortawesome/free-brands-svg-icons'
+import { faApple, faDiscord, faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faBook, faWarning } from '@fortawesome/free-solid-svg-icons'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Preview } from './Preview'
@@ -82,6 +82,21 @@ function UsefulLinks() {
             color="warning"
           >
             Abuse
+          </Button>
+        </Link>
+      </Grid>
+      <Grid>
+        <Link href="https://free.itny.me/join/pjatk2021">
+          <Button
+            icon={<FontAwesomeIcon icon={faDiscord} />}
+            bordered
+            auto
+            css={{
+              color: '#5865F2',
+              borderColor: '#5865F2',
+            }}
+          >
+            Discord
           </Button>
         </Link>
       </Grid>
