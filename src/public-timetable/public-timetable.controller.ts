@@ -238,11 +238,12 @@ export class PublicTimetableController {
     if ((groups ?? []).length < 1)
       throw new HttpException('You have to choose at least one group!', 400)
 
-    const ics = await this.timetableService.createICS({
+    const { ics, err } = await this.timetableService.createICS({
       groups,
     })
 
-    //return res.send(ics)
+    if (!ics) throw new HttpException(err, 418) // 🫖
+
     return res.contentType('.ics').attachment('AltapiSchedule.ics').send(ics)
   }
 

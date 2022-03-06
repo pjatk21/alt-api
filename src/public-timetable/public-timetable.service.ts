@@ -88,7 +88,7 @@ export class PublicTimetableService {
     )
   }
 
-  async createICS(optionalFilters: ScheduleOptionalFilters): Promise<string> {
+  async createICS(optionalFilters: ScheduleOptionalFilters) {
     if (!(optionalFilters.groups || optionalFilters.tutors))
       throw new Error('Specify groups or tutor!')
 
@@ -127,17 +127,22 @@ export class PublicTimetableService {
         description: `${re.type} z ${re.name} w budynku ${re.room} prowadzone przez ${re.tutor}.`,
         busyStatus: 'BUSY',
         url: previewUrl.toString(),
-        alarm: {
-          action: 'display',
-          trigger: {
-            before: true,
-            minutes: 15,
-          },
-        } as Alarm,
+        alarms: [
+          {
+            action: 'display',
+            trigger: {
+              before: true,
+              minutes: 15,
+            },
+          } as Alarm,
+        ],
       }
     })
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return createEvents(events).value!
+    const icsBuild = createEvents(events)
+    return {
+      ics: icsBuild.value,
+      err: icsBuild.error,
+    }
   }
 
   async findSingleEntry(
