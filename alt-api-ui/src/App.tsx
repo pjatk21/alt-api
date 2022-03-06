@@ -16,7 +16,7 @@ import {
 } from '@nextui-org/react'
 import useSWR from 'swr'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faApple, faDiscord, faGithub } from '@fortawesome/free-brands-svg-icons'
+import { faApple, faGithub } from '@fortawesome/free-brands-svg-icons'
 import {
   faBook,
   faCircleDollarToSlot,
