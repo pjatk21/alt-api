@@ -21,7 +21,7 @@ async function bootstrap() {
   const docOpts = new DocumentBuilder()
     .setTitle('Altapi')
     .setDescription(
-      'Query PJA schedule in milliseconds. A great alternative to original webpage from 2010.<br>[![Run in Insomnia](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Altapi&uri=https%3A%2F%2Faltapi.kpostek.dev%2Fredoc%2Fswagger.json)',
+      'Query PJA schedule in milliseconds. A great alternative to original webpage from 2010.<br>[![Run in Insomnia](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Altapi&uri=https%3A%2F%2Faltapi.kpostek.dev%2Fredoc%2Fopenapi.json)',
     )
     .setVersion(
       process.env.npm_package_version ??
