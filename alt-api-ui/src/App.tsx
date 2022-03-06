@@ -11,11 +11,12 @@ import {
   NextUIProvider,
   Spacer,
   Text,
+  Tooltip,
 } from '@nextui-org/react'
 import useSWR from 'swr'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faApple, faDiscord, faGithub } from '@fortawesome/free-brands-svg-icons'
-import { faBook, faWarning } from '@fortawesome/free-solid-svg-icons'
+import { faBook, faCircleDollarToSlot, faWarning } from '@fortawesome/free-solid-svg-icons'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Preview } from './Preview'
 import { CalendarAdd } from './CalendarAdd'
@@ -44,7 +45,7 @@ function UsefulLinks() {
   return (<>
     <h3>Useful links</h3>
       <Grid.Container
-      gap={2}
+      gap={1}
       alignItems={'center'}
       justify={'flex-start'}
       direction={'row'}
@@ -74,14 +75,14 @@ function UsefulLinks() {
         </Link>
       </Grid>
       <Grid>
-        <Link href="mailto:krystian@postek.eu?subject=Nadu%C5%BCycia%20Altapi">
+        <Link href="https://github.com/pjatk21/alt-api/issues/new/choose">
           <Button
             icon={<FontAwesomeIcon icon={faWarning} />}
             bordered
             auto
             color="warning"
           >
-            Abuse
+            Issue with API
           </Button>
         </Link>
       </Grid>
@@ -113,6 +114,23 @@ function UsefulLinks() {
           >
             iOS app (alpha)
           </Button>
+        </Link>
+      </Grid>
+      <Grid>
+        <Link href="https://revolut.me/kpostekk">
+          <Tooltip content={'coffee ain\'t cheap ☕️'}>
+            <Button
+              icon={<FontAwesomeIcon icon={faCircleDollarToSlot} />}
+              bordered
+              auto
+              css={{
+                color: '#e0a8dd',
+                borderColor: '#e0a8dd',
+              }}
+            >
+              Donate me
+            </Button>
+          </Tooltip>
         </Link>
       </Grid>
     </Grid.Container>
