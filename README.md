@@ -4,10 +4,16 @@
   <img alt="GitHub Workflow Status (branch)" src="https://img.shields.io/github/workflow/status/pjatk21/alt-api/Docker%20CI/main?style=flat-square">
   <a href="https://codeclimate.com/github/pjatk21/alt-api">
     <img alt="Code Climate maintainability" src="https://img.shields.io/codeclimate/maintainability/pjatk21/alt-api?style=flat-square">
+  </a>
+  <a href="https://codeclimate.com/github/pjatk21/alt-api">
     <img alt="Code Climate technical debt" src="https://img.shields.io/codeclimate/tech-debt/pjatk21/alt-api?style=flat-square">
   </a>
-  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/pjatk21/alt-api?style=flat-square">
-  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/pjatk21/alt-api?style=flat-square">
+  <a href="https://github.com/pjatk21/alt-api/search?l=typescript&type=code">
+    <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/pjatk21/alt-api?style=flat-square">
+  </a>
+  <a href="https://github.com/pjatk21/alt-api/commits/main">
+    <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/pjatk21/alt-api?style=flat-square">
+  </a>
 </div>
 
 ## Feature'y
