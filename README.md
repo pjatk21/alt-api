@@ -1,7 +1,7 @@
 <div align="center">
   <img width="340" alt="AltapiHeading" src="https://user-images.githubusercontent.com/30326322/156919789-c4132a16-dc5d-4d17-a13d-02d74a8360f8.png">
   <p>Twórz zapytania do planu zajęć PJATK w ciągu milisekund. Dobra alternatywa dla oryginalnej strony z 2010.</p>
-  <img alt="GitHub Workflow Status (branch)" src="https://img.shields.io/github/workflow/status/pjatk21/alt-api/Docker%20CI/main">
+  <img alt="GitHub Workflow Status (branch)" src="https://img.shields.io/github/workflow/status/pjatk21/alt-api/Docker%20CI/main?style=flat-square">
   <img alt="Code Climate maintainability" src="https://img.shields.io/codeclimate/maintainability/pjatk21/alt-api?style=flat-square">
   <img alt="Code Climate technical debt" src="https://img.shields.io/codeclimate/tech-debt/pjatk21/alt-api?style=flat-square">
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/pjatk21/alt-api?style=flat-square">
