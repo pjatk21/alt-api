@@ -12,7 +12,7 @@ import { MongooseModule } from '@nestjs/mongoose'
   imports: [
     MongooseModule.forRoot(process.env.MONGO_URL ?? 'mongodb://localhost/alt-pja'),
     PublicTimetableModule,
-    ThrottlerModule.forRoot({ ttl: 300, limit: 1000 }),
+    ThrottlerModule.forRoot({ ttl: 600, limit: 3000 }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'alt-api-ui', 'dist'),
     }),
