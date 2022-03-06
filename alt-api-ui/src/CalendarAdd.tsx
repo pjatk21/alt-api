@@ -105,7 +105,7 @@ export function CalendarAdd() {
           {groups.map((group) => (
             <p key={group}>
               <Checkbox
-                onChange={(e) => setGroups(groups.filter((g) => group !== g))}
+                onChange={() => setGroups(groups.filter((g) => group !== g))}
                 checked={true}
               >
                 {group}
@@ -116,7 +116,7 @@ export function CalendarAdd() {
         <Grid>
           {groupsFiltered.slice(0, 5).map((group) => (
             <p key={group}>
-              <Checkbox onChange={(e) => setGroups([...groups, group])} checked={false}>
+              <Checkbox onChange={() => setGroups([...groups, group])} checked={false}>
                 {group}
               </Checkbox>
             </p>
