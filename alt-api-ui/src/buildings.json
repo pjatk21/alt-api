@@ -1,0 +1,32 @@
+{
+  "buildings": [
+    {
+      "name": "A2020",
+      "where": "Warsaw, ul. Koszykowa 86"
+    },
+    {
+      "name": "B2020",
+      "where": "Warsaw, ul. Koszykowa 86"
+    },
+    {
+      "name": "C",
+      "where": "Warsaw, ul. Nowogrodzka 73"
+    },
+    {
+      "name": "F",
+      "where": "Warsaw, ul. Koszykowa 86"
+    },
+    {
+      "name": "G",
+      "where": "Warsaw, ul. Nowogrodzka 84/86"
+    },
+    {
+      "name": "H",
+      "where": "Warsaw, ul. Nowogrodzka 68"
+    },
+    {
+      "name": "L.O.",
+      "where": "Warsaw, ul. Szczęśliwicka 33A"
+    }
+  ]
+}
