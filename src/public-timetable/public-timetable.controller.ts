@@ -218,7 +218,7 @@ export class PublicTimetableController {
     example: ['WIs I.2 - 46c', 'WIs I.2 - 1w'],
     description: 'Group names to fetch calendar.',
     schema: {
-      minItems: 2,
+      minItems: 1,
     },
   })
   @ApiProduces('text/calendar')
@@ -235,8 +235,8 @@ export class PublicTimetableController {
     @Query('groups', new ParseArrayPipe({ items: String, separator: ',' }))
     groups: string[],
   ) {
-    if ((groups ?? []).length < 2)
-      throw new HttpException('You have to choose at least two groups!', 400)
+    if ((groups ?? []).length < 1)
+      throw new HttpException('You have to choose at least one group!', 400)
 
     const ics = await this.timetableService.createICS({
       groups,

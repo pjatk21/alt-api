@@ -22,7 +22,7 @@ function CalendarUrl({ groups }: CalendarUrlProps) {
     return url
   }, [groups])
   
-  if (groups.length < 2) return <Button auto disabled color={"error"}>Select at least 2 groups</Button>
+  if (groups.length < 1) return <Text css={{ opacity: 0.8 }}color={"error"}>Select at least one group</Text>
   
   return (<>
     <Button icon={<FontAwesomeIcon icon={faCopy} />} auto onClick={() => navigator.clipboard.writeText(icsUrl.toString())}>Copy ICS URL</Button>
