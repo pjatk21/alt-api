@@ -56,7 +56,7 @@ export function CalendarAdd() {
       <Text h4>Select groups</Text>
       <Grid.Container gap={2}>
         <Grid>
-          <Input width="260px" clearable bordered label="Group name" placeholder="WIs I.2 - 1w" onChange={(e) => setGroupSearch(e.target.value)}/>
+          <Input width="230px" clearable underlined label="Group name" placeholder="WIs I.2 - 1w" onChange={(e) => setGroupSearch(e.target.value)}/>
           <Spacer />
           <CalendarUrl groups={groups} />
           <Spacer />
