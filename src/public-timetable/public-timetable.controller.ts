@@ -252,6 +252,7 @@ export class PublicTimetableController {
     summary: 'Upload a schedule for a selected date',
     description:
       "Endpoint dedicated for scrappers to provide new data. Regular users won't use that.",
+    deprecated: true,
   })
   @ApiTags('Admin')
   @ApiBody({ type: [ScheduleEntryDto] })
