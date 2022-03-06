@@ -1,12 +1,21 @@
-import { faCopy, faDownload } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Checkbox, Grid, Input, Link, Loading, Spacer, Text } from "@nextui-org/react";
-import React, { useMemo, useState } from "react";
-import useSWR from "swr";
+import { faCopy, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  Button,
+  Checkbox,
+  Grid,
+  Input,
+  Link,
+  Loading,
+  Spacer,
+  Text,
+} from '@nextui-org/react'
+import React, { useMemo, useState } from 'react'
+import useSWR from 'swr'
 
 const baseUrl = import.meta.env.DEV
-? 'http://krystians-mac-pro.local:4000'
-: 'https://altapi.kpostek.dev'
+  ? 'http://krystians-mac-pro.local:4000'
+  : 'https://altapi.kpostek.dev'
 
 type CalendarUrlProps = {
   groups: string[]
@@ -21,16 +30,31 @@ function CalendarUrl({ groups }: CalendarUrlProps) {
     }
     return url
   }, [groups])
-  
-  if (groups.length < 1) return <Text css={{ opacity: 0.8 }}color={"error"}>Select at least one group</Text>
-  
-  return (<>
-    <Button icon={<FontAwesomeIcon icon={faCopy} />} auto onClick={() => navigator.clipboard.writeText(icsUrl.toString())}>Copy ICS URL</Button>
-    <Spacer />
-    <Link href={icsUrl.toString()}>
-      <Button icon={<FontAwesomeIcon icon={faDownload} />} auto>Download ICS</Button>
-    </Link>
-  </>)
+
+  if (groups.length < 1)
+    return (
+      <Text css={{ opacity: 0.8 }} color={'error'}>
+        Select at least one group
+      </Text>
+    )
+
+  return (
+    <>
+      <Button
+        icon={<FontAwesomeIcon icon={faCopy} />}
+        auto
+        onClick={() => navigator.clipboard.writeText(icsUrl.toString())}
+      >
+        Copy ICS URL
+      </Button>
+      <Spacer />
+      <Link href={icsUrl.toString()}>
+        <Button icon={<FontAwesomeIcon icon={faDownload} />} auto>
+          Download ICS
+        </Button>
+      </Link>
+    </>
+  )
 }
 
 export function CalendarAdd() {
@@ -40,15 +64,26 @@ export function CalendarAdd() {
 
   const availableGroupsResponse = useSWR(url.toString(), fetcher)
 
-  const { groupsAvailable } = (availableGroupsResponse.data ?? { groupsAvailable: [] }) as { groupsAvailable: string[] }
+  const { groupsAvailable } = (availableGroupsResponse.data ?? {
+    groupsAvailable: [],
+  }) as { groupsAvailable: string[] }
   const [groups, setGroups] = useState<string[]>([])
-  const [groupSearch, setGroupSearch] = useState<string>("")
+  const [groupSearch, setGroupSearch] = useState<string>('')
   const groupsFiltered = useMemo(
-    () => groupsAvailable.filter((group) => !groups.includes(group)).filter((group) => group.toLowerCase().includes(groupSearch.toLowerCase())).sort(),
-    [groups, groupsAvailable, groupSearch]
+    () =>
+      groupsAvailable
+        .filter((group) => !groups.includes(group))
+        .filter((group) => group.toLowerCase().includes(groupSearch.toLowerCase()))
+        .sort(),
+    [groups, groupsAvailable, groupSearch],
   )
-  
-  if (availableGroupsResponse.error) return <Text color={'error'} as={'pre'}>{availableGroupsResponse.error.toString()}</Text>
+
+  if (availableGroupsResponse.error)
+    return (
+      <Text color={'error'} as={'pre'}>
+        {availableGroupsResponse.error.toString()}
+      </Text>
+    )
   if (!availableGroupsResponse.data) return <Loading />
 
   return (
@@ -56,15 +91,39 @@ export function CalendarAdd() {
       <Text h4>Select groups</Text>
       <Grid.Container gap={2}>
         <Grid>
-          <Input width="230px" clearable underlined label="Group name" placeholder="WIs I.2 - 1w" onChange={(e) => setGroupSearch(e.target.value)}/>
+          <Input
+            width="230px"
+            clearable
+            underlined
+            label="Group name"
+            placeholder="WIs I.2 - 1w"
+            onChange={(e) => setGroupSearch(e.target.value)}
+          />
           <Spacer />
           <CalendarUrl groups={groups} />
           <Spacer />
-          {groups.map((group) => <p key={group}><Checkbox onChange={(e) => setGroups(groups.filter((g) => group !== g)) } checked={true}>{group}</Checkbox></p>)}
+          {groups.map((group) => (
+            <p key={group}>
+              <Checkbox
+                onChange={(e) => setGroups(groups.filter((g) => group !== g))}
+                checked={true}
+              >
+                {group}
+              </Checkbox>
+            </p>
+          ))}
         </Grid>
         <Grid>
-          {groupsFiltered.slice(0, 5).map((group) => <p key={group}><Checkbox onChange={(e) => setGroups([...groups, group]) } checked={false}>{group}</Checkbox></p>)}
-          {groupsFiltered.length > 5 && <Text i>And {groupsFiltered.length} more...</Text>}
+          {groupsFiltered.slice(0, 5).map((group) => (
+            <p key={group}>
+              <Checkbox onChange={(e) => setGroups([...groups, group])} checked={false}>
+                {group}
+              </Checkbox>
+            </p>
+          ))}
+          {groupsFiltered.length > 5 && (
+            <Text i>And {groupsFiltered.length} more...</Text>
+          )}
         </Grid>
       </Grid.Container>
     </>
