@@ -28,7 +28,7 @@ const baseUrl = import.meta.env.DEV
 function LastUpdate() {
   const fetcher = (url: string) => fetch(url).then((r) => r.json())
   const { data, error } = useSWR(`${baseUrl}/lastUpdate`, fetcher)
-  if (error) return null
+  if (error) return <Text as={'pre'} color="error">{error.toString()}</Text>
   if (!data) return <Loading />
   return (
     <>

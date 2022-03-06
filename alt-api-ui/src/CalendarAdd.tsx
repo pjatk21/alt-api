@@ -48,7 +48,7 @@ export function CalendarAdd() {
     [groups, groupsAvailable, groupSearch]
   )
   
-  if (availableGroupsResponse.error) <Text>{availableGroupsResponse.error}</Text>
+  if (availableGroupsResponse.error) return <Text color={'error'} as={'pre'}>{availableGroupsResponse.error.toString()}</Text>
   if (!availableGroupsResponse.data) return <Loading />
 
   return (
