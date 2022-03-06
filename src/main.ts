@@ -8,6 +8,7 @@ import { RedocModule, RedocOptions } from 'nestjs-redoc'
 import { Logger, VersioningType } from '@nestjs/common'
 import { Chance } from 'chance'
 import { existsSync, readFileSync } from 'fs'
+import { HypervisorModule } from './hypervisor/hypervisor.module'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: true })
@@ -31,7 +32,7 @@ async function bootstrap() {
     .build()
 
   const doc = SwaggerModule.createDocument(app, docOpts, {
-    include: [PublicTimetableModule],
+    include: [PublicTimetableModule, HypervisorModule],
   })
 
   const redocOpts: RedocOptions = {

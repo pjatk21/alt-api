@@ -6,12 +6,14 @@ import { PublicTimetableService } from './public-timetable/public-timetable.serv
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
+import { HypervisorModule } from './hypervisor/hypervisor.module'
 import { MongooseModule } from '@nestjs/mongoose'
 
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.MONGO_URL ?? 'mongodb://localhost/alt-pja'),
     PublicTimetableModule,
+    HypervisorModule,
     ThrottlerModule.forRoot({ ttl: 600, limit: 3000 }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'alt-api-ui', 'dist'),
