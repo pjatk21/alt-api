@@ -9,6 +9,7 @@ import {
   Link,
   Loading,
   NextUIProvider,
+  NormalColors,
   Spacer,
   Text,
   Tooltip,
@@ -41,6 +42,36 @@ function LastUpdate() {
   )
 }
 
+type UsefulLinkProps = {
+  icon?: React.ReactNode,
+  builtinColor?: NormalColors,
+  customColor?: string,
+  tooltip?: string,
+  disabled?: boolean,
+  href: string,
+  text: string,
+}
+
+function UsefulLink(props: UsefulLinkProps) {
+  const { icon, builtinColor, customColor, href, text, tooltip, disabled } = props
+  const customColorCss: Record<string, string> | undefined = customColor ? {
+    color: customColor,
+    borderColor: customColor,
+  } : undefined
+
+  const button = (<Button icon={icon} disabled={disabled} bordered auto color={builtinColor} css={customColorCss}>
+    {text}
+  </Button>)
+
+  return (
+    <Grid>
+      <Link href={!disabled ? href : undefined}>
+        {tooltip ? <Tooltip content={tooltip}>{button}</Tooltip> : button}
+      </Link>
+    </Grid>
+  )
+}
+
 function UsefulLinks() {
   return (<>
     <h3>Useful links</h3>
@@ -51,88 +82,11 @@ function UsefulLinks() {
       direction={'row'}
       wrap={'wrap'}
     >
-      <Grid>
-        <Link href="/redoc">
-          <Button
-            icon={<FontAwesomeIcon icon={faBook} />}
-            bordered
-            auto
-          >
-            ReDoc
-          </Button>
-        </Link>
-      </Grid>
-      <Grid>
-        <Link href="https://github.com/pjatk21/alt-api">
-          <Button
-            icon={<FontAwesomeIcon icon={faGithub} />}
-            bordered
-            auto
-            color={'secondary'}
-          >
-            Github
-          </Button>
-        </Link>
-      </Grid>
-      <Grid>
-        <Link href="https://github.com/pjatk21/alt-api/issues/new/choose">
-          <Button
-            icon={<FontAwesomeIcon icon={faWarning} />}
-            bordered
-            auto
-            color="warning"
-          >
-            Issue with API
-          </Button>
-        </Link>
-      </Grid>
-      <Grid>
-        <Link href="https://free.itny.me/join/pjatk2021">
-          <Button
-            icon={<FontAwesomeIcon icon={faDiscord} />}
-            bordered
-            auto
-            css={{
-              color: '#5865F2',
-              borderColor: '#5865F2',
-            }}
-          >
-            Discord
-          </Button>
-        </Link>
-      </Grid>
-      <Grid>
-        <Link href="https://github.com/pjatk21/Pie-Schedule">
-          <Button
-            icon={<FontAwesomeIcon icon={faApple} />}
-            bordered
-            auto
-            css={{
-              color: '#cfd4d4',
-              borderColor: '#cfd4d4',
-            }}
-          >
-            iOS app (alpha)
-          </Button>
-        </Link>
-      </Grid>
-      <Grid>
-        <Link href="https://revolut.me/kpostekk">
-          <Tooltip content={'coffee ain\'t cheap ☕️'}>
-            <Button
-              icon={<FontAwesomeIcon icon={faCircleDollarToSlot} />}
-              bordered
-              auto
-              css={{
-                color: '#e0a8dd',
-                borderColor: '#e0a8dd',
-              }}
-            >
-              Donate me
-            </Button>
-          </Tooltip>
-        </Link>
-      </Grid>
+      <UsefulLink icon={<FontAwesomeIcon icon={faBook} />} builtinColor={'primary'} href={'/redoc'} text={'ReDoc'} />
+      <UsefulLink icon={<FontAwesomeIcon icon={faGithub} />} builtinColor={'secondary'} href={'https://github.com/pjatk21/alt-api'} text={'Github'} />
+      <UsefulLink icon={<FontAwesomeIcon icon={faWarning} />} builtinColor={'warning'} href={'https://github.com/pjatk21/alt-api/issues/new/choose'} text={'Report issue'} />
+      <UsefulLink icon={<FontAwesomeIcon icon={faApple} />} customColor={'#cfd4d4'} href={'https://github.com/pjatk21/Pie-Schedule'} disabled text={'iOS app (𝝰)'} tooltip={'I need money for Apple licences'} />
+      <UsefulLink icon={<FontAwesomeIcon icon={faCircleDollarToSlot} />} customColor={'#e0a8dd'} href={'https://revolut.me/kpostekk'} text={'Donate me'} tooltip={'coffee && booze ain\'t cheap ☕️ 🥃'} />
     </Grid.Container>
   </>
   )
