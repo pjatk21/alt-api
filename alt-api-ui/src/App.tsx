@@ -179,6 +179,7 @@ function AppHome() {
                 <Text h2 css={{
                   textGradient: 'to bottom left, #3EE5FF 0%, #FF38F2 100%',
                 }}>Subscribe to ICS</Text>
+                <Link href="https://github.com/pjatk21/alt-api/wiki/ICS-integration" css={{ opacity: 0.5 }}>Read more about ICS integration here</Link>
               </Container>
             </Card.Header>
             <Card.Body>
