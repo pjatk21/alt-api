@@ -32,7 +32,7 @@ export class HypervisorGateway implements OnGatewayInit {
   ): Promise<WsResponse<unknown>> {
     const visaRequestId = await this.hypervisor.handleVisaRequest(client, passport)
     return {
-      event: 'visa-status',
+      event: HypervisorEvents.PASSPORT,
       data: {
         visaRequestId,
       },
