@@ -5,13 +5,10 @@ import {
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer,
   WsResponse,
 } from '@nestjs/websockets'
 import { Socket, Server } from 'socket.io'
-import { createHash, randomBytes } from 'crypto'
 import { ScrapperPassportDto } from './dto/passport.dto'
-import { ScrapperVisaResponseDto } from './dto/visa.dto'
 import { HypervisorService } from './hypervisor.service'
 import { HypervisorEvents, HypervisorScrapperState } from './hypervisor.enum'
 

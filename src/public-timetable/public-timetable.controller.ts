@@ -14,7 +14,6 @@ import {
   HttpException,
   NotFoundException,
 } from '@nestjs/common'
-import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util'
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -27,7 +26,6 @@ import {
   ApiProduces,
   ApiProperty,
   ApiQuery,
-  ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
