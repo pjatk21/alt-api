@@ -6,7 +6,8 @@ on:
       - "v*"
     branches:
       - "main"
-      - "gh-actions-build-docker"
+      - "gh-*"
+      - "ws-hypervisor"
   workflow_dispatch:
 
 jobs:
