@@ -19,7 +19,6 @@ export class HypervisorController {
   async visa(@Body('oid') oid: string) {
     const vr = await this.hypervisor.getVisaRequest(oid)
     const { id, socketId } = vr
-    vr.acceptedAt = new Date()
     vr.active = true
     this.hypervisor.sendVisa(socketId, { accepted: true, visaId: id })
     return { staus: 'done!' }

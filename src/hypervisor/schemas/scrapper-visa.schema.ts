@@ -4,11 +4,8 @@ import { ScrapperPassportDto } from '../dto/passport.dto'
 
 export type ScrapperVisaDocument = ScrapperVisa & Document
 
-@Schema()
+@Schema({ timestamps: true })
 export class ScrapperVisa {
-  @Prop({ type: Date })
-  acceptedAt: Date
-
   @Prop({ required: true, type: ScrapperPassportDto })
   passport: ScrapperPassportDto
 
