@@ -1,11 +1,17 @@
 import { createHash, randomBytes, randomUUID } from 'crypto'
 import { io } from 'socket.io-client'
-import { HypervisorEvents, HypervisorScrapperState } from '../hypervisor/hypervisor.enum'
+import {
+  HypervisorEvents,
+  HypervisorScrapperState,
+  HypervisorScrapperCommands,
+} from '../hypervisor/hypervisor.enum'
+import EventEmitter from 'events'
 
 const socket = io('ws://localhost:4000/', { transports: ['websocket'], timeout: 600 })
+const commands = new EventEmitter()
 
 console.log('Scrapper registration simulator', socket.io.opts)
-socket.onAny((ev, payload) => console.log('Non handled event:', ev, 'value:', payload))
+
 socket.on('disconnect', (reason) => {
   console.log('disconnected', reason)
 })
@@ -23,11 +29,7 @@ socket.on('connect', () => {
       .digest('hex'),
   })
 
-  // 1.1. Update state
-  socket.emit(HypervisorEvents.STATE, {
-    uuid,
-    state: HypervisorScrapperState.REGISTRATION,
-  })
+  socket.on('visa-status', (e) => console.log('VS:', e))
 })
 
 // 2. Wait for visa
@@ -37,16 +39,29 @@ socket.once(HypervisorEvents.VISA, (visa) => {
     socket.emit(HypervisorEvents.STATE, HypervisorScrapperState.READY)
 
     // 3. Wait for commands
-    socket.on(HypervisorEvents.COMMAND, (cmd) => {
-      console.log('Dispatching:', cmd)
-      switch (cmd) {
-        case 'disconnect':
-          socket.disconnect()
-        default:
-          console.warn("Can't recoginise cmd!")
-      }
+    socket.on(HypervisorEvents.COMMAND, (cmdExec) => {
+      console.log('Dispatching:', cmdExec.command)
+      commands.emit(cmdExec.command, cmdExec)
     })
   } else {
     console.log('Visa rejected')
   }
+})
+
+commands.on(HypervisorScrapperCommands.DISCONNECT, () => {
+  socket.emit(HypervisorEvents.STATE, HypervisorScrapperState.DISCONNECTED)
+  socket.disconnect()
+})
+
+commands.on(HypervisorScrapperCommands.EXIT, () => {
+  socket.emit(HypervisorEvents.STATE, HypervisorScrapperState.DISCONNECTED)
+  process.exit()
+})
+
+commands.on(HypervisorScrapperCommands.SCRAP, () => {
+  socket.emit(HypervisorEvents.STATE, HypervisorScrapperState.WORKING)
+  console.log('Much work...')
+  setTimeout(() => {
+    socket.emit(HypervisorEvents.STATE, HypervisorScrapperState.READY)
+  }, 10000)
 })

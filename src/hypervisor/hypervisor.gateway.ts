@@ -13,6 +13,7 @@ import { createHash, randomBytes } from 'crypto'
 import { ScrapperPassportDto } from './dto/passport.dto'
 import { ScrapperVisaResponseDto } from './dto/visa.dto'
 import { HypervisorService } from './hypervisor.service'
+import { HypervisorEvents, HypervisorScrapperState } from './hypervisor.enum'
 
 @WebSocketGateway({ transports: ['websocket', 'polling'] })
 export class HypervisorGateway implements OnGatewayInit {
@@ -39,5 +40,14 @@ export class HypervisorGateway implements OnGatewayInit {
         requestId: visaRequestId,
       },
     }
+  }
+
+  @SubscribeMessage(HypervisorEvents.STATE)
+  async recordState(
+    @ConnectedSocket() client: Socket,
+    @MessageBody(new ParseEnumPipe(HypervisorScrapperState))
+    state: HypervisorScrapperState,
+  ) {
+    await this.hypervisor.updateState(client.id, state)
   }
 }

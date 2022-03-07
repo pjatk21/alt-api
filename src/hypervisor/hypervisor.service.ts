@@ -5,6 +5,8 @@ import { Model } from 'mongoose'
 import { Socket, Server } from 'socket.io'
 import { ScrapperPassportDto } from './dto/passport.dto'
 import { ScrapperVisaResponseDto } from './dto/visa.dto'
+import { HypervisorScrapperState } from './hypervisor.enum'
+import { ScrapperState, ScrapperStateDocument } from './schemas/scrapper-state.schema'
 import { ScrapperVisa, ScrapperVisaDocument } from './schemas/scrapper-visa.schema'
 
 export enum HypervisorInternalEvents {
@@ -19,7 +21,18 @@ export class HypervisorService {
     private events: EventEmitter2,
     @InjectModel(ScrapperVisa.name)
     private visaModel: Model<ScrapperVisaDocument>,
+    @InjectModel(ScrapperState.name)
+    private statesModel: Model<ScrapperStateDocument>,
   ) {}
+
+  async updateState(socketId: string, state: HypervisorScrapperState) {
+    const visa = await this.visaModel.findOne({ socketId })
+    const stateRecord = await new this.statesModel({
+      visa,
+      newState: state,
+    }).save()
+    return stateRecord
+  }
 
   async handleVisaRequest(socket: Socket, passport: ScrapperPassportDto) {
     return await new this.visaModel({

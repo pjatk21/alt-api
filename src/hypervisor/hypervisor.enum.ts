@@ -1,8 +1,18 @@
 export enum HypervisorScrapperState {
+  STARTING,
   REGISTRATION,
   READY,
   WORKING,
   BROKEN,
+  DISCONNECTED,
+}
+
+export enum HypervisorScrapperCommands {
+  DISCONNECT = 'disconnect',
+  EXIT = 'exit',
+  SCRAP = 'scrap',
+  QUEUE = 'queue',
+  CANCEL = 'cancel',
 }
 
 export enum HypervisorEvents {
