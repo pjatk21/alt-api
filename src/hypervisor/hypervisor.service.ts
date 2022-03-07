@@ -28,6 +28,7 @@ export class HypervisorService {
   async updateState(socketId: string, state: HypervisorScrapperState) {
     const visa = await this.visaModel.findOne({ socketId })
     const stateRecord = await new this.statesModel({
+      socketId,
       visa,
       newState: state,
     }).save()

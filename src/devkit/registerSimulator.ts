@@ -5,7 +5,7 @@ import {
   HypervisorScrapperState,
   HypervisorScrapperCommands,
 } from '../hypervisor/hypervisor.enum'
-import EventEmitter from 'events'
+import { EventEmitter } from 'events'
 
 const socket = io('ws://localhost:4000/', { transports: ['websocket'], timeout: 600 })
 const commands = new EventEmitter()
