@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { ApiProperty } from '@nestjs/swagger'
 import { Document, Types } from 'mongoose'
 import { HypervisorScrapperState } from '../hypervisor.enum'
 import { ScrapperVisa } from './scrapper-visa.schema'
