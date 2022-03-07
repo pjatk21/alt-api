@@ -2,18 +2,14 @@
   <img width="340" alt="AltapiHeading" src="https://user-images.githubusercontent.com/30326322/156919789-c4132a16-dc5d-4d17-a13d-02d74a8360f8.png">
   <p>Twórz zapytania do planu zajęć PJATK w ciągu milisekund. Dobra alternatywa dla oryginalnej strony z 2010.</p>
   <img alt="GitHub Workflow Status (branch)" src="https://img.shields.io/github/workflow/status/pjatk21/alt-api/Docker%20CI/main?style=flat-square">
-  <a href="https://codeclimate.com/github/pjatk21/alt-api">
-    <img alt="Code Climate maintainability" src="https://img.shields.io/codeclimate/maintainability/pjatk21/alt-api?style=flat-square">
+  <a href="https://codeclimate.com/github/pjatk21/alt-api"><img alt="Code Climate maintainability" src="https://img.shields.io/codeclimate/maintainability/pjatk21/alt-api">
   </a>
-  <a href="https://codeclimate.com/github/pjatk21/alt-api">
-    <img alt="Code Climate technical debt" src="https://img.shields.io/codeclimate/tech-debt/pjatk21/alt-api?style=flat-square">
+  <a href="https://codeclimate.com/github/pjatk21/alt-api"><img alt="Code Climate technical debt" src="https://img.shields.io/codeclimate/tech-debt/pjatk21/alt-api">
   </a>
-  <a href="https://github.com/pjatk21/alt-api/search?l=typescript&type=code">
-    <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/pjatk21/alt-api?style=flat-square">
+  <a href="https://github.com/pjatk21/alt-api/search?l=typescript&type=code"><img alt="GitHub top language" src="https://img.shields.io/github/languages/top/pjatk21/alt-api">
   </a>
-  <a href="https://github.com/pjatk21/alt-api/commits/main">
-    <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/pjatk21/alt-api?style=flat-square">
-  </a>
+  <a href="https://github.com/pjatk21/alt-api/commits/main"><img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/pjatk21/alt-api">
+  </a><a href="https://wakatime.com/badge/user/304093ee-926f-40f9-980c-65ea3d5a15b7/project/8ebe4c55-638b-4258-88aa-99702785e52d"><img src="https://wakatime.com/badge/user/304093ee-926f-40f9-980c-65ea3d5a15b7/project/8ebe4c55-638b-4258-88aa-99702785e52d.svg" alt="wakatime"></a>
 </div>
 
 ## Feature'y
