@@ -1,4 +1,4 @@
-import { Logger, UsePipes, ValidationPipe } from '@nestjs/common'
+import { Logger, ParseEnumPipe, UsePipes, ValidationPipe } from '@nestjs/common'
 import {
   ConnectedSocket,
   MessageBody,
@@ -28,7 +28,7 @@ export class HypervisorGateway implements OnGatewayInit {
   }
 
   @UsePipes(new ValidationPipe({ transform: true }))
-  @SubscribeMessage('passport')
+  @SubscribeMessage(HypervisorEvents.PASSPORT)
   async handleMessage(
     @ConnectedSocket() client: Socket,
     @MessageBody() passport: ScrapperPassportDto,
@@ -37,7 +37,7 @@ export class HypervisorGateway implements OnGatewayInit {
     return {
       event: 'visa-status',
       data: {
-        requestId: visaRequestId,
+        visaRequestId,
       },
     }
   }
