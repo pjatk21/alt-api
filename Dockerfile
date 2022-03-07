@@ -8,6 +8,8 @@ RUN adduser -D -s /bin/bash altiapi
 
 WORKDIR /app
 
+RUN mkdir /app/alt-api-ui
+
 RUN chown -R altiapi /app
 
 USER altiapi
