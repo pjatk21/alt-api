@@ -6,7 +6,8 @@ import { Socket, Server } from 'socket.io'
 import { ScrapperPassportDto } from './dto/passport.dto'
 import { VisaRequestDto } from './dto/visa-request.dto'
 import { ScrapperVisaDispositionDto } from './dto/visa.dto'
-import { HypervisorScrapperState } from './hypervisor.enum'
+import { HypervisorEvents, HypervisorScrapperState } from './hypervisor.enum'
+import { HypervisorCommandExec } from './hypervisor.types'
 import { ScrapperState, ScrapperStateDocument } from './schemas/scrapper-state.schema'
 import { ScrapperVisa, ScrapperVisaDocument } from './schemas/scrapper-visa.schema'
 
@@ -34,6 +35,16 @@ export class HypervisorService {
       newState: state,
     }).save()
     return stateRecord
+  }
+
+  async assignCommand(uuid: string, command: HypervisorCommandExec) {
+    const visa = await this.visaModel.findOne({
+      passport: {
+        uuid,
+      },
+    })
+
+    this.socket.to(visa.socketId).emit(HypervisorEvents.COMMAND, command)
   }
 
   async handleVisaRequest(socket: Socket, passport: ScrapperPassportDto) {

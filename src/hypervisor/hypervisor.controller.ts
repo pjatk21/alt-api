@@ -74,7 +74,8 @@ export class HypervisorController {
   @ApiResponse({ type: HypervisorResponseDto })
   @ApiBody({ type: HypervisorCommnandRequestDto })
   async manage(@Body() cmdReq: HypervisorCommnandRequestDto): Promise<HypervisorResponseDto> {
-    
+    const { scrapper, command } = cmdReq
+    await this.hypervisor.assignCommand(scrapper, { command, context: null })
     return {
       status: HypervisorResponseStatus.ASSIGNED,
     }
