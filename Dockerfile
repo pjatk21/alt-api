@@ -16,13 +16,13 @@ USER altiapi
 
 # Copy dependencies defined in package.json
 
-COPY package.json /app/package.json
+COPY --chown=altiapi package.json /app/package.json
 
-COPY yarn.lock /app/yarn.lock
+COPY --chown=altiapi yarn.lock /app/yarn.lock
 
-COPY alt-api-ui/package.json /app/alt-api-ui/package.json
+COPY --chown=altiapi alt-api-ui/package.json /app/alt-api-ui/package.json
 
-COPY alt-api-ui/yarn.lock /app/alt-api-ui/yarn.lock
+COPY --chown=altiapi alt-api-ui/yarn.lock /app/alt-api-ui/yarn.lock
 
 # Install dependencies
 
@@ -32,6 +32,10 @@ RUN yarn install
 # Install ui dependencies
 WORKDIR /app/alt-api-ui
 RUN yarn install
+
+# Copy rest of the sources
+
+COPY --chown=altiapi . /app
 
 # Build api
 
