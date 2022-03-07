@@ -5,11 +5,15 @@ import { HypervisorService } from './hypervisor.service'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 import { ScrapperVisa, ScrapperVisaSchema } from './schemas/scrapper-visa.schema'
+import { ScrapperState, ScrapperStateSchema } from './schemas/scrapper-state.schema'
 
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
     MongooseModule.forFeature([{ name: ScrapperVisa.name, schema: ScrapperVisaSchema }]),
+    MongooseModule.forFeature([
+      { name: ScrapperState.name, schema: ScrapperStateSchema },
+    ]),
   ],
   providers: [HypervisorGateway, HypervisorService],
   controllers: [HypervisorController],
