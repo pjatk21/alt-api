@@ -11,7 +11,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.MONGO_URL ?? 'mongodb://localhost/alt-pja'),
+    MongooseModule.forRoot(process.env.MONGO_URL ?? 'mongodb://localhost/altapi'),
     PublicTimetableModule,
     HypervisorModule,
     ThrottlerModule.forRoot({ ttl: 600, limit: 3000 }),
