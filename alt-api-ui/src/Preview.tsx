@@ -15,8 +15,8 @@ import { googleMapsEmbededApiKey } from './credentials.json'
 import { ScheduleEntryRawResponse } from './types'
 
 const baseUrl = import.meta.env.DEV
-  ? 'http://krystians-mac-pro.local:4000'
-  : 'https://altapi.kpostek.dev'
+  ? 'http://krystians-mac-pro.local:4000/'
+  : window.location.href
 
 function PreviewWidget() {
   const fetcher = (url: string) => fetch(url).then((r) => r.json())

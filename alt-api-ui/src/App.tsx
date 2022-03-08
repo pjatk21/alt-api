@@ -28,12 +28,12 @@ import { CalendarAdd } from './CalendarAdd'
 import { NotFound } from './NotFound'
 
 const baseUrl = import.meta.env.DEV
-  ? 'http://krystians-mac-pro.local:4000'
-  : 'https://altapi.kpostek.dev'
+  ? 'http://krystians-mac-pro.local:4000/'
+  : window.location.href
 
 function LastUpdate() {
   const fetcher = (url: string) => fetch(url).then((r) => r.json())
-  const { data, error } = useSWR(`${baseUrl}/lastUpdate`, fetcher)
+  const { data, error } = useSWR(`${baseUrl}lastUpdate`, fetcher)
   if (error)
     return (
       <Text as={'pre'} color="error">
