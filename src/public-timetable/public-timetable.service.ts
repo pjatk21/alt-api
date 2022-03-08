@@ -93,12 +93,13 @@ export class PublicTimetableService {
     if (!(optionalFilters.groups || optionalFilters.tutors))
       throw new Error('Specify groups or tutor!')
 
-    const rawEntries: ScheduleEntryDto[] = await this.timetableModel
+    const rawEntries: Timetable[] = await this.timetableModel
       .aggregate([
         {
           $project: {
             entry: true,
             group: '$entry.groups',
+            uploadedAt: true,
           },
         },
         {
@@ -113,10 +114,12 @@ export class PublicTimetableService {
         },
       ])
       .exec()
-      .then((rows) => rows.map((row) => row.entry))
-    const events: EventAttributes[] = rawEntries.map((re) => {
+
+    const events: EventAttributes[] = rawEntries.map((row) => {
+      const re = row.entry
       const begin = DateTime.fromJSDate(re.begin).setZone()
       const end = DateTime.fromJSDate(re.end).setZone()
+      const updated = DateTime.fromJSDate(row.uploadedAt).setZone()
       const previewUrl = new URL('https://altapi.kpostek.dev/preview')
       previewUrl.searchParams.append('at', begin.toISO())
       previewUrl.searchParams.append('group', re.groups[0])
@@ -128,15 +131,17 @@ export class PublicTimetableService {
           .update(re.groups.toString())
           .update(re.code)
           .update(re.room)
-          .update(re.tutor)
+          .update(re.tutor ?? 'Not assigned')
           .digest('hex')
+          .slice(0, 20)
 
       return {
-        productId: eventHashId,
+        uid: eventHashId,
+        productId: 'altapi/ics',
         start: [begin.year, begin.month, begin.day, begin.hour, begin.minute],
-        end: [end.year, end.month, end.day, end.hour, end.minute],
+        end: [end.year, end.month, end.day, end.hour, begin.minute],
         title: `${re.type} z ${re.code} (${re.room})`,
-        description: `${re.type} z ${re.name} w budynku ${re.room} prowadzone przez ${re.tutor}.`,
+        description: `${re.type} z ${re.name} w budynku ${re.room} prowadzone przez ${re.tutor}. Ostatnia aktualizacja ${DateTime.fromJSDate(row.uploadedAt).setZone().toISO()}`,
         busyStatus: 'BUSY',
         url: previewUrl.toString(),
         alarms: [
@@ -147,6 +152,13 @@ export class PublicTimetableService {
               minutes: 15,
             },
           } as Alarm,
+        ],
+        lastModified: [
+          updated.year,
+          updated.month,
+          updated.day,
+          updated.hour,
+          updated.minute,
         ],
       }
     })
