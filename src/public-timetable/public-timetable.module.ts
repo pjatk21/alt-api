@@ -6,7 +6,7 @@ import { PublicTimetableController } from './public-timetable.controller'
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.MONGO_URL ?? 'mongodb://localhost/alt-pja'),
+    MongooseModule.forRoot(process.env.MONGO_URL ?? 'mongodb://localhost/altapi'),
     MongooseModule.forFeature([{ name: Timetable.name, schema: TimetableSchema }]),
     CacheModule.register({ ttl: 60 * 5 }), // 5 minutes
   ],
