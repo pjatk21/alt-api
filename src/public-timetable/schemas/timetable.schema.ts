@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { DateTime } from 'luxon'
 import { Document } from 'mongoose'
 import { ScheduleEntryDto } from '../dto/schedule-entry.dto'
 
