@@ -7,6 +7,7 @@ import { DateTime } from 'luxon'
 import { GroupsAvailableDto } from './dto/groups-available.dto'
 import { TutorsAvailableDto } from './dto/tutors-available.dto'
 import { Alarm, createEvents, EventAttributes } from 'ics'
+import { createHash } from 'crypto'
 
 type ScheduleOptionalFilters = {
   groups?: string[]
@@ -120,7 +121,18 @@ export class PublicTimetableService {
       previewUrl.searchParams.append('at', begin.toISO())
       previewUrl.searchParams.append('group', re.groups[0])
 
+      const eventHashId =
+        'altid-' +
+        createHash('sha1')
+          .update(re.begin.getTime().toString())
+          .update(re.groups.toString())
+          .update(re.code)
+          .update(re.room)
+          .update(re.tutor)
+          .digest('hex')
+
       return {
+        productId: eventHashId,
         start: [begin.year, begin.month, begin.day, begin.hour, begin.minute],
         end: [end.year, end.month, end.day, end.hour, end.minute],
         title: `${re.type} z ${re.code} (${re.room})`,
