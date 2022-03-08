@@ -75,6 +75,7 @@ export class ScheduleEntryDto {
   @ApiProperty({
     type: ScheduleEntryRawComponentsDto,
     description: 'Shards of data left from scrap, not really useful',
+    required: false,
   })
-  raw: ScheduleEntryRawComponentsDto
+  raw?: ScheduleEntryRawComponentsDto
 }

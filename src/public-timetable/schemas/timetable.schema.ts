@@ -5,13 +5,19 @@ import { ScheduleEntryDto } from '../dto/schedule-entry.dto'
 
 export type TimetableDocument = Timetable & Document
 
-@Schema()
+@Schema({ timestamps: true })
 export class Timetable {
-  @Prop({ required: true, default: () => DateTime.local().toJSDate() })
-  uploadedAt: Date
-
   @Prop({ required: true, type: ScheduleEntryDto })
   entry: ScheduleEntryDto
+
+  @Prop({ required: true })
+  htmlId: string
+
+  @Prop()
+  createdAt: Date
+
+  @Prop()
+  updatedAt: Date
 }
 
 export const TimetableSchema = SchemaFactory.createForClass(Timetable)
