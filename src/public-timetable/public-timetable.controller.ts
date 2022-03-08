@@ -13,6 +13,9 @@ import {
   Response,
   HttpException,
   NotFoundException,
+  ValidationPipe,
+  UsePipes,
+  Logger,
 } from '@nestjs/common'
 import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util'
 import {
@@ -36,6 +39,7 @@ import { DateTime } from 'luxon'
 import { HttpExceptionResponseDto } from 'src/dto/http-exception-response.dto'
 import { GroupsAvailableDto } from './dto/groups-available.dto'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
+import { ScheduleParseDto } from './dto/schedule-parse.dto'
 import { ScheduleResponseDto } from './dto/schedule-response.dto'
 import { TutorsAvailableDto } from './dto/tutors-available.dto'
 import { ParseDateIsoPipe } from './parse-date-iso.pipe'
@@ -52,6 +56,8 @@ class UploadResponseMock {
   path: '/timetable',
 })
 export class PublicTimetableController {
+  private readonly logger = new Logger(PublicTimetableController.name)
+
   constructor(private timetableService: PublicTimetableService) {}
 
   @Get('/date/:date')
@@ -279,5 +285,14 @@ export class PublicTimetableController {
     }
 
     return await this.timetableService.flushAndSink(entry, date)
+  }
+
+  @Post('/parse')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiBody({ type: ScheduleParseDto })
+  async parseString(@Body() parseObject: ScheduleParseDto) {
+    const msg = `Entry htmlId ${parseObject.htmlId} has body length ${parseObject.body.length}`
+    this.logger.verbose(msg)
+    return { message: msg }
   }
 }
