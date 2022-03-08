@@ -139,7 +139,7 @@ export class PublicTimetableService {
         uid: eventHashId,
         productId: 'altapi/ics',
         start: [begin.year, begin.month, begin.day, begin.hour, begin.minute],
-        end: [end.year, end.month, end.day, end.hour, begin.minute],
+        end: [end.year, end.month, end.day, end.hour, end.minute],
         title: `${re.type} z ${re.code} (${re.room})`,
         description: `${re.type} z ${re.name} w budynku ${re.room} prowadzone przez ${re.tutor}. Ostatnia aktualizacja ${DateTime.fromJSDate(row.uploadedAt).setZone().toISO()}`,
         busyStatus: 'BUSY',
