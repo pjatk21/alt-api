@@ -219,8 +219,8 @@ export class PublicTimetableService {
   async lastUpdate() {
     const lastValue = await this.timetableModel
       .findOne()
-      .sort({ uploadedAt: 'descending' })
-    return DateTime.fromJSDate(lastValue.uploadedAt).toISO()
+      .sort({ updatedAt: 'descending' })
+    return DateTime.fromJSDate(lastValue.updatedAt).toISO()
   }
 
   async dataFetchedToDate() {
