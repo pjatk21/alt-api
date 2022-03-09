@@ -80,4 +80,20 @@ export class HypervisorController {
       status: HypervisorResponseStatus.ASSIGNED,
     }
   }
+
+  @Post('emitCmd')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiOperation({
+    summary: 'Manage with working scrappers',
+  })
+  @ApiResponse({ type: HypervisorResponseDto })
+  @ApiBody({ type: HypervisorCommnandRequestDto })
+  async emitCmd(@Body() cmdReq: HypervisorCommnandRequestDto): Promise<HypervisorResponseDto> {
+    const { scrapper, command } = cmdReq
+    this.hypervisor.socket.to(scrapper).emit('cmd', { command, context: null } )
+    // await this.hypervisor.assignCommand(scrapper, { command, context: null })
+    return {
+      status: HypervisorResponseStatus.ASSIGNED,
+    }
+  }
 }
