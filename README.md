@@ -68,3 +68,10 @@ Wymagania:
 ```
 docker-compose up
 ```
+
+## Rozwój projektu
+
+ - Wszystkie zmiany będą akceptowane o ile zostaną wcześniej sformatowane przy pomocy prettier i eslint nie ma zastrzeń
+ - Zmiany wprowadzone przez spoełeczność nie muszą (ale mogą) być wspierane przez autorów
+ - Wymagane jest używanie yarn v2
+ - Można dodawać koeljne dependecies do package.json i do docker-compose.yml
