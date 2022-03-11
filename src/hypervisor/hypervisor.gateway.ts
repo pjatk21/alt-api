@@ -2,6 +2,8 @@ import { Logger, ParseEnumPipe, UsePipes, ValidationPipe } from '@nestjs/common'
 import {
   ConnectedSocket,
   MessageBody,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
@@ -12,9 +14,11 @@ import { ScrapperPassportDto } from './dto/passport.dto'
 import { HypervisorService } from './hypervisor.service'
 import { HypervisorEvents, HypervisorScrapperState } from './hypervisor.enum'
 
-@WebSocketGateway({ transports: ['websocket', 'polling'] })
-export class HypervisorGateway implements OnGatewayInit {
-  private readonly logger = new Logger('Hypervisor Gateway')
+@WebSocketGateway(4010, { transports: ['websocket', 'polling'] })
+export class HypervisorGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
+  private readonly logger = new Logger(HypervisorGateway.name)
 
   constructor(private hypervisor: HypervisorService) {}
 
@@ -22,6 +26,15 @@ export class HypervisorGateway implements OnGatewayInit {
     this.logger.warn(`Overriding null socket with ${server}`)
     this.hypervisor.socket = server
     console.log(this.hypervisor.socket)
+  }
+
+  handleConnection(client: Socket, ...args: any[]) {
+    this.logger.log(`Scrapper ${client.id} connected!`)
+    client.emit('cmd', 'any')
+  }
+
+  handleDisconnect(client: any) {
+    this.logger.log(`Scrapper ${client.id} disconnected!`)
   }
 
   @UsePipes(new ValidationPipe({ transform: true }))
