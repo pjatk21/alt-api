@@ -47,4 +47,15 @@ export class HypervisorGateway implements OnGatewayInit {
   ) {
     await this.hypervisor.updateState(client.id, state)
   }
+
+  @SubscribeMessage(HypervisorEvents.SCHEDULE)
+  async sinkNewEvents(
+    @ConnectedSocket() client: Socket,
+    @MessageBody('body') body: string,
+    @MessageBody('htmlId') htmlId: string,
+  ) {
+    this.logger.verbose(client.id + ' + ' + htmlId)
+
+    await this.hypervisor.saveScheduleEntry(htmlId, body)
+  }
 }

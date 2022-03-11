@@ -6,6 +6,8 @@ import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 import { ScrapperVisa, ScrapperVisaSchema } from './schemas/scrapper-visa.schema'
 import { ScrapperState, ScrapperStateSchema } from './schemas/scrapper-state.schema'
+import { PublicTimetableModule } from 'src/public-timetable/public-timetable.module'
+import { PublicTimetableService } from 'src/public-timetable/public-timetable.service'
 
 @Module({
   imports: [
@@ -14,8 +16,9 @@ import { ScrapperState, ScrapperStateSchema } from './schemas/scrapper-state.sch
     MongooseModule.forFeature([
       { name: ScrapperState.name, schema: ScrapperStateSchema },
     ]),
+    PublicTimetableModule,
   ],
-  providers: [HypervisorGateway, HypervisorService],
+  providers: [HypervisorGateway, HypervisorService, PublicTimetableService],
   controllers: [HypervisorController],
 })
 export class HypervisorModule {}

@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common'
-import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectModel } from '@nestjs/mongoose'
+import { createHash } from 'crypto'
+import { JSDOM } from 'jsdom'
+import { DateTime } from 'luxon'
 import { Model } from 'mongoose'
 import { Socket, Server } from 'socket.io'
+import { ScheduleEntryDto } from 'src/public-timetable/dto/schedule-entry.dto'
+import { PublicTimetableService } from 'src/public-timetable/public-timetable.service'
 import { ScrapperPassportDto } from './dto/passport.dto'
 import { VisaRequestDto } from './dto/visa-request.dto'
 import { ScrapperVisaDispositionDto } from './dto/visa.dto'
@@ -20,7 +24,7 @@ export class HypervisorService {
   public socket: Server = null
 
   constructor(
-    private events: EventEmitter2,
+    private timetables: PublicTimetableService,
     @InjectModel(ScrapperVisa.name)
     private visaModel: Model<ScrapperVisaDocument>,
     @InjectModel(ScrapperState.name)
@@ -94,5 +98,43 @@ export class HypervisorService {
       newState: HypervisorScrapperState.REGISTRATION,
     }).save()
     return registrationEvent
+  }
+
+  getChangeHash(htmlId: string, htmlBody: string) {
+    return createHash('sha1').update(htmlBody).update(htmlId).digest('hex').slice(0, 32)
+  }
+
+  async saveScheduleEntry(htmlId: string, htmlBody: string) {
+    const htmlFrag = JSDOM.fragment(htmlBody)
+    const entry: ScheduleEntryDto = {
+      name: htmlFrag.querySelector('[id*="NazwaPrzedmiotyLabel"]').textContent.trim(),
+      code: htmlFrag.querySelector('[id*="KodPrzedmiotuLabel"]').textContent.trim(),
+      type: htmlFrag.querySelector('[id*="TypZajecLabel"]').textContent.trim(),
+      groups: htmlFrag.querySelector('[id*="GrupyLabel"]').textContent.trim().split(', '),
+      building: htmlFrag.querySelector('[id*="BudynekLabel"]').textContent.trim(),
+      room: htmlFrag.querySelector('[id*="SalaLabel"]').textContent.trim(),
+      begin: undefined,
+      end: undefined,
+      tutor: htmlFrag.querySelector('[id*="TypZajecLabel"]').textContent.trim(),
+    }
+
+    const dateBuilder = (datePart: string, timePart: string) =>
+      DateTime.fromFormat(`${datePart} ${timePart}`, 'dd.MM.yyyy HH:mm:ss', {
+        zone: 'Europe/Warsaw',
+      })
+
+    entry.begin = dateBuilder(
+      htmlFrag.querySelector('[id*="DataZajecLabel"]').textContent.trim(),
+      htmlFrag.querySelector('[id*=GodzRozpLabel]').textContent.trim(),
+    ).toJSDate()
+
+    entry.end = dateBuilder(
+      htmlFrag.querySelector('[id*="DataZajecLabel"]').textContent.trim(),
+      htmlFrag.querySelector('[id*=GodzZakonLabel]').textContent.trim(),
+    ).toJSDate()
+
+    if (entry.tutor === '---') entry.tutor = null
+
+    this.timetables.updateOneEntry(htmlId, this.getChangeHash(htmlId, htmlBody), entry)
   }
 }

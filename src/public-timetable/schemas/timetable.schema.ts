@@ -4,13 +4,16 @@ import { ScheduleEntryDto } from '../dto/schedule-entry.dto'
 
 export type TimetableDocument = Timetable & Document
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, versionKey: false })
 export class Timetable {
   @Prop({ required: true, type: ScheduleEntryDto })
   entry: ScheduleEntryDto
 
   @Prop({ required: true })
   htmlId: string
+
+  @Prop({ required: true })
+  changeHash: string
 
   @Prop()
   createdAt: Date

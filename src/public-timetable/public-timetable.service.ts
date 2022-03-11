@@ -31,6 +31,7 @@ export class PublicTimetableService {
    * Updates all occurances in selected date (removeMany + save)
    * @param timetable array of schedule entries
    * @param date date string
+   * @deprecated
    * @returns
    */
   async flushAndSink(timetable: ScheduleEntryDto[], date: DateTime) {
@@ -49,6 +50,17 @@ export class PublicTimetableService {
     return {
       result: removed.deletedCount ? 'replaced' : 'added',
     }
+  }
+
+  async updateOneEntry(htmlId: string, changeHash: string, entry: ScheduleEntryDto) {
+    await this.timetableModel.findOneAndUpdate(
+      {
+        htmlId,
+        changeHash: { $ne: changeHash },
+      },
+      { $set: { entry } },
+      { new: true, upsert: true },
+    )
   }
 
   async timetableForDay(date: DateTime, optionalFilters: ScheduleOptionalFilters) {

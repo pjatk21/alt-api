@@ -20,4 +20,5 @@ export enum HypervisorEvents {
   PASSPORT = 'passport', // send passport and wait for disposition
   VISA = 'visa', // dispositon ready, accepted or not
   COMMAND = 'cmd', // disposition of running command (scrap, cancel, restart, etc.)
+  SCHEDULE = 'schedule-update',
 }
