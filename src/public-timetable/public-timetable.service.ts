@@ -59,7 +59,7 @@ export class PublicTimetableService {
         changeHash: { $ne: changeHash },
       },
       { $set: { changeHash, entry } },
-      { upsert: true },
+      { new: true, upsert: true },
     )
   }
 
