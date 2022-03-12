@@ -7,5 +7,5 @@ export type HypervisorScrapArgs =
 
 export type HypervisorCommandExec = {
   command: HypervisorScrapperCommands
-  context: HypervisorCommandExec | HypervisorScrapArgs | unknown
+  context: HypervisorScrapArgs | null
 }
