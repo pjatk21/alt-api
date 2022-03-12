@@ -18,7 +18,7 @@ import { ScrapperVisa, ScrapperVisaDocument } from './schemas/scrapper-visa.sche
 @Injectable()
 export class HypervisorService {
   public socket: Server = null
-  public activeScrappers: Map<string, ScrapperPassportDto & { socketId: string }> = new Map()
+  public activeScrappers: Map<string, ScrapperPassportDto> = new Map()
 
   constructor(
     private timetables: PublicTimetableService,
@@ -29,72 +29,9 @@ export class HypervisorService {
   ) {}
 
   async updateState(socketId: string, state: HypervisorScrapperState) {
-    const visa = await this.visaModel.findOne({ socketId })
-    const stateRecord = await new this.statesModel({
-      socketId,
-      visa,
-      newState: state,
-    }).save()
-    return stateRecord
-  }
-
-  async assignCommand(uuid: string, command: HypervisorCommandExec) {
-    const visa = await this.visaModel.findOne({
-      passport: {
-        uuid,
-      },
-    })
-
-    this.socket.to(visa.socketId).emit(HypervisorEvents.COMMAND, command)
-  }
-
-  async handleVisaRequest(socket: Socket, passport: ScrapperPassportDto) {
-    return await new this.visaModel({
-      socketId: socket.id,
-      passport,
-    })
-      .save()
-      .then((vm) => vm._id)
-  }
-
-  async checkPassport(socketId: string, passport: ScrapperPassportDto) {
-    const visa = await this.visaModel.findOne({
-      passport: {
-        uuid: passport.uuid,
-        presharedKey: passport.secret,
-      },
-    })
-
-    if (!visa) return false
-
-    visa.socketId = socketId
-    visa.save()
-
-    return true
-  }
-
-  async getVisaRequests(): Promise<VisaRequestDto[]> {
-    return await this.visaModel.find({ active: false }).then((coll) =>
-      coll.map((d) => ({
-        uuid: d.passport.uuid,
-        name: d.passport.name,
-        visa: d._id,
-      })),
-    )
-  }
-
-  async getVisaRequest(visaId: string) {
-    return await this.visaModel.findOne({ _id: visaId, active: false })
-  }
-
-  async sendVisa(socketId: string, visa: ScrapperVisaDispositionDto) {
-    this.socket.to(socketId).emit('visa', visa)
-    const registrationEvent = await new this.statesModel({
-      socketId,
-      visa,
-      newState: HypervisorScrapperState.REGISTRATION,
-    }).save()
-    return registrationEvent
+    const scrapperUuid = this.activeScrappers.get(socketId).uuid
+    const visa = await this.visaModel.findOne({ 'passport.uuid': scrapperUuid })
+    return await new this.statesModel({ newState: state, visa, socketId }).save()
   }
 
   getChangeHash(htmlId: string, htmlBody: string) {
