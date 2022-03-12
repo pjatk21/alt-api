@@ -2,11 +2,11 @@ import { IsString, IsUUID } from 'class-validator'
 
 export class ScrapperPassportDto {
   @IsString()
-  friendlyName: string
+  name: string
 
   @IsUUID()
   uuid: string
 
   @IsString()
-  presharedKey: string
+  secret: string
 }
