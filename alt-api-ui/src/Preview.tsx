@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import {
   Card,
   Container,
@@ -30,8 +30,6 @@ function PreviewWidget() {
     data?: ScheduleEntryRawResponse
     error?: Error
   }
-  const [gmapUrlString, setGmapUrlString] = useState<string>('')
-
   if (error) return <Text>{error.message}</Text>
   if (!data) return <Loading />
 
@@ -41,32 +39,6 @@ function PreviewWidget() {
   const buildingLocation: string | undefined = buildings.filter(
     (building) => building.name === data.building,
   )[0]?.where
-
-  const googleMapsIframeUrl = new URL('https://www.google.com/maps/embed/v1')
-
-  googleMapsIframeUrl.searchParams.append('key', googleMapsEmbededApiKey)
-  console.log(googleMapsIframeUrl)
-  if (buildingLocation) {
-    navigator.geolocation.getCurrentPosition(
-      (geoLocation) => {
-        googleMapsIframeUrl.pathname += '/directions'
-        googleMapsIframeUrl.searchParams.append('destination', buildingLocation)
-        googleMapsIframeUrl.searchParams.append(
-          'origin',
-          `${geoLocation.coords.latitude}, ${geoLocation.coords.longitude}`,
-        )
-        googleMapsIframeUrl.searchParams.append('mode', 'transit')
-        setGmapUrlString(googleMapsIframeUrl.toString())
-      },
-      (err) => {
-        console.warn(err)
-        googleMapsIframeUrl.pathname += '/place'
-        googleMapsIframeUrl.searchParams.append('q', buildingLocation)
-        setGmapUrlString(googleMapsIframeUrl.toString())
-      },
-      { enableHighAccuracy: true, timeout: 2 * 60 * 1000 },
-    )
-  }
 
   return (
     <>
@@ -92,26 +64,6 @@ function PreviewWidget() {
         </Container>
       </Card>
       <Spacer />
-      <Card>
-        <Container>
-          <Text h4>Jak dotrzeć</Text>
-          {buildingLocation && (
-            <div
-              style={{ display: 'flex', width: '100%', height: '50vh', padding: '0px' }}
-            >
-              <iframe
-                referrerPolicy="origin"
-                frameBorder="0"
-                style={{
-                  flexGrow: 1,
-                }}
-                src={gmapUrlString}
-                allowFullScreen
-              ></iframe>
-            </div>
-          )}
-        </Container>
-      </Card>
     </>
   )
 }
