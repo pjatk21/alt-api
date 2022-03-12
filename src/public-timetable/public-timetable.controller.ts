@@ -1,53 +1,35 @@
 import {
-  Body,
   CacheInterceptor,
   Controller,
   Get,
-  Headers,
   Param,
   ParseArrayPipe,
-  Post,
   Query,
-  UnauthorizedException,
   UseInterceptors,
   Response,
   HttpException,
   NotFoundException,
-  ValidationPipe,
-  UsePipes,
   Logger,
 } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
-  ApiBody,
-  ApiCreatedResponse,
-  ApiHeader,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiProduces,
-  ApiProperty,
   ApiQuery,
-  ApiTags,
-  ApiUnauthorizedResponse,
 } from '@nestjs/swagger'
 import { Response as Res } from 'express'
 import { DateTime } from 'luxon'
 import { HttpExceptionResponseDto } from 'src/dto/http-exception-response.dto'
 import { GroupsAvailableDto } from './dto/groups-available.dto'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
-import { ScheduleParseDto } from './dto/schedule-parse.dto'
 import { ScheduleResponseDto } from './dto/schedule-response.dto'
 import { TutorsAvailableDto } from './dto/tutors-available.dto'
 import { ParseDateIsoPipe } from './parse-date-iso.pipe'
 import { ParseDateYmdPipe } from './parse-date-ymd.pipe'
 import { PublicTimetableService } from './public-timetable.service'
-
-class UploadResponseMock {
-  @ApiProperty({ enum: ['replaced', 'added'] })
-  result: string
-}
 
 @Controller({
   version: '1',
@@ -249,49 +231,5 @@ export class PublicTimetableController {
     if (!ics) throw new HttpException(err, 418) // 🫖
 
     return res.contentType('.ics').attachment('AltapiSchedule.ics').send(ics)
-  }
-
-  @Post('/upload/:date')
-  @ApiOperation({
-    summary: 'Upload a schedule for a selected date',
-    description:
-      "Endpoint dedicated for scrappers to provide new data. Regular users won't use that.",
-    deprecated: true,
-  })
-  @ApiTags('Admin')
-  @ApiBody({ type: [ScheduleEntryDto] })
-  @ApiHeader({ name: 'X-Upload-key' })
-  @ApiCreatedResponse({
-    description: 'Created/updated schedule',
-    type: UploadResponseMock,
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Missing or invalid X-Upload-key',
-    type: UnauthorizedException,
-  })
-  async upload(
-    @Body(new ParseArrayPipe({ items: ScheduleEntryDto, enableDebugMessages: true }))
-    entry: ScheduleEntryDto[],
-    @Param('date', new ParseDateYmdPipe()) date: DateTime,
-    @Headers('X-Upload-key') uploadKey?: string,
-  ) {
-    // TODO: implement REAL auth module
-    if (
-      uploadKey !== process.env.ALTAPI_UPLOAD_KEY ||
-      process.env.ALTAPI_UNSECURE == '1'
-    ) {
-      throw new UnauthorizedException()
-    }
-
-    return await this.timetableService.flushAndSink(entry, date)
-  }
-
-  @Post('/parse')
-  @UsePipes(new ValidationPipe({ transform: true }))
-  @ApiBody({ type: ScheduleParseDto })
-  async parseString(@Body() parseObject: ScheduleParseDto) {
-    const msg = `Entry htmlId ${parseObject.htmlId} has body length ${parseObject.body.length}`
-    this.logger.verbose(msg)
-    return { message: msg }
   }
 }
