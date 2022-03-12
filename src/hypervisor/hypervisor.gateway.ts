@@ -1,4 +1,4 @@
-import { Logger, ParseEnumPipe, UsePipes, ValidationPipe } from '@nestjs/common'
+import { Logger, ParseEnumPipe, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common'
 import {
   ConnectedSocket,
   MessageBody,
@@ -16,6 +16,7 @@ import { HypervisorEvents, HypervisorScrapperState } from './hypervisor.enum'
 import { Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose'
 import { ScrapperVisa, ScrapperVisaDocument } from './schemas/scrapper-visa.schema'
+import { HypervisorGuard } from './hypervisor.guard'
 
 @WebSocketGateway(4010, { transports: ['websocket', 'polling'] })
 export class HypervisorGateway
@@ -71,6 +72,7 @@ export class HypervisorGateway
     }
   }
 
+  @UseGuards(HypervisorGuard)
   @SubscribeMessage(HypervisorEvents.STATE)
   async recordState(
     @ConnectedSocket() client: Socket,
@@ -80,6 +82,7 @@ export class HypervisorGateway
     await this.hypervisor.updateState(client.id, state)
   }
 
+  @UseGuards(HypervisorGuard)
   @SubscribeMessage(HypervisorEvents.SCHEDULE)
   async sinkNewEvents(
     @ConnectedSocket() client: Socket,
