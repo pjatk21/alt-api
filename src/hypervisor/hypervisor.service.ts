@@ -26,6 +26,12 @@ export class HypervisorService {
     private statesModel: Model<ScrapperStateDocument>,
   ) {}
 
+  /**
+   * This method updates states of scrappers
+   * @param socketId id of ws client
+   * @param state new state of scrapper
+   * @returns new state entity
+   */
   async updateState(socketId: string, state: HypervisorScrapperState) {
     const scrapperUuid = this.activeScrappers.get(socketId).uuid
     const visa = await this.visaModel.findOne({ 'passport.uuid': scrapperUuid })
@@ -34,10 +40,22 @@ export class HypervisorService {
     return await new this.statesModel({ newState: state, visa, socketId }).save()
   }
 
-  getChangeHash(htmlId: string, htmlBody: string) {
+  /**
+   * Creates hash used for detecting chanegs in the schedule
+   * @param htmlId id of the entry (scrapped from html)
+   * @param htmlBody string body of the entry
+   * @returns 32 char prefix of the sha1 hash
+   */
+  private getChangeHash(htmlId: string, htmlBody: string) {
     return createHash('sha1').update(htmlBody).update(htmlId).digest('hex').slice(0, 32)
   }
 
+  /**
+   * Parse (and save) uploaded schedule entry
+   * @param htmlId id of the entry (scrapped from html)
+   * @param htmlBody string body of the entry
+   * @returns new entry entity
+   */
   async saveScheduleEntry(htmlId: string, htmlBody: string) {
     const htmlFrag = JSDOM.fragment(htmlBody)
     const entry: ScheduleEntryDto = {
