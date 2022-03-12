@@ -39,7 +39,6 @@ export class HypervisorGateway
   afterInit(server: Server) {
     this.logger.warn(`Overriding null socket with new instance`)
     this.hypervisor.socket = server
-    console.log(this.hypervisor.socket)
   }
 
   handleConnection(client: Socket, ...args: any[]) {

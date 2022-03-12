@@ -93,4 +93,26 @@ export class HypervisorService {
       entry,
     )
   }
+
+  async getScrappersStatus() {
+    const connectedScrappers = Array.from(this.activeScrappers.keys())
+
+    const statuses: ScrapperState[] = []
+
+    for (const cs of connectedScrappers) {
+      statuses.push(
+        await this.statesModel
+          .findOne({ socketId: cs })
+          .sort({ createdAt: -1 })
+          .populate('visa'),
+      )
+    }
+
+    return statuses.map((status) => ({
+      name: status.visa.passport.name,
+      uuid: status.visa.passport.uuid,
+      lastState: status.newState,
+      lastUpdated: status.createdAt,
+    }))
+  }
 }
