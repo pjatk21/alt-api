@@ -1,3 +1,6 @@
+/**
+ * Possible states of the scrapper, used for indicate status
+ */
 export enum HypervisorScrapperState {
   STARTING = 'start',
   REGISTRATION = 'register',
@@ -7,14 +10,17 @@ export enum HypervisorScrapperState {
   DISCONNECTED = 'disconnect',
 }
 
+/**
+ * Commands that represts certian tasks
+ */
 export enum HypervisorScrapperCommands {
   DISCONNECT = 'disconnect',
-  EXIT = 'exit',
   SCRAP = 'scrap',
-  QUEUE = 'queue',
-  CANCEL = 'cancel',
 }
 
+/**
+ * Events related to the communnication hypervisor <-> scrapper
+ */
 export enum HypervisorEvents {
   STATE = 'state-update', // send scrapper state
   PASSPORT = 'passport', // send passport and wait for disposition
