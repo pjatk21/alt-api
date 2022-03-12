@@ -22,6 +22,7 @@ export enum HypervisorInternalEvents {
 @Injectable()
 export class HypervisorService {
   public socket: Server = null
+  public activeScrappers: Map<string, ScrapperPassportDto & { socketId: string }> = new Map()
 
   constructor(
     private timetables: PublicTimetableService,
