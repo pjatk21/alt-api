@@ -15,10 +15,6 @@ import { HypervisorCommandExec } from './hypervisor.types'
 import { ScrapperState, ScrapperStateDocument } from './schemas/scrapper-state.schema'
 import { ScrapperVisa, ScrapperVisaDocument } from './schemas/scrapper-visa.schema'
 
-export enum HypervisorInternalEvents {
-  VISA = 'visa',
-}
-
 @Injectable()
 export class HypervisorService {
   public socket: Server = null
