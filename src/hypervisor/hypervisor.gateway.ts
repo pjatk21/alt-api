@@ -95,8 +95,12 @@ export class HypervisorGateway
     @MessageBody('body') body: string,
     @MessageBody('htmlId') htmlId: string,
   ) {
-    this.logger.verbose(client.id + ' + ' + htmlId)
-
-    await this.hypervisor.saveScheduleEntry(htmlId, body)
+    const { entry } = await this.hypervisor.saveScheduleEntry(htmlId, body)
+    const passport = this.hypervisor.activeScrappers.get(client.id)
+    this.logger.verbose(
+      `${passport.name} uploaded "${entry.code}" for "${
+        entry.groups
+      }" at "${entry.begin.toISOString()}"`,
+    )
   }
 }
