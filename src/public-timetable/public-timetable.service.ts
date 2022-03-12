@@ -53,7 +53,7 @@ export class PublicTimetableService {
   }
 
   async updateOneEntry(htmlId: string, changeHash: string, entry: ScheduleEntryDto) {
-    await this.timetableModel.findOneAndUpdate(
+    return await this.timetableModel.findOneAndUpdate(
       {
         htmlId,
         changeHash: { $ne: changeHash },

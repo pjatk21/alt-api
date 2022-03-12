@@ -1,17 +1,14 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { createHash } from 'crypto'
 import { JSDOM } from 'jsdom'
 import { DateTime } from 'luxon'
 import { Model } from 'mongoose'
-import { Socket, Server } from 'socket.io'
+import { Server } from 'socket.io'
 import { ScheduleEntryDto } from 'src/public-timetable/dto/schedule-entry.dto'
 import { PublicTimetableService } from 'src/public-timetable/public-timetable.service'
 import { ScrapperPassportDto } from './dto/passport.dto'
-import { VisaRequestDto } from './dto/visa-request.dto'
-import { ScrapperVisaDispositionDto } from './dto/visa.dto'
-import { HypervisorEvents, HypervisorScrapperState } from './hypervisor.enum'
-import { HypervisorCommandExec } from './hypervisor.types'
+import { HypervisorScrapperState } from './hypervisor.enum'
 import { ScrapperState, ScrapperStateDocument } from './schemas/scrapper-state.schema'
 import { ScrapperVisa, ScrapperVisaDocument } from './schemas/scrapper-visa.schema'
 
@@ -19,6 +16,7 @@ import { ScrapperVisa, ScrapperVisaDocument } from './schemas/scrapper-visa.sche
 export class HypervisorService {
   public socket: Server = null
   public activeScrappers: Map<string, ScrapperPassportDto> = new Map()
+  private readonly logger = new Logger(HypervisorService.name)
 
   constructor(
     private timetables: PublicTimetableService,
@@ -31,6 +29,8 @@ export class HypervisorService {
   async updateState(socketId: string, state: HypervisorScrapperState) {
     const scrapperUuid = this.activeScrappers.get(socketId).uuid
     const visa = await this.visaModel.findOne({ 'passport.uuid': scrapperUuid })
+    this.logger.log(`Update state "${state}" for "${visa.passport.name}"`)
+
     return await new this.statesModel({ newState: state, visa, socketId }).save()
   }
 
@@ -69,6 +69,10 @@ export class HypervisorService {
 
     if (entry.tutor === '---') entry.tutor = null
 
-    this.timetables.updateOneEntry(htmlId, this.getChangeHash(htmlId, htmlBody), entry)
+    return await this.timetables.updateOneEntry(
+      htmlId,
+      this.getChangeHash(htmlId, htmlBody),
+      entry,
+    )
   }
 }
