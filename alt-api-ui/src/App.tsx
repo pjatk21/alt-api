@@ -104,7 +104,7 @@ function UsefulLinks() {
         <UsefulLink
           icon={<FontAwesomeIcon icon={faBook} />}
           builtinColor={'primary'}
-          href={'/redoc'}
+          href={baseUrl + '/redoc'}
           text={'ReDoc'}
         />
         <UsefulLink
