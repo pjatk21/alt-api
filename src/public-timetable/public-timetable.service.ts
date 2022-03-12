@@ -58,8 +58,8 @@ export class PublicTimetableService {
         htmlId,
         changeHash: { $ne: changeHash },
       },
-      { $set: { htmlId, changeHash, entry } },
-      { new: true, upsert: true },
+      { $set: { changeHash, entry } },
+      { upsert: true },
     )
   }
 
