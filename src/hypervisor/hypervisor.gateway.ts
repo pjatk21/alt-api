@@ -29,8 +29,7 @@ export class HypervisorGateway
   }
 
   handleConnection(client: Socket, ...args: any[]) {
-    this.logger.log(`Scrapper ${client.id} connected!`)
-    client.emit('cmd', 'any')
+    this.logger.log(`Scrapper ${client.id} connected! Args (${args.length}): ${args}`)
   }
 
   handleDisconnect(client: any) {
@@ -43,12 +42,16 @@ export class HypervisorGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() passport: ScrapperPassportDto,
   ): Promise<WsResponse<unknown>> {
-    const visaRequestId = await this.hypervisor.handleVisaRequest(client, passport)
+    // const visaRequestId = await this.hypervisor.handleVisaRequest(client, passport)
+
+    this.hypervisor.activeScrappers.set(passport.uuid, {
+      ...passport,
+      socketId: client.id,
+    })
+
     return {
-      event: HypervisorEvents.PASSPORT,
-      data: {
-        visaRequestId,
-      },
+      event: HypervisorEvents.VISA,
+      data: null,
     }
   }
 
