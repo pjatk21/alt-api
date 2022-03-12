@@ -65,7 +65,7 @@ export class HypervisorService {
     const visa = await this.visaModel.findOne({
       passport: {
         uuid: passport.uuid,
-        presharedKey: passport.presharedKey,
+        presharedKey: passport.secret,
       },
     })
 
@@ -81,7 +81,7 @@ export class HypervisorService {
     return await this.visaModel.find({ active: false }).then((coll) =>
       coll.map((d) => ({
         uuid: d.passport.uuid,
-        name: d.passport.friendlyName,
+        name: d.passport.name,
         visa: d._id,
       })),
     )
