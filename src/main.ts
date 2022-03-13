@@ -11,7 +11,10 @@ import { existsSync, readFileSync } from 'fs'
 import { HypervisorModule } from './hypervisor/hypervisor.module'
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: true })
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    cors: true,
+    logger: process.env.NODE_ENV === 'production' ? ['error', 'warn', 'log'] : undefined,
+  })
 
   // Enable versioning
   app.enableVersioning({
