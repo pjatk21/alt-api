@@ -153,6 +153,7 @@ export class PublicTimetableService {
         start: [begin.year, begin.month, begin.day, begin.hour, begin.minute],
         end: [end.year, end.month, end.day, end.hour, end.minute],
         title: `${re.type} z ${re.code} (${re.room})`,
+        // eslint-disable-next-line prettier/prettier
         description: `${re.type} z ${re.name} w budynku ${re.room} prowadzone przez ${re.tutor}. Ostatnia aktualizacja ${DateTime.fromJSDate(row.updatedAt).setZone().toISO()}`,
         busyStatus: 'BUSY',
         url: previewUrl.toString(),

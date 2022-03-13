@@ -8,7 +8,7 @@ import { ScrapperVisa, ScrapperVisaSchema } from './schemas/scrapper-visa.schema
 import { ScrapperState, ScrapperStateSchema } from './schemas/scrapper-state.schema'
 import { PublicTimetableModule } from 'src/public-timetable/public-timetable.module'
 import { PublicTimetableService } from 'src/public-timetable/public-timetable.service'
-import { DispositorService } from './dispositor/dispositor.service';
+import { DispositorService } from './dispositor/dispositor.service'
 
 @Module({
   imports: [
@@ -19,7 +19,12 @@ import { DispositorService } from './dispositor/dispositor.service';
     ]),
     PublicTimetableModule,
   ],
-  providers: [HypervisorGateway, HypervisorService, PublicTimetableService, DispositorService],
+  providers: [
+    HypervisorGateway,
+    HypervisorService,
+    PublicTimetableService,
+    DispositorService,
+  ],
   controllers: [HypervisorController],
 })
 export class HypervisorModule {}

@@ -1,13 +1,10 @@
 import { NestFactory } from '@nestjs/core'
 import { NestExpressApplication } from '@nestjs/platform-express'
-import * as bodyParser from 'body-parser'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 import { PublicTimetableModule } from './public-timetable/public-timetable.module'
 import { RedocModule, RedocOptions } from 'nestjs-redoc'
-import { Logger, VersioningType } from '@nestjs/common'
-import { Chance } from 'chance'
-import { existsSync, readFileSync } from 'fs'
+import { VersioningType } from '@nestjs/common'
 import { HypervisorModule } from './hypervisor/hypervisor.module'
 
 async function bootstrap() {

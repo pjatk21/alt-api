@@ -1,6 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { HypervisorScrapperCommands } from "../hypervisor.enum";
-import { HypervisorCommandExec } from "../hypervisor.types";
+import { ApiProperty } from '@nestjs/swagger'
+import { HypervisorScrapperCommands } from '../hypervisor.enum'
 
 export class HypervisorCommnandRequestDto {
   @ApiProperty()
