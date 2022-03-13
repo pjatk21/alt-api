@@ -13,15 +13,6 @@ type TaskDisposition = {
 
 const tasks: TaskDisposition[] = [
   {
-    name: 'scrapper test',
-    priority: 150,
-    runNewAfter: { hours: 27 },
-    argsFactory: () => ({
-      scrapUntil: DateTime.now().endOf('week').toJSDate(),
-      limit: 3,
-    }),
-  },
-  {
     name: 'fetch to the end of the week',
     priority: 50,
     runNewAfter: { hour: 2 },
