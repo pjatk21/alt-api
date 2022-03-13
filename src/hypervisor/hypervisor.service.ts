@@ -47,11 +47,14 @@ export class HypervisorService {
   /**
    * Creates hash used for detecting chanegs in the schedule
    * @param htmlId id of the entry (scrapped from html)
-   * @param htmlBody string body of the entry
    * @returns 32 char prefix of the sha1 hash
    */
-  private getChangeHash(htmlId: string, htmlBody: string) {
-    return createHash('sha1').update(htmlBody).update(htmlId).digest('hex').slice(0, 32)
+  private getChangeHash(htmlId: string, se: ScheduleEntryDto) {
+    return createHash('sha1')
+      .update(JSON.stringify(se))
+      .update(htmlId)
+      .digest('hex')
+      .slice(0, 32)
   }
 
   /**
@@ -71,7 +74,7 @@ export class HypervisorService {
       room: htmlFrag.querySelector('[id*="SalaLabel"]').textContent.trim(),
       begin: undefined,
       end: undefined,
-      tutor: htmlFrag.querySelector('[id*="TypZajecLabel"]').textContent.trim(),
+      tutor: htmlFrag.querySelector('[id*="DydaktycyLabel"]').textContent.trim(),
     }
 
     const dateBuilder = (datePart: string, timePart: string) =>
@@ -93,7 +96,7 @@ export class HypervisorService {
 
     return await this.timetables.updateOneEntry(
       htmlId,
-      this.getChangeHash(htmlId, htmlBody),
+      this.getChangeHash(htmlId, entry),
       entry,
     )
   }
