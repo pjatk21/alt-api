@@ -42,7 +42,7 @@
     "liquidjs": "^9.34.0",
     "lodash": "^4.17.21",
     "luxon": "^2.3.0",
-    "mongoose": "^6.2.1",
+    "mongoose": "^6.2.6",
     "nestjs-redoc": "^2.2.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
