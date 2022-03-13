@@ -51,12 +51,18 @@ const tasks: TaskDisposition[] = [
 @Injectable()
 export class DispositorService {
   private readonly logger = new Logger(DispositorService.name)
+  // client id -> task name
   private activeTasks: Map<string, string> = new Map()
+  // task name -> last update datetime
   private taskLastRun: Map<string, DateTime> = new Map()
 
   constructor() {
     // Populate last runs
     for (const task of tasks) this.taskLastRun.set(task.name, DateTime.fromMillis(0))
+  }
+
+  public cleanupOnDisconnect(client: Socket) {
+    if (this.activeTasks.delete(client.id)) this.logger.warn(`Removed active task!`)
   }
 
   private getRunIn(task: TaskDisposition) {
@@ -99,13 +105,14 @@ export class DispositorService {
 
     if (startIn) {
       const d = Duration.fromMillis(startIn)
-      this.logger.log(`Applyinng delay of ${d.toFormat('mm:ss')} to task "${task.name}"`)
+      this.logger.log(`Delay ${d.toFormat('H:mm:ss')} for task "${task.name}"`)
     }
 
-    setTimeout(
-      () => client.emit(HypervisorEvents.COMMAND, HypervisorScrapperCommands.SCRAP, arg),
-      startIn ?? 5000,
-    )
+    setTimeout(() => {
+      // note: client might disconnect while waiting for new disposition
+      if (client.connected)
+        client.emit(HypervisorEvents.COMMAND, HypervisorScrapperCommands.SCRAP, arg)
+    }, startIn ?? 1000)
   }
 
   public releaseTask(client: Socket) {

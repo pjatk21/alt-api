@@ -53,6 +53,7 @@ export class HypervisorGateway
     const discScrp = this.hypervisor.activeScrappers.get(client.id)
     if (discScrp) {
       this.hypervisor.activeScrappers.delete(client.id)
+      this.dispositor.cleanupOnDisconnect(client)
 
       this.logger.log(`Scrapper ${discScrp.name} disconnected!`)
     } else {
