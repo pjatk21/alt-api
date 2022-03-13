@@ -7,18 +7,43 @@ services:
       - 4000:4000
     environment:
       MONGO_URL: 'mongodb://database/altiapi'
-      ALTAPI_UPLOAD_KEY: 'changeMeLater'
     restart: unless-stopped
     depends_on:
       - database
-  scrapper:
+  # Scrappers, a lot of them
+  scrapper-zimmer:
     image: ghcr.io/pjatk21/alt-scrap:main
     restart: unless-stopped
-    cap_add:
-      - "SYS_ADMIN"
     environment:
-      ALTAPI_URL: 'http://altapi:4000/'
-      ALTAPI_UPLOAD_KEY: 'changeMeLater'
+      SCRAPPER_NAME: Zimmer
+      ALTAPI_GATEWAY: ws://altapi:4010/
+    depends_on:
+      - altapi
+  scrapper-benia:
+    image: ghcr.io/pjatk21/alt-scrap:main
+    restart: unless-stopped
+    environment:
+      SCRAPPER_NAME: Benia
+      ALTAPI_GATEWAY: ws://altapi:4010/
+    depends_on:
+      - altapi
+  scrapper-rafal:
+    image: ghcr.io/pjatk21/alt-scrap:main
+    restart: unless-stopped
+    environment:
+      SCRAPPER_NAME: Rafał
+      ALTAPI_GATEWAY: ws://altapi:4010/
+    depends_on:
+      - altapi
+  scrapper-cyprian:
+    image: ghcr.io/pjatk21/alt-scrap:main
+    restart: unless-stopped
+    environment:
+      SCRAPPER_NAME: Cyprian
+      ALTAPI_GATEWAY: ws://altapi:4010/
+    depends_on:
+      - altapi
+  # Other useful containers
   database:
     image: mongo:latest
     restart: unless-stopped
