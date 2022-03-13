@@ -18,17 +18,12 @@ import {
 import { Socket, Server } from 'socket.io'
 import { ScrapperPassportDto } from './dto/passport.dto'
 import { HypervisorService } from './hypervisor.service'
-import {
-  HypervisorEvents,
-  HypervisorScrapperCommands,
-  HypervisorScrapperState,
-} from './hypervisor.enum'
+import { HypervisorEvents, HypervisorScrapperState } from './hypervisor.enum'
 import { Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose'
 import { ScrapperVisa, ScrapperVisaDocument } from './schemas/scrapper-visa.schema'
 import { HypervisorGuard } from './hypervisor.guard'
-import { DateTime } from 'luxon'
-import { HypervisorScrapArgs } from './hypervisor.types'
+import { DispositorService } from './dispositor/dispositor.service'
 
 @WebSocketGateway(4010, { transports: ['websocket', 'polling'] })
 export class HypervisorGateway
@@ -38,13 +33,14 @@ export class HypervisorGateway
 
   constructor(
     private hypervisor: HypervisorService,
+    private dispositor: DispositorService,
     @InjectModel(ScrapperVisa.name)
     private visaModel: Model<ScrapperVisaDocument>,
   ) {}
 
   afterInit(server: Server) {
-    this.logger.warn(`Overriding null socket with new instance`)
-    this.hypervisor.socket = server
+    this.logger.warn('Populating WS server among services...')
+    this.hypervisor.setServer(server)
   }
 
   handleConnection(client: Socket, ...args: any[]) {
@@ -55,9 +51,13 @@ export class HypervisorGateway
 
   handleDisconnect(client: Socket) {
     const discScrp = this.hypervisor.activeScrappers.get(client.id)
-    this.hypervisor.activeScrappers.delete(client.id)
+    if (discScrp) {
+      this.hypervisor.activeScrappers.delete(client.id)
 
-    this.logger.log(`Scrapper ${discScrp.name} disconnected!`)
+      this.logger.log(`Scrapper ${discScrp.name} disconnected!`)
+    } else {
+      this.logger.warn(`Non-registered scrapper on socket ${client.id} disconnected!`)
+    }
   }
 
   @UsePipes(new ValidationPipe({ transform: true }))
@@ -66,6 +66,17 @@ export class HypervisorGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() passport: ScrapperPassportDto,
   ): Promise<WsResponse<unknown>> {
+    if (
+      Array.from(this.hypervisor.activeScrappers.values())
+        .map((p) => p.uuid)
+        .includes(passport.uuid)
+    ) {
+      this.logger.warn(
+        `Scrapper ${passport.name} already connected! Disconnecting socket!`,
+      )
+      client.disconnect()
+    }
+
     this.logger.log(`Registeting passport ${passport.uuid} for scrapper ${passport.name}`)
     this.hypervisor.activeScrappers.set(client.id, passport)
 
@@ -92,10 +103,8 @@ export class HypervisorGateway
   ) {
     await this.hypervisor.updateState(client.id, state)
     if (state === HypervisorScrapperState.READY) {
-      const args: HypervisorScrapArgs = {
-        scrapUntil: DateTime.fromObject({ year: 2022, month: 6, day: 28 }).toJSDate(),
-      }
-      client.emit(HypervisorEvents.COMMAND, HypervisorScrapperCommands.SCRAP, args)
+      this.dispositor.releaseTask(client)
+      this.dispositor.assignTask(client)
     }
   }
 

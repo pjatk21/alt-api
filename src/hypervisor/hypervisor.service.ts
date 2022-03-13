@@ -14,7 +14,7 @@ import { ScrapperVisa, ScrapperVisaDocument } from './schemas/scrapper-visa.sche
 
 @Injectable()
 export class HypervisorService {
-  public socket: Server = null
+  private server: Server = null
   public activeScrappers: Map<string, ScrapperPassportDto> = new Map()
   private readonly logger = new Logger(HypervisorService.name)
 
@@ -25,6 +25,10 @@ export class HypervisorService {
     @InjectModel(ScrapperState.name)
     private statesModel: Model<ScrapperStateDocument>,
   ) {}
+
+  public setServer(server: Server) {
+    this.server = server
+  }
 
   /**
    * This method updates states of scrappers
