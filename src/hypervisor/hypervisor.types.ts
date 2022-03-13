@@ -1,9 +1,10 @@
 import { HypervisorScrapperCommands } from './hypervisor.enum'
 
-export type HypervisorScrapArgs =
-  | { daysAhead?: number }
-  | { numberOfEntriesAhead?: number }
-  | { scrapUntil?: Date }
+export type HypervisorScrapArgs = {
+  scrapUntil: Date
+  limit?: number
+  skip?: number
+}
 
 export type HypervisorCommandExec = {
   command: HypervisorScrapperCommands

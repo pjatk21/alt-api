@@ -18,11 +18,17 @@ import {
 import { Socket, Server } from 'socket.io'
 import { ScrapperPassportDto } from './dto/passport.dto'
 import { HypervisorService } from './hypervisor.service'
-import { HypervisorEvents, HypervisorScrapperState } from './hypervisor.enum'
+import {
+  HypervisorEvents,
+  HypervisorScrapperCommands,
+  HypervisorScrapperState,
+} from './hypervisor.enum'
 import { Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose'
 import { ScrapperVisa, ScrapperVisaDocument } from './schemas/scrapper-visa.schema'
 import { HypervisorGuard } from './hypervisor.guard'
+import { DateTime } from 'luxon'
+import { HypervisorScrapArgs } from './hypervisor.types'
 
 @WebSocketGateway(4010, { transports: ['websocket', 'polling'] })
 export class HypervisorGateway
@@ -85,6 +91,12 @@ export class HypervisorGateway
     state: HypervisorScrapperState,
   ) {
     await this.hypervisor.updateState(client.id, state)
+    if (state === HypervisorScrapperState.READY) {
+      const args: HypervisorScrapArgs = {
+        scrapUntil: DateTime.fromObject({ year: 2022, month: 6, day: 28 }).toJSDate(),
+      }
+      client.emit(HypervisorEvents.COMMAND, HypervisorScrapperCommands.SCRAP, args)
+    }
   }
 
   @UseGuards(HypervisorGuard)
