@@ -8,9 +8,13 @@ import { RedocModule, RedocOptions } from 'nestjs-redoc'
 import { Logger, VersioningType } from '@nestjs/common'
 import { Chance } from 'chance'
 import { existsSync, readFileSync } from 'fs'
+import { HypervisorModule } from './hypervisor/hypervisor.module'
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: true })
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    cors: true,
+    logger: process.env.NODE_ENV === 'production' ? ['error', 'warn', 'log'] : undefined,
+  })
 
   // Enable versioning
   app.enableVersioning({
@@ -31,7 +35,7 @@ async function bootstrap() {
     .build()
 
   const doc = SwaggerModule.createDocument(app, docOpts, {
-    include: [PublicTimetableModule],
+    include: [PublicTimetableModule, HypervisorModule],
   })
 
   const redocOpts: RedocOptions = {
@@ -41,25 +45,6 @@ async function bootstrap() {
 
   await RedocModule.setup('/redoc', app, doc, redocOpts)
   // SwaggerModule.setup('/swagger', app, doc)
-
-  // Allow little bigger POSTs
-  app.use(bodyParser.json({ limit: '500kB' }))
-
-  // Init upload key
-  if (process.env.ALTAPI_UPLOAD_KEY === undefined) {
-    if (existsSync('.uploadkey')) {
-      process.env.ALTAPI_UPLOAD_KEY = readFileSync('.uploadkey').toString().trim()
-    } else {
-      const ukl = new Logger('Upload key')
-      ukl.warn('NO UPLOAD KEY PRESENT IN ENV!')
-      const uploadKey = Array.from({ length: 4 }, () =>
-        new Chance().pickone([new Chance().string(), new Chance().natural()]),
-      ).join('-')
-      ukl.warn('Save next code into .uploadkey file')
-      ukl.warn(uploadKey)
-      process.env.ALTAPI_UPLOAD_KEY = uploadKey
-    }
-  }
 
   await app.listen(4000)
 }
