@@ -11,7 +11,7 @@ export class HypervisorController {
   @Get('scrappers')
   @ApiOperation({ summary: 'Display active scrappers' })
   @ApiResponse({ type: [ScrapperStatusDto] })
-  async name() {
+  async scrappers() {
     return this.hypervisor.getScrappersStatus()
   }
 }

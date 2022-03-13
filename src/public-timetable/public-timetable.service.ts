@@ -131,7 +131,7 @@ export class PublicTimetableService {
       const re = row.entry
       const begin = DateTime.fromJSDate(re.begin).setZone()
       const end = DateTime.fromJSDate(re.end).setZone()
-      const updated = DateTime.fromJSDate(row.uploadedAt).setZone()
+      const updated = DateTime.fromJSDate(row.updatedAt).setZone()
       const previewUrl = new URL('https://altapi.kpostek.dev/preview')
       previewUrl.searchParams.append('at', begin.toISO())
       previewUrl.searchParams.append('group', re.groups[0])
@@ -153,7 +153,7 @@ export class PublicTimetableService {
         start: [begin.year, begin.month, begin.day, begin.hour, begin.minute],
         end: [end.year, end.month, end.day, end.hour, end.minute],
         title: `${re.type} z ${re.code} (${re.room})`,
-        description: `${re.type} z ${re.name} w budynku ${re.room} prowadzone przez ${re.tutor}. Ostatnia aktualizacja ${DateTime.fromJSDate(row.uploadedAt).setZone().toISO()}`,
+        description: `${re.type} z ${re.name} w budynku ${re.room} prowadzone przez ${re.tutor}. Ostatnia aktualizacja ${DateTime.fromJSDate(row.updatedAt).setZone().toISO()}`,
         busyStatus: 'BUSY',
         url: previewUrl.toString(),
         alarms: [
