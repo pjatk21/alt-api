@@ -1,13 +1,30 @@
 import { Injectable, Logger } from '@nestjs/common'
-import { Socket } from 'socket.io'
+import { Server, Socket } from 'socket.io'
 import { DateTime, Duration, DurationLikeObject } from 'luxon'
 import { HypervisorScrapArgs } from '../hypervisor.types'
-import { HypervisorEvents, HypervisorScrapperCommands } from '../hypervisor.enum'
+import {
+  HypervisorEvents,
+  HypervisorScrapperCommands,
+  HypervisorScrapperState,
+} from '../hypervisor.enum'
+import { HypervisorService } from '../hypervisor.service'
 
 type TaskDisposition = {
+  /**
+   * Name of the task, should be unique
+   */
   name: string
+  /**
+   * Priority of the task
+   */
   priority: number
+  /**
+   * Delay between runs
+   */
   runNewAfter: DurationLikeObject
+  /**
+   * Function which can dynamicly define aruments for the scrappers
+   */
   argsFactory: () => HypervisorScrapArgs
 }
 
@@ -15,7 +32,7 @@ const tasks: TaskDisposition[] = [
   {
     name: 'fetch to the end of the week',
     priority: 50,
-    runNewAfter: { hour: 2 },
+    runNewAfter: { minutes: 25 },
     argsFactory: () => ({
       scrapUntil: DateTime.now().endOf('week').toJSDate(),
     }),
@@ -56,21 +73,37 @@ export class DispositorService {
   // task name -> last update datetime
   private taskLastRun: Map<string, DateTime> = new Map()
 
-  constructor() {
+  constructor(private readonly hypervisor: HypervisorService) {
     // Populate last runs
     for (const task of tasks) this.taskLastRun.set(task.name, DateTime.fromMillis(0))
   }
 
-  public cleanupOnDisconnect(client: Socket) {
-    if (this.activeTasks.delete(client.id)) this.logger.warn(`Removed active task!`)
+  public async cleanupOnDisconnect(client: Socket, server: Server) {
+    if (this.activeTasks.has(client.id)) {
+      this.logger.warn(
+        `Scrapper disconnected while awaiting for new task! Trying to disptach this task to new scrapper...`,
+      )
+      this.activeTasks.delete(client.id)
+
+      const readyHypervisors = await this.hypervisor.getScrappersByState(
+        HypervisorScrapperState.READY,
+      )
+
+      if (readyHypervisors.length > 0) {
+        this.logger.log(`Found ${readyHypervisors.length} ready scrappers.`)
+        this.logger.log(`Choosing ${readyHypervisors[0].name}...`)
+
+        await this.assignTask(server.sockets.sockets.get(readyHypervisors[0].socket))
+      }
+    }
   }
 
   private getRunIn(task: TaskDisposition) {
     if (this.taskLastRun.has(task.name))
-      return this.taskLastRun.get(task.name).diffNow().negate().plus(task.runNewAfter)
+      return this.taskLastRun.get(task.name).diffNow().plus(task.runNewAfter)
   }
 
-  private getNextTask(): [TaskDisposition, number | null] {
+  private getNextTask(): [TaskDisposition | null, number | null] {
     const tasksAvailable = tasks
       .sort((x, y) => y.priority - x.priority)
       .filter((t) => !Array.from(this.activeTasks.values()).includes(t.name))
@@ -92,20 +125,28 @@ export class DispositorService {
       return [mostPrioritised, runIn.as('milliseconds')]
     }
 
-    this.logger.warn('All tasks are running! Running more prioritised task...')
-    const defaultTask = tasks.sort((x, y) => y.priority - x.priority)[0]
-    const runIn = this.getRunIn(defaultTask)
-    return [defaultTask, runIn.as('milliseconds')]
+    this.logger.warn('All tasks are running! None task disposed!')
+    return [null, null]
   }
 
-  public assignTask(client: Socket) {
+  public async assignTask(client: Socket) {
     const [task, startIn] = this.getNextTask()
+
+    if (task === null) return
+
     this.activeTasks.set(client.id, task.name)
     const arg = task.argsFactory()
 
     if (startIn) {
       const d = Duration.fromMillis(startIn)
-      this.logger.log(`Delay ${d.toFormat('H:mm:ss')} for task "${task.name}"`)
+      this.logger.log(
+        `Delay ${d
+          .shiftTo('hours', 'minutes', 'seconds')
+          .toHuman({ listStyle: 'short' })} for task "${task.name}", disposed to ${
+          client.id
+        }`,
+      )
+      await this.hypervisor.updateState(client.id, HypervisorScrapperState.AWAITING)
     }
 
     setTimeout(() => {
@@ -115,7 +156,7 @@ export class DispositorService {
     }, startIn ?? 1000)
   }
 
-  public releaseTask(client: Socket) {
+  public async releaseTask(client: Socket) {
     if (!this.activeTasks.has(client.id)) return
 
     this.logger.log(

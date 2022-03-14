@@ -30,6 +30,12 @@ export class HypervisorService {
     this.server = server
   }
 
+  public async getScrappersByState(state: HypervisorScrapperState) {
+    return await this.getScrappersStatus().then((s) =>
+      s.filter((x) => x.lastState === state),
+    )
+  }
+
   /**
    * This method updates states of scrappers
    * @param socketId id of ws client
@@ -118,6 +124,7 @@ export class HypervisorService {
     return statuses.map((status) => ({
       name: status.visa.passport.name,
       uuid: status.visa.passport.uuid,
+      socket: status.socketId,
       lastState: status.newState,
       lastUpdated: status.createdAt,
     }))
