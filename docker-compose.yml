@@ -27,22 +27,6 @@ services:
       ALTAPI_GATEWAY: ws://altapi:4010/
     depends_on:
       - altapi
-  scrapper-rafal:
-    image: ghcr.io/pjatk21/alt-scrap:main
-    restart: unless-stopped
-    environment:
-      SCRAPPER_NAME: Rafał
-      ALTAPI_GATEWAY: ws://altapi:4010/
-    depends_on:
-      - altapi
-  scrapper-cyprian:
-    image: ghcr.io/pjatk21/alt-scrap:main
-    restart: unless-stopped
-    environment:
-      SCRAPPER_NAME: Cyprian
-      ALTAPI_GATEWAY: ws://altapi:4010/
-    depends_on:
-      - altapi
   # Other useful containers
   database:
     image: mongo:latest
