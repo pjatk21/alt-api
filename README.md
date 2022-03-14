@@ -69,6 +69,8 @@ docker-compose up
 ## Rozwój projektu
 
  - Wszystkie zmiany będą akceptowane o ile zostaną wcześniej sformatowane przy pomocy prettier i eslint nie ma zastrzeń
+ - Akceptowane są ***wszystkie*** technologie o ile jest możliwość ich implementacji poprzez WASI lub inaczej "natywnie" w Node.js >= 16.x
+    - Oczywiście, również jest wymagane dodanie typowania dla TS
  - Zmiany wprowadzone przez spoełeczność nie muszą (ale mogą) być wspierane przez autorów
- - Wymagane jest używanie yarn v2
+ - Wymagane jest używanie yarn
  - Można dodawać koeljne dependecies do package.json i do docker-compose.yml
