@@ -31,6 +31,7 @@ export function AppHome() {
                 webpage from 2010.
               </Text>
               <LastUpdate />
+              <Spacer />
               <UsefulLinks />
             </Container>
           </Card.Body>
