@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React from 'react'
 import {
   Card,
   Container,
@@ -11,7 +11,6 @@ import {
 import useSWR from 'swr'
 import { DateTime } from 'luxon'
 import { buildings } from './buildings.json'
-import { googleMapsEmbededApiKey } from './credentials.json'
 import { ScheduleEntryRawResponse } from '../types'
 
 const baseUrl = import.meta.env.DEV

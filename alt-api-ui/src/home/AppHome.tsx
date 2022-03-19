@@ -1,13 +1,4 @@
-import {
-  Card,
-  Col,
-  Container,
-  createTheme,
-  Link,
-  NextUIProvider,
-  Spacer,
-  Text,
-} from '@nextui-org/react'
+import { Card, Col, Container, Link, Spacer, Text } from '@nextui-org/react'
 import React from 'react'
 import { CalendarAdd } from '../calendar/CalendarAdd'
 import { Scrappers } from '../scrappers/Scrappers'
