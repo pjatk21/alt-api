@@ -1,4 +1,5 @@
-import { Card, Grid, Loading, Text } from '@nextui-org/react'
+import { Card, Grid, Loading, Text, Tooltip } from '@nextui-org/react'
+import { DateTime } from 'luxon'
 import React from 'react'
 import { QueryClient, QueryClientProvider, useQuery, useQueryClient } from 'react-query'
 
@@ -13,10 +14,8 @@ type ScrapperLike = {
   lastUpdated: string
 }
 
-const getScrappers: () => Promise<ScrapperLike[]> = () => {
-  console.log('aaaaa')
-  return fetch(`${baseUrl}hypervisor/scrappers`).then((r) => r.json())
-}
+const getScrappers: () => Promise<ScrapperLike[]> = () =>
+  fetch(`${baseUrl}hypervisor/scrappers`).then((r) => r.json())
 
 function colorFromState(state: string) {
   switch (state) {
@@ -47,11 +46,25 @@ export function Scrappers() {
         {data.map((scrapper) => (
           <Grid sm={6} key={scrapper.uuid}>
             <Card color={colorFromState(scrapper.lastState)}>
-              <Text h4>{scrapper.name}</Text>
-              <Text css={{ fontFamily: '$mono' }}>{scrapper.uuid}</Text>
+              <Tooltip
+                content={<Text css={{ fontFamily: '$mono' }}>{scrapper.uuid}</Text>}
+              >
+                <Text h4 style={{ fontStyle: 'italic' }}>
+                  {scrapper.name}
+                </Text>
+              </Tooltip>
+
               <Card>
-                <Text>State: {scrapper.lastState}</Text>
-                <Text>Last state update: {scrapper.lastUpdated}</Text>
+                <Text>
+                  State:{' '}
+                  <Text span css={{ fontFamily: '$mono' }}>
+                    {scrapper.lastState}
+                  </Text>
+                </Text>
+                <Text>
+                  Last state update: <br />{' '}
+                  {DateTime.fromISO(scrapper.lastUpdated).toISO()}
+                </Text>
               </Card>
             </Card>
           </Grid>
