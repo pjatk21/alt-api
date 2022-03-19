@@ -26,6 +26,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Preview } from './calendar/Preview'
 import { CalendarAdd } from './calendar/CalendarAdd'
 import { NotFound } from './NotFound'
+import { Scrappers, ScrappersWrapper } from './scrappers/Scrappers'
 
 const baseUrl = import.meta.env.DEV
   ? 'http://krystians-mac-pro.local:4000/'
@@ -218,6 +219,7 @@ function App() {
         <Route path="/" element={<AppHome />} />
         <Route path="preview/" element={<Preview />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="scrappers/" element={<ScrappersWrapper />} />
       </Routes>
     </BrowserRouter>
   )
