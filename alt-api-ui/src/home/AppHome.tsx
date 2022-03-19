@@ -10,6 +10,7 @@ import {
 } from '@nextui-org/react'
 import React from 'react'
 import { CalendarAdd } from '../calendar/CalendarAdd'
+import { Scrappers } from '../scrappers/Scrappers'
 import { LastUpdate } from './LastUpdate'
 import { UsefulLinks } from './UsefulLinks'
 
@@ -66,6 +67,19 @@ export function AppHome() {
           <Card.Body>
             <Container>
               <CalendarAdd />
+            </Container>
+          </Card.Body>
+        </Card>
+        <Spacer />
+        <Card>
+          <Card.Header>
+            <Container>
+              <Text h2>Scrappers</Text>
+            </Container>
+          </Card.Header>
+          <Card.Body>
+            <Container>
+              <Scrappers />
             </Container>
           </Card.Body>
         </Card>
