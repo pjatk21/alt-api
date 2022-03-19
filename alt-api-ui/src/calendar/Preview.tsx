@@ -12,7 +12,7 @@ import useSWR from 'swr'
 import { DateTime } from 'luxon'
 import { buildings } from './buildings.json'
 import { googleMapsEmbededApiKey } from './credentials.json'
-import { ScheduleEntryRawResponse } from './types'
+import { ScheduleEntryRawResponse } from '../types'
 
 const baseUrl = import.meta.env.DEV
   ? 'http://krystians-mac-pro.local:4000/'

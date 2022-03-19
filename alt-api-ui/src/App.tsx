@@ -23,8 +23,8 @@ import {
   faWarning,
 } from '@fortawesome/free-solid-svg-icons'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Preview } from './Preview'
-import { CalendarAdd } from './CalendarAdd'
+import { Preview } from './calendar/Preview'
+import { CalendarAdd } from './calendar/CalendarAdd'
 import { NotFound } from './NotFound'
 
 const baseUrl = import.meta.env.DEV
