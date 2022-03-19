@@ -32,7 +32,7 @@ const tasks: TaskDisposition[] = [
   {
     name: 'fetch to the end of the week',
     priority: 50,
-    runNewAfter: { minutes: 25 },
+    runNewAfter: { minutes: 45 },
     argsFactory: () => ({
       scrapUntil: DateTime.now().endOf('week').toJSDate(),
     }),
