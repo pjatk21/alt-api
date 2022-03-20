@@ -6,7 +6,7 @@ import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
 import { HypervisorModule } from './hypervisor/hypervisor.module'
 import { MongooseModule } from '@nestjs/mongoose'
-import { ServiceCheckModule } from './service-check/service-check.module';
+import { ServiceCheckModule } from './service-check/service-check.module'
 import { ScheduleModule } from '@nestjs/schedule'
 
 @Module({
