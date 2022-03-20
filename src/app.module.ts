@@ -6,6 +6,7 @@ import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
 import { HypervisorModule } from './hypervisor/hypervisor.module'
 import { MongooseModule } from '@nestjs/mongoose'
+import { ServiceCheckModule } from './service-check/service-check.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { MongooseModule } from '@nestjs/mongoose'
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'alt-api-ui', 'dist'),
     }),
+    ServiceCheckModule,
   ],
   controllers: [AppController],
   providers: [PublicTimetableService],
