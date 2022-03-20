@@ -7,6 +7,7 @@ import { join } from 'path'
 import { HypervisorModule } from './hypervisor/hypervisor.module'
 import { MongooseModule } from '@nestjs/mongoose'
 import { ServiceCheckModule } from './service-check/service-check.module';
+import { ScheduleModule } from '@nestjs/schedule'
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ServiceCheckModule } from './service-check/service-check.module';
       rootPath: join(__dirname, '..', 'alt-api-ui', 'dist'),
     }),
     ServiceCheckModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [PublicTimetableService],
