@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React from 'react'
 import {
   Card,
   Container,
@@ -8,30 +8,27 @@ import {
   Spacer,
   Text,
 } from '@nextui-org/react'
-import useSWR from 'swr'
 import { DateTime } from 'luxon'
 import { buildings } from './buildings.json'
-import { googleMapsEmbededApiKey } from './credentials.json'
-import { ScheduleEntryRawResponse } from './types'
+import { ScheduleEntryRawResponse } from '../types'
+import { useQuery } from 'react-query'
 
 const baseUrl = import.meta.env.DEV
   ? 'http://krystians-mac-pro.local:4000/'
   : window.location.href
 
 function PreviewWidget() {
-  const fetcher = (url: string) => fetch(url).then((r) => r.json())
+  // const fetcher = (url: string) => fetch(url).then((r) => r.json())
   const browserParams = new URLSearchParams(window.location.search)
   const url = new URL(baseUrl)
   url.pathname = '/v1/timetable/single'
   url.searchParams.append('group', browserParams.get('group') ?? '')
   url.searchParams.append('at', browserParams.get('at') ?? '')
+  const getPreview: () => Promise<ScheduleEntryRawResponse> = () => fetch(url.toString()).then((r) => r.json())
 
-  const { data, error } = useSWR(url.toString(), fetcher) as {
-    data?: ScheduleEntryRawResponse
-    error?: Error
-  }
-  if (error) return <Text>{error.message}</Text>
-  if (!data) return <Loading />
+  const { data, isError, isLoading } = useQuery('preview', getPreview)
+  if (isError) return <Text>{isError}</Text>
+  if (isLoading || !data) return <Loading />
 
   const begin = DateTime.fromISO(data.begin).setZone()
   const end = DateTime.fromISO(data.end).setZone()

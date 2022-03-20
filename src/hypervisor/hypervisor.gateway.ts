@@ -30,6 +30,7 @@ export class HypervisorGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   private readonly logger = new Logger(HypervisorGateway.name)
+  private server: Server = null
 
   constructor(
     private hypervisor: HypervisorService,
@@ -40,6 +41,7 @@ export class HypervisorGateway
 
   afterInit(server: Server) {
     this.logger.warn('Populating WS server among services...')
+    this.server = server
     this.hypervisor.setServer(server)
   }
 
@@ -49,11 +51,12 @@ export class HypervisorGateway
     )
   }
 
-  handleDisconnect(client: Socket) {
+  async handleDisconnect(client: Socket) {
     const discScrp = this.hypervisor.activeScrappers.get(client.id)
     if (discScrp) {
+      this.hypervisor.updateState(client.id, HypervisorScrapperState.DISCONNECTED)
       this.hypervisor.activeScrappers.delete(client.id)
-      this.dispositor.cleanupOnDisconnect(client)
+      await this.dispositor.cleanupOnDisconnect(client, this.server)
 
       this.logger.log(`Scrapper ${discScrp.name} disconnected!`)
     } else {
@@ -104,8 +107,8 @@ export class HypervisorGateway
   ) {
     await this.hypervisor.updateState(client.id, state)
     if (state === HypervisorScrapperState.READY) {
-      this.dispositor.releaseTask(client)
-      this.dispositor.assignTask(client)
+      await this.dispositor.releaseTask(client)
+      await this.dispositor.assignTask(client)
     }
   }
 

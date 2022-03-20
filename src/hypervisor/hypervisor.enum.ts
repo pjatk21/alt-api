@@ -8,6 +8,7 @@ export enum HypervisorScrapperState {
   WORKING = 'work',
   ERRORED = 'err',
   DISCONNECTED = 'disconnect',
+  AWAITING = 'awaiting',
 }
 
 /**
