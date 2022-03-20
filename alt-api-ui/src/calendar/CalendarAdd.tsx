@@ -40,6 +40,17 @@ function CalendarUrl({ groups }: CalendarUrlProps) {
 
   return (
     <>
+      {icsUrl.toString().length > 256 && (
+        <Tooltip
+          content={
+            'Generated URL is over 256 chars, some calendars may issues processing that long URL!'
+          }
+        >
+          <Text color={'warning'}>
+            <FontAwesomeIcon icon={faWarning} />
+          </Text>
+        </Tooltip>
+      )}
       <Button
         icon={<FontAwesomeIcon icon={faCopy} />}
         auto
