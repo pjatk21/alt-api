@@ -1,4 +1,4 @@
-import { faCopy, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { faCopy, faDownload, faWarning } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   Button,
@@ -9,9 +9,10 @@ import {
   Loading,
   Spacer,
   Text,
+  Tooltip,
 } from '@nextui-org/react'
 import React, { useMemo, useState } from 'react'
-import useSWR from 'swr'
+import { useQuery } from 'react-query'
 
 const baseUrl = import.meta.env.DEV
   ? 'http://krystians-mac-pro.local:4000/'
@@ -68,16 +69,14 @@ function CalendarUrl({ groups }: CalendarUrlProps) {
   )
 }
 
+const getAvailableGroups: () => Promise<{ groupsAvailable: string[] }> = () =>
+  fetch(`${baseUrl}v1/timetable/groups`).then((r) => r.json())
+
 export function CalendarAdd() {
-  const fetcher = (url: string) => fetch(url).then((r) => r.json())
-  const url = new URL(baseUrl)
-  url.pathname = '/v1/timetable/groups'
+  const qResponse = useQuery('groups', getAvailableGroups)
+  const { data, isLoading, isError } = qResponse
+  const { groupsAvailable } = data ?? { groupsAvailable: [] }
 
-  const availableGroupsResponse = useSWR(url.toString(), fetcher)
-
-  const { groupsAvailable } = (availableGroupsResponse.data ?? {
-    groupsAvailable: [],
-  }) as { groupsAvailable: string[] }
   const [groups, setGroups] = useState<string[]>([])
   const [groupSearch, setGroupSearch] = useState<string>('')
   const groupsFiltered = useMemo(
@@ -89,13 +88,14 @@ export function CalendarAdd() {
     [groups, groupsAvailable, groupSearch],
   )
 
-  if (availableGroupsResponse.error)
+  if (isError)
     return (
       <Text color={'error'} as={'pre'}>
-        {availableGroupsResponse.error.toString()}
+        {isError}
       </Text>
     )
-  if (!availableGroupsResponse.data) return <Loading />
+  if (isLoading) return <Loading />
+  console.log(groups)
 
   return (
     <>
@@ -103,7 +103,6 @@ export function CalendarAdd() {
       <Grid.Container gap={2}>
         <Grid>
           <Input
-            width="230px"
             clearable
             underlined
             label="Group name"
@@ -124,7 +123,7 @@ export function CalendarAdd() {
             </p>
           ))}
         </Grid>
-        <Grid css={{ overflow: 'auto', maxHeight: '300px' }}>
+        <Grid css={{ overflow: 'auto', maxHeight: (33.25 + 16) * 10 }}>
           {groupsFiltered.slice(0, 50).map((group) => (
             <p key={group}>
               <Checkbox onChange={() => setGroups([...groups, group])} checked={false}>
@@ -132,7 +131,7 @@ export function CalendarAdd() {
               </Checkbox>
             </p>
           ))}
-          {groupsFiltered.length > 5 && (
+          {groupsFiltered.length > 50 && (
             <Text i>And {groupsFiltered.length - 50} more...</Text>
           )}
         </Grid>
