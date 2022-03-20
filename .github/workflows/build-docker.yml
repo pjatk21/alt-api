@@ -4,10 +4,6 @@ on:
   push:
     tags:
       - "v*"
-    branches:
-      - "main"
-      - "gh-*"
-      - "ws-hypervisor"
   workflow_dispatch:
 
 jobs:
