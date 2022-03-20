@@ -6,7 +6,7 @@
   <a href="https://codeclimate.com/github/pjatk21/alt-api"><img alt="Code Climate technical debt" src="https://img.shields.io/codeclimate/tech-debt/pjatk21/alt-api"></a>
   <a href="https://github.com/pjatk21/alt-api/search?l=typescript&type=code"><img alt="GitHub top language" src="https://img.shields.io/github/languages/top/pjatk21/alt-api"></a>
   <a href="https://github.com/pjatk21/alt-api/commits/main"><img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/pjatk21/alt-api"></a>
-  <a href="https://wakatime.com/badge/user/304093ee-926f-40f9-980c-65ea3d5a15b7/project/8ebe4c55-638b-4258-88aa-99702785e52d"><img src="https://wakatime.com/badge/user/304093ee-926f-40f9-980c-65ea3d5a15b7/project/8ebe4c55-638b-4258-88aa-99702785e52d.svg" alt="wakatime"></a>
+  <a href="https://wakatime.com/badge/user/304093ee-926f-40f9-980c-65ea3d5a15b7/project/26f543df-5e37-4313-b4c3-42e9216cded4"><img src="https://wakatime.com/badge/user/304093ee-926f-40f9-980c-65ea3d5a15b7/project/26f543df-5e37-4313-b4c3-42e9216cded4.svg" alt="wakatime"></a>
 </div>
 
 ## Feature'y
