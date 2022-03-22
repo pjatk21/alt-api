@@ -12,6 +12,7 @@ import { DateTime } from 'luxon'
 import { buildings } from './buildings.json'
 import { ScheduleEntryRawResponse } from '../types'
 import { useQuery } from 'react-query'
+import ky from 'ky'
 
 const baseUrl = import.meta.env.DEV
   ? 'http://krystians-mac-pro.local:4000/'
@@ -24,7 +25,8 @@ function PreviewWidget() {
   url.pathname = '/v1/timetable/single'
   url.searchParams.append('group', browserParams.get('group') ?? '')
   url.searchParams.append('at', browserParams.get('at') ?? '')
-  const getPreview: () => Promise<ScheduleEntryRawResponse> = () => fetch(url.toString()).then((r) => r.json())
+  const getPreview: () => Promise<ScheduleEntryRawResponse> = () =>
+    ky.get(url.toString()).json()
 
   const { data, isError, isLoading } = useQuery('preview', getPreview)
   if (isError) return <Text>{isError}</Text>

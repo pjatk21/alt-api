@@ -2,6 +2,7 @@ import React from 'react'
 import { Loading, Text } from '@nextui-org/react'
 import { useQuery } from 'react-query'
 import { DateTime } from 'luxon'
+import ky from 'ky'
 
 const baseUrl = import.meta.env.DEV
   ? 'http://krystians-mac-pro.local:4000/'
@@ -17,7 +18,7 @@ type LastUpdateLike = {
 }
 
 const getLastUpdate: () => Promise<LastUpdateLike> = () =>
-  fetch(`${baseUrl}lastUpdate`).then((r) => r.json())
+  ky.get(`${baseUrl}lastUpdate`).json()
 
 export function LastUpdate() {
   const { data, error, isLoading } = useQuery(`${baseUrl}lastUpdate`, getLastUpdate)

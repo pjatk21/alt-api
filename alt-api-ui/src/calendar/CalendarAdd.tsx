@@ -11,6 +11,7 @@ import {
   Text,
   Tooltip,
 } from '@nextui-org/react'
+import ky from 'ky'
 import React, { useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 
@@ -70,7 +71,7 @@ function CalendarUrl({ groups }: CalendarUrlProps) {
 }
 
 const getAvailableGroups: () => Promise<{ groupsAvailable: string[] }> = () =>
-  fetch(`${baseUrl}v1/timetable/groups`).then((r) => r.json())
+  ky.get(`${baseUrl}v1/timetable/groups`).json()
 
 export function CalendarAdd() {
   const qResponse = useQuery('groups', getAvailableGroups)
@@ -95,7 +96,6 @@ export function CalendarAdd() {
       </Text>
     )
   if (isLoading) return <Loading />
-  console.log(groups)
 
   return (
     <>
