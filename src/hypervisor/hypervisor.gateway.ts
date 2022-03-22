@@ -24,6 +24,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { ScrapperVisa, ScrapperVisaDocument } from './schemas/scrapper-visa.schema'
 import { HypervisorGuard } from './hypervisor.guard'
 import { DispositorService } from './dispositor/dispositor.service'
+import { MissingDOMElement } from './hypervisor.errors'
 
 @WebSocketGateway(4010, { transports: ['websocket', 'polling'] })
 export class HypervisorGateway
@@ -121,12 +122,19 @@ export class HypervisorGateway
     @MessageBody('body') body: string,
     @MessageBody('htmlId') htmlId: string,
   ) {
-    const { entry } = await this.hypervisor.saveScheduleEntry(htmlId, body)
     const passport = this.hypervisor.activeScrappers.get(client.id)
-    this.logger.verbose(
-      `${passport.name} uploaded "${entry.code}" for "${
-        entry.groups
-      }" at "${entry.begin.toISOString()}"`,
-    )
+
+    try {
+      const { entry } = await this.hypervisor.saveScheduleEntry(htmlId, body)
+      this.logger.verbose(
+        `${passport.name} uploaded "${entry.code}" for "${
+          entry.groups
+        }" at "${entry.begin.toISOString()}"`,
+      )
+    } catch (error) {
+      if (error instanceof MissingDOMElement)
+        this.logger.warn(`Received unsupported event from ${passport.name}!`)
+      else throw error
+    }
   }
 }

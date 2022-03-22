@@ -9,6 +9,7 @@ import { ScheduleEntryDto } from 'src/public-timetable/dto/schedule-entry.dto'
 import { PublicTimetableService } from 'src/public-timetable/public-timetable.service'
 import { ScrapperPassportDto } from './dto/passport.dto'
 import { HypervisorScrapperState } from './hypervisor.enum'
+import { MissingDOMElement } from './hypervisor.errors'
 import { ScrapperState, ScrapperStateDocument } from './schemas/scrapper-state.schema'
 import { ScrapperVisa, ScrapperVisaDocument } from './schemas/scrapper-visa.schema'
 
@@ -71,6 +72,10 @@ export class HypervisorService {
    */
   async saveScheduleEntry(htmlId: string, htmlBody: string) {
     const htmlFrag = JSDOM.fragment(htmlBody)
+    if (htmlFrag.querySelector('[id*="NazwaPrzedmiotyLabel"]') === null) {
+      throw new MissingDOMElement('Received event without subjects label!')
+    }
+
     const entry: ScheduleEntryDto = {
       name: htmlFrag.querySelector('[id*="NazwaPrzedmiotyLabel"]').textContent.trim(),
       code: htmlFrag.querySelector('[id*="KodPrzedmiotuLabel"]').textContent.trim(),
