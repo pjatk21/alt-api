@@ -756,10 +756,10 @@
     lodash "4.17.21"
     path-to-regexp "3.2.0"
 
-"@nestjs/testing@^8.0.0":
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-8.4.0.tgz#c727fc427d753f106d1c9b11383858a24518170d"
-  integrity sha512-Gk9OW4RpiIGDOROHS7O271uJEpIddQP94zlkPOVOu3HPUxntfKbmDU4cDaCqC0PQ9Jtj71C0H1j9RS8ituYLAw==
+"@nestjs/testing@^8.4.2":
+  version "8.4.2"
+  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-8.4.2.tgz#ed392a206b90f563f85c8f03534de93b8710afe3"
+  integrity sha512-vb8sJTjdakqa9k5tMdcKJf8lG3TT7ekwaVbQ4FXGBjjYrriILYioQv23kkKrgOkT1HErUPdYAgeECw5qE8MIzg==
   dependencies:
     optional "0.1.4"
     tslib "2.3.1"
@@ -1060,10 +1060,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.21.tgz#864b987c0c68d07b4345845c3e63b75edd143644"
   integrity sha512-DBZCJbhII3r90XbQxI8Y9IjjiiOGlZ0Hr32omXIZvwwZ7p4DMMXGrKXVyPfuoBOri9XNtL0UK69jYIBIsRX3QQ==
 
-"@types/node@16":
-  version "16.11.26"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.26.tgz#63d204d136c9916fb4dcd1b50f9740fe86884e47"
-  integrity sha512-GZ7bu5A6+4DtG7q9GsoHXy3ALcgeIHP4NnL0Vv2wu0uUB/yQex26v0tf6/na1mm0+bS9Uw+0DFex7aaKr2qawQ==
+"@types/node@17":
+  version "17.0.22"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.22.tgz#38b6c4b9b2f3ed9f2e376cce42a298fb2375251e"
+  integrity sha512-8FwbVoG4fy+ykY86XCAclKZDORttqE5/s7dyWZKLXTdv3vRy5HozBEinG5IqhvPXXzIZEcTVbuHlQEI6iuwcmw==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
