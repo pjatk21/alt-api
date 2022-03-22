@@ -2,7 +2,7 @@ import { Card, Grid, Loading, Text, Tooltip } from '@nextui-org/react'
 import { DateTime } from 'luxon'
 import React from 'react'
 import ky, { HTTPError } from 'ky'
-import { QueryClient, QueryClientProvider, useQuery, useQueryClient } from 'react-query'
+import { useQuery } from 'react-query'
 
 const baseUrl = import.meta.env.DEV
   ? 'http://krystians-mac-pro.local:4000/'
