@@ -129,4 +129,9 @@ export class HypervisorService {
       lastUpdated: status.createdAt,
     }))
   }
+
+  async getScrapperStateHistory(uuid: string) {
+    const v = await this.visaModel.findOne({ 'passport.uuid': uuid })
+    return await this.statesModel.find({ visa: v })
+  }
 }
