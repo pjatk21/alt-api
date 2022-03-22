@@ -92,6 +92,8 @@ export class HypervisorGateway
       { new: true, upsert: true },
     )
 
+    await this.hypervisor.updateState(client.id, HypervisorScrapperState.STARTING)
+
     return {
       event: HypervisorEvents.VISA,
       data: null,

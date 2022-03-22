@@ -1,6 +1,7 @@
 import { Card, Grid, Loading, Text, Tooltip } from '@nextui-org/react'
 import { DateTime } from 'luxon'
 import React from 'react'
+import ky, { HTTPError } from 'ky'
 import { QueryClient, QueryClientProvider, useQuery, useQueryClient } from 'react-query'
 
 const baseUrl = import.meta.env.DEV
@@ -15,7 +16,7 @@ type ScrapperLike = {
 }
 
 const getScrappers: () => Promise<ScrapperLike[]> = () =>
-  fetch(`${baseUrl}hypervisor/scrappers`).then((r) => r.json())
+  ky.get(`${baseUrl}hypervisor/scrappers`).json()
 
 function colorFromState(state: string) {
   switch (state) {
@@ -26,17 +27,20 @@ function colorFromState(state: string) {
     case 'ready':
       return 'secondary'
     default:
-      return undefined
+      return 'warning'
   }
 }
 
 export function Scrappers() {
   const { data, error, isLoading, isError } = useQuery('scrappers', getScrappers, {
-    refetchInterval: 1_000,
+    refetchInterval: 5_000,
+    retry: false,
   })
 
   if (isLoading) return <Loading />
-  if (isError) return <pre>{JSON.stringify(error)}</pre>
+  if (isError) {
+    if (error instanceof HTTPError) return <pre>{error.message}</pre>
+  }
 
   if (data) {
     if (data.length === 0) return <p>There are not any connected scrappers...</p>
