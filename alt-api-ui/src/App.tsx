@@ -6,6 +6,7 @@ import { NotFound } from './NotFound'
 import { ScrappersWrapper } from './scrappers/Scrappers'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { AppHome } from './home/AppHome'
+import { ScheduleViewer } from './schedule-viewer/ScheduleViewer'
 
 const queryClient = new QueryClient()
 
@@ -22,6 +23,7 @@ function App() {
             <Route path="/" element={<AppHome />} />
             <Route path="preview/" element={<Preview />} />
             <Route path="scrappers/" element={<ScrappersWrapper />} />
+            <Route path="view/" element={<ScheduleViewer />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -1,0 +1,33 @@
+.timelineContainer
+  position: relative
+  border-radius: 16px
+  border: none
+  padding: 10px
+  flex-direction: column
+
+  > div
+    position: absolute
+    width: 100%
+
+  .background
+    background-color: #c9c9c91a
+    z-index: 10
+
+    .line
+      flex-direction: row
+      display: flex
+      align-items: start
+
+      span
+        font-family: 'JetBrains Mono', monospace
+        font-size: 9pt
+        margin: 0
+      hr
+        margin: 10px 10px
+        width: 100%
+        background-color: white
+      margin-bottom: 16px
+
+  .content
+    margin-left: 40px
+    z-index: 20
