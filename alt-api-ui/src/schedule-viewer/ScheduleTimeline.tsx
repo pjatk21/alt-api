@@ -10,9 +10,9 @@ export function ScheduleTimeline() {
         <ScheduleBlock />
       </div>
       <div className={styles.background}>
-        {[...Array(24)].map((x, y) => (
+        {[...Array(24-6)].map((x, y) => (
           <div key={y} className={styles.line}>
-            <span>{y}:00</span>
+            <span>{y+6}:00</span>
             <hr />
           </div>
         ))}

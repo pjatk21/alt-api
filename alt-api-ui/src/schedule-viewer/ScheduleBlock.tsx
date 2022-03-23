@@ -4,7 +4,7 @@ import styles from './ScheduleBlock.module.sass'
 export function ScheduleBlock() {
   return (
     <div className={styles.timelineBlock}>
-      <span>any</span>
+      <span>PPJ</span>
     </div>
   )
 }
