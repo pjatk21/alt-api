@@ -8,30 +8,6 @@ import { ScheduleBlock } from './ScheduleBlock'
 import { useInterval } from 'usehooks-ts'
 import styles from './ScheduleTimeline.module.sass'
 
-const mockData: ScheduleEntryRawResponse = {
-  name: 'Programowanie obiektowe i GUI',
-  code: 'GUI',
-  type: 'Wykład',
-  groups: ['WIs I.2 - 1w'],
-  building: 'B2020',
-  room: 'B/241',
-  begin: '2022-03-24T07:30:00.000Z',
-  end: '2022-03-24T09:00:00.000Z',
-  tutor: 'Tomaszewski Michał',
-}
-
-const mockData2: ScheduleEntryRawResponse = {
-  name: 'Algebra liniowa i geometria',
-  code: 'ALG',
-  type: 'Wykład',
-  groups: ['WIs I.2 - 1w'],
-  building: 'B2020',
-  room: 'B/241',
-  begin: '2022-03-24T09:15:00.000Z',
-  end: '2022-03-24T10:45:00.000Z',
-  tutor: 'Turska Ewa',
-}
-
 type ScheduleTimelineProps = {
   date: DateTime
   groups: string[]
