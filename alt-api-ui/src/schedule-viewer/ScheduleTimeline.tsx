@@ -72,8 +72,8 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
         })}
       </div>
       <div className={styles.content}>
-        {data?.map((x) => (
-          <ScheduleBlock key={x.begin + x.groups} data={x} />
+        {data?.map((x, y) => (
+          <ScheduleBlock key={y} data={x} />
         ))}
       </div>
       {DateTime.now().startOf('day').plus({ hours: 6 }) < date &&
