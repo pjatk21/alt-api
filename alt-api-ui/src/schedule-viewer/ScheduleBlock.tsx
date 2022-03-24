@@ -30,8 +30,8 @@ export function ScheduleBlock({ data }: ScheduleBlockProps) {
     <div
       className={styles.timelineBlock}
       style={{
-        top: offset * 50 + 1 + 10,
-        height: heightByDuration * 50,
+        top: offset * 55 + 10 + 1,
+        height: heightByDuration * 55,
         backgroundColor: bgColorByType,
       }}
       onClick={() => setModalVisible(true)}

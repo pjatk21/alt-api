@@ -76,7 +76,7 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
         ))}
       </div>
       <div className={styles.timePointer}>
-        <hr style={{ top: timePointer * 50 + 1 }} />
+        <hr style={{ top: timePointer * 55 }} />
       </div>
     </div>
   )

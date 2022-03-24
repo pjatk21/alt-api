@@ -1,11 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap')
+
 .timelineContainer
+  --timeline-padding-vertical: 10px
+  --timeline-padding-horizontal: 20px
+  --timeline-hour-height: 55px
+  --timeline-time-width: 45px
+
   position: relative
   border: none
   flex-direction: column
 
   .background
-    padding: 10px
-    border-radius: 16px
+    padding: var(--timeline-padding-vertical) var(--timeline-padding-horizontal)
+    border-radius: var(--timeline-padding-horizontal)
     background-color: #c9c9c91a
     z-index: 10
 
@@ -13,20 +20,25 @@
       flex-direction: row
       display: flex
       align-items: start
+      justify-content: start
+      height: var(--timeline-hour-height)
 
       span
+        display: block
         font-family: 'JetBrains Mono', monospace
         font-size: 9pt
         margin: 0
+        width: var(--timeline-time-width)
+
       hr
-        margin: 0 10px 32px 10px
+        margin: 0
         width: 100%
         border-color: #6b6b6b75
-      margin-bottom: 16px
 
   .content
-    margin-left: 56px
     z-index: 20
+    margin-left: calc(var(--timeline-time-width) + var(--timeline-padding-horizontal))
+
 
   .timePointer
     z-index: 30
