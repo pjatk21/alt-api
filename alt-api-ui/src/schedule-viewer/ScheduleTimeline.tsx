@@ -19,7 +19,10 @@ function timepointerOffset() {
     .as('hours')
 }
 
-function getSchedule(date: DateTime, groups: string[]): Promise<{ entries: ScheduleEntryRawResponse[] }> {
+function getSchedule(
+  date: DateTime,
+  groups: string[],
+): Promise<{ entries: ScheduleEntryRawResponse[] }> {
   const params = new URLSearchParams()
   for (const g of groups) params.append('groups', g)
 
@@ -59,7 +62,9 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
           const h = DateTime.fromObject({ hour: 6 + y })
           return (
             <div key={y} className={styles.line}>
-              <span>{h.toLocaleString({ timeStyle: 'short' })}</span>
+              <div>
+                <span>{h.toLocaleString({ timeStyle: 'short', hourCycle: 'h24' })}</span>
+              </div>
               <hr />
             </div>
           )
