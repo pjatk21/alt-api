@@ -8,14 +8,22 @@ import './ScheduleViewer.sass'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faArrowRight, faTrash } from '@fortawesome/free-solid-svg-icons'
 
+const urlInit = new URL(window.location.href)
+const initalGroups = urlInit.searchParams.getAll('set')
+const initalDate = urlInit.searchParams.get('date')
+let initFinished = false
+
 export function ScheduleViewer() {
   const queryClient = useQueryClient()
+
   const [activeDate, setActiveDate] = useState(DateTime.now())
-  const [groups, setGroups] = useLocalStorage(
-    'groups',
-    //['WIs I.2 - 1w', 'WIs I.2 - 46c', 'WIs I.2 - 126l'].sort(),
-    [] as string[],
-  )
+  if (initalDate && !initFinished) setActiveDate(DateTime.fromISO(initalDate))
+
+  const [groups, setGroups] = useLocalStorage<string[]>('groups', [])
+  if (initalGroups.length > 0 && !initFinished) setGroups(initalGroups)
+
+  initFinished = true
+
   const [groupPickerVisible, setGroupPickerVisible] = useState(groups.length === 0)
 
   const addGroup = (group: string) => {
@@ -27,6 +35,7 @@ export function ScheduleViewer() {
     setGroups(groups.filter((x) => x !== group))
     queryClient.invalidateQueries({ queryKey: 'schedule' })
   }
+  console.log(groups, activeDate, initalDate)
 
   return (
     <Container xs>
