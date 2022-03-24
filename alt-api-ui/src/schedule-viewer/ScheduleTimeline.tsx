@@ -7,6 +7,7 @@ import { ScheduleEntryRawResponse } from '../types'
 import { ScheduleBlock } from './ScheduleBlock'
 import { useInterval } from 'usehooks-ts'
 import styles from './ScheduleTimeline.module.sass'
+import { baseUrl } from '../util'
 
 type ScheduleTimelineProps = {
   date: DateTime
@@ -29,7 +30,7 @@ function getSchedule(
   params.append('from', date.startOf('day').toISO())
   params.append('to', date.endOf('day').toISO())
   return ky
-    .get(`https://altapi.kpostek.dev/v1/timetable/range`, {
+    .get(`${baseUrl}v1/timetable/range`, {
       searchParams: params,
     })
     .json()
