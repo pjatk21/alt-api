@@ -75,9 +75,12 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
           <ScheduleBlock key={x.begin + x.groups} data={x} />
         ))}
       </div>
-      <div className={styles.timePointer}>
-        <hr style={{ top: timePointer * 55 }} />
-      </div>
+      {DateTime.now().startOf('day').plus({ hours: 6 }) < date &&
+        DateTime.now().startOf('day').plus({ hours: 21 }) > date && (
+          <div className={styles.timePointer}>
+            <hr style={{ top: timePointer * 55 }} />
+          </div>
+        )}
     </div>
   )
 }
