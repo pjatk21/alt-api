@@ -44,6 +44,7 @@ RUN yarn build
 
 WORKDIR /app/alt-api-ui
 RUN yarn build
+RUN rm -Rf /app/alt-api-ui/node_modules
 
 # Prepare api
 WORKDIR /app
@@ -51,5 +52,7 @@ EXPOSE 4000
 
 ENV NODE_ENV=production \
     TZ=Europe/Warsaw
+
+RUN yarn install
 
 ENTRYPOINT yarn start:prod
