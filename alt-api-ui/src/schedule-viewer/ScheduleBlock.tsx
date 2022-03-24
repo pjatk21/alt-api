@@ -6,7 +6,7 @@ import { colors } from './colors.json'
 import { Button, Modal, Text, Link } from '@nextui-org/react'
 import { buildings } from '../calendar/buildings.json'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRoute, faSign } from '@fortawesome/free-solid-svg-icons'
+import { faRoute } from '@fortawesome/free-solid-svg-icons'
 
 type ScheduleBlockProps = {
   data: ScheduleEntryRawResponse
@@ -26,8 +26,7 @@ export function ScheduleBlock({ data }: ScheduleBlockProps) {
   const location = buildings.filter((b) => b.name === data.building)[0]
 
   // WARNING
-  // 50 -> 1hr in timeline (elem height + margin (34 + 16))
-  // 1 + 10 -> hr size + top padding size
+  // Check ScheduleTimeline.module.sass for sizes
   return (
     <div
       className={styles.timelineBlock}
