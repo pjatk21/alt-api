@@ -6,7 +6,7 @@ import { useQueryClient } from 'react-query'
 import { useLocalStorage } from 'usehooks-ts'
 import './ScheduleViewer.sass'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faArrowRight, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 export function ScheduleViewer() {
   const queryClient = useQueryClient()
@@ -31,15 +31,14 @@ export function ScheduleViewer() {
   return (
     <Container xs>
       <Text h2>Plan zajęć</Text>
-      <Grid.Container gap={2} justify={'center'}>
+      <Grid.Container gap={1} justify={'center'}>
         <Grid>
           <Button
             bordered
             auto
             onClick={() => setActiveDate(activeDate.minus({ day: 1 }))}
-          >
-            Prev. day
-          </Button>
+            icon={<FontAwesomeIcon icon={faArrowLeft} />}
+          />
         </Grid>
         <Grid>
           <Input
@@ -56,9 +55,8 @@ export function ScheduleViewer() {
             bordered
             auto
             onClick={() => setActiveDate(activeDate.plus({ day: 1 }))}
-          >
-            Next day
-          </Button>
+            icon={<FontAwesomeIcon icon={faArrowRight} />}
+          />
         </Grid>
       </Grid.Container>
       <ScheduleTimeline date={activeDate} groups={groups} />
