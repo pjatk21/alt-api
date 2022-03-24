@@ -1,9 +1,12 @@
-import { Card, Col, Container, Link, Spacer, Text } from '@nextui-org/react'
 import React from 'react'
+import { Button, Card, Col, Container, Link, Spacer, Text } from '@nextui-org/react'
 import { CalendarAdd } from '../calendar/CalendarAdd'
 import { Scrappers } from '../scrappers/Scrappers'
-import { LastUpdate } from './LastUpdate'
+import { LastUpdate } from '../dev/LastUpdate'
 import { UsefulLinks } from './UsefulLinks'
+import { Link as RRDLink } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
 export function AppHome() {
   return (
@@ -30,6 +33,15 @@ export function AppHome() {
                 Query PJA schedule in milliseconds. A great alternative to original
                 webpage from 2010.
               </Text>
+              <RRDLink to="/app">
+                <Button
+                  iconRight={<FontAwesomeIcon icon={faArrowRight} />}
+                  color={'gradient'}
+                  auto
+                >
+                  Checkout new web app!
+                </Button>
+              </RRDLink>
               <Spacer />
               <UsefulLinks />
             </Container>

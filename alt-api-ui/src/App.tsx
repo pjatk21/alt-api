@@ -24,7 +24,7 @@ function App() {
             <Route path="/" element={<AppHome />} />
             <Route path="preview/" element={<Preview />} />
             <Route path="scrappers/" element={<ScrappersWrapper />} />
-            <Route path="view/" element={<ScheduleViewer />} />
+            <Route path="app/" element={<ScheduleViewer />} />
             <Route path="dev/" element={<DevPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
