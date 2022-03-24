@@ -5,6 +5,8 @@ import styles from './ScheduleBlock.module.sass'
 import { colors } from './colors.json'
 import { Button, Modal, Text, Link } from '@nextui-org/react'
 import { buildings } from '../calendar/buildings.json'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRoute, faSign } from '@fortawesome/free-solid-svg-icons'
 
 type ScheduleBlockProps = {
   data: ScheduleEntryRawResponse
@@ -72,7 +74,9 @@ export function ScheduleBlock({ data }: ScheduleBlockProps) {
           <Link
             href={`https://www.google.com/maps/dir/?api=1&destination=${location.where}`}
           >
-            <Button>Nawiguj</Button>
+            <Button auto icon={<FontAwesomeIcon icon={faRoute} />}>
+              Nawiguj
+            </Button>
           </Link>
         </Modal.Footer>
       </Modal>
