@@ -5,8 +5,8 @@ import { NotFound } from './NotFound'
 import { ScrappersWrapper } from './scrappers/Scrappers'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { AppHome } from './home/AppHome'
-import { ScheduleViewer } from './schedule-viewer/ScheduleViewer'
 import { DevPage } from './dev/DevPage'
+import { ScheduleViewer } from './schedule-viewer/ScheduleViewer'
 
 const queryClient = new QueryClient()
 

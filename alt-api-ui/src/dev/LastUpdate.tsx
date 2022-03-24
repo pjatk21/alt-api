@@ -3,10 +3,7 @@ import { Loading, Text } from '@nextui-org/react'
 import { useQuery } from 'react-query'
 import { DateTime } from 'luxon'
 import ky from 'ky'
-
-const baseUrl = import.meta.env.DEV
-  ? 'http://krystians-mac-pro.local:4000/'
-  : window.location.href
+import { baseUrl } from '../util'
 
 type LastUpdateLike = {
   lastScrapperUpload: string

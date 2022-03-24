@@ -20,7 +20,10 @@ export function ScheduleViewer() {
   if (initalDate && !initFinished) setActiveDate(DateTime.fromISO(initalDate))
 
   const [groups, setGroups] = useLocalStorage<string[]>('groups', [])
-  if (initalGroups.length > 0 && !initFinished) setGroups(initalGroups)
+  if (initalGroups.length > 0 && !initFinished) {
+    setGroups(initalGroups)
+    window.location.href = window.location.protocol + window.location.pathname
+  }
 
   initFinished = true
 

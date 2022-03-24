@@ -14,10 +14,7 @@ import {
 import ky from 'ky'
 import React, { useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
-
-const baseUrl = import.meta.env.DEV
-  ? 'http://krystians-mac-pro.local:4000/'
-  : window.location.href
+import { baseUrl } from '../util'
 
 type CalendarUrlProps = {
   groups: string[]
