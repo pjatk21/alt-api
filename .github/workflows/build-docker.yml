@@ -5,7 +5,7 @@ on:
     tags:
       - "v*"
     branches:
-      - "*"
+      - "!main" # only tags or prototypes should be built
   workflow_dispatch:
 
 jobs:
