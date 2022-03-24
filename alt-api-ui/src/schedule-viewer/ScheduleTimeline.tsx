@@ -45,9 +45,12 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
   })
   console.log(data)
 
-  if (isLoading || groups.length === 0) return <div style={{ display: 'flex', justifyContent: 'center'}}>
-    <Loading>Pobieranie planu zajęć</Loading>
-  </div>
+  if (isLoading || groups.length === 0)
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Loading>Pobieranie planu zajęć</Loading>
+      </div>
+    )
 
   return (
     <div className={styles.timelineContainer}>
