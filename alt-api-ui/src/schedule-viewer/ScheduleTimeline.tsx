@@ -1,9 +1,11 @@
+import { Loading } from '@nextui-org/react'
 import ky from 'ky'
 import { DateTime } from 'luxon'
-import React from 'react'
+import React, { useState } from 'react'
 import { useQuery } from 'react-query'
 import { ScheduleEntryRawResponse } from '../types'
 import { ScheduleBlock } from './ScheduleBlock'
+import { useInterval } from 'usehooks-ts'
 import styles from './ScheduleTimeline.module.sass'
 
 const mockData: ScheduleEntryRawResponse = {
@@ -30,28 +32,49 @@ const mockData2: ScheduleEntryRawResponse = {
   tutor: 'Turska Ewa',
 }
 
-const params = new URLSearchParams()
-params.append('groups', 'WIs I.2 - 1w')
-params.append('groups', 'WIs I.2 - 46c')
+type ScheduleTimelineProps = {
+  date: DateTime
+  groups: string[]
+}
 
-const getSchedule: () => Promise<{ entries: ScheduleEntryRawResponse[] }> = () =>
-  ky
-    .get('https://altapi.kpostek.dev/v1/timetable/date/2022-03-25', {
+function timepointerOffset() {
+  return DateTime.now()
+    .diff(DateTime.now().startOf('day').set({ hour: 6 }))
+    .as('hours')
+}
+
+function getSchedule(date: DateTime, groups: string[]): Promise<{ entries: ScheduleEntryRawResponse[] }> {
+  const params = new URLSearchParams()
+  for (const g of groups) params.append('groups', g)
+
+  params.append('from', date.startOf('day').toISO())
+  params.append('to', date.endOf('day').toISO())
+  return ky
+    .get(`https://altapi.kpostek.dev/v1/timetable/range`, {
       searchParams: params,
     })
     .json()
+}
 
-export function ScheduleTimeline() {
-  const { data, isLoading } = useQuery('schedule', getSchedule)
+export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
+  const [timePointer, setTimePoiner] = useState(timepointerOffset())
+  useInterval(() => setTimePoiner(timepointerOffset()), 10000)
+
+  const { data, isLoading } = useQuery<
+    { entries: ScheduleEntryRawResponse[] },
+    Error,
+    ScheduleEntryRawResponse[]
+  >(['schedule', date], () => getSchedule(date, groups), {
+    select: (x) => x.entries,
+  })
   console.log(data)
+
+  if (isLoading || groups.length === 0) return <div style={{ display: 'flex', justifyContent: 'center'}}>
+    <Loading>Pobieranie planu zajęć</Loading>
+  </div>
 
   return (
     <div className={styles.timelineContainer}>
-      <div className={styles.content}>
-        {data?.entries.slice(0, 3).map((x) => (
-          <ScheduleBlock key={x.begin + x.groups} data={x} />
-        ))}
-      </div>
       <div className={styles.background}>
         {[...Array(22 - 6)].map((x, y) => {
           const h = DateTime.fromObject({ hour: 6 + y })
@@ -62,6 +85,14 @@ export function ScheduleTimeline() {
             </div>
           )
         })}
+      </div>
+      <div className={styles.content}>
+        {data?.map((x) => (
+          <ScheduleBlock key={x.begin + x.groups} data={x} />
+        ))}
+      </div>
+      <div className={styles.timePointer}>
+        <hr style={{ top: timePointer * 50 + 1 }} />
       </div>
     </div>
   )
