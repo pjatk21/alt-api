@@ -30,7 +30,6 @@ export function AppHome() {
                 Query PJA schedule in milliseconds. A great alternative to original
                 webpage from 2010.
               </Text>
-              <LastUpdate />
               <Spacer />
               <UsefulLinks />
             </Container>
@@ -59,19 +58,6 @@ export function AppHome() {
           <Card.Body>
             <Container>
               <CalendarAdd />
-            </Container>
-          </Card.Body>
-        </Card>
-        <Spacer />
-        <Card>
-          <Card.Header>
-            <Container>
-              <Text h2>Scrappers</Text>
-            </Container>
-          </Card.Header>
-          <Card.Body>
-            <Container>
-              <Scrappers />
             </Container>
           </Card.Body>
         </Card>
