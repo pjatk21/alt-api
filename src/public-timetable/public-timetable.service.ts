@@ -132,9 +132,11 @@ export class PublicTimetableService {
       const re = row.entry
       const begin = DateTime.fromJSDate(re.begin).setZone()
       const end = DateTime.fromJSDate(re.end).setZone()
-      const previewUrl = new URL('https://altapi.kpostek.dev/preview')
-      previewUrl.searchParams.append('at', begin.toISO())
-      previewUrl.searchParams.append('group', re.groups[0])
+      const previewUrl = new URL('https://altapi.kpostek.dev/app')
+      previewUrl.searchParams.append('date', begin.toISODate())
+      for (const g of optionalFilters.groups ?? re.groups) {
+        previewUrl.searchParams.append('set', g)
+      }
 
       const eventHashId =
         'altid-' +
