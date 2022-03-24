@@ -56,10 +56,12 @@ export class PublicTimetableService {
   async updateOneEntry(htmlId: string, changeHash: string, entry: ScheduleEntryDto) {
     return await this.timetableModel.findOneAndUpdate(
       {
-        htmlId,
-        changeHash: { $ne: changeHash },
+        entry: {
+          groups: entry.groups,
+          begin: entry.begin,
+        },
       },
-      { $set: { changeHash, entry } },
+      { $set: { htmlId, changeHash, entry } },
       { new: true, upsert: true },
     )
   }

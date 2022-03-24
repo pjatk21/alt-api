@@ -12,7 +12,7 @@ export class Timetable {
   @Prop({ required: true })
   htmlId: string
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   changeHash: string
 
   @Prop()
