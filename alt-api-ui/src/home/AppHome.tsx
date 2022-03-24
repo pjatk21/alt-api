@@ -51,14 +51,7 @@ export function AppHome() {
         <Card>
           <Card.Header>
             <Container>
-              <Text
-                h2
-                css={{
-                  textGradient: 'to bottom left, #3EE5FF 0%, #FF38F2 100%',
-                }}
-              >
-                Subscribe to ICS
-              </Text>
+              <Text h2>Add to calendar</Text>
               <Link
                 href="https://github.com/pjatk21/alt-api/wiki/ICS-integration"
                 css={{ opacity: 0.5 }}
