@@ -3,6 +3,7 @@ import { faApple, faGithub } from '@fortawesome/free-brands-svg-icons'
 import {
   faBook,
   faCircleDollarToSlot,
+  faRobot,
   faWarning,
 } from '@fortawesome/free-solid-svg-icons'
 import { Button, Grid, Link, NormalColors, Tooltip } from '@nextui-org/react'
@@ -93,6 +94,12 @@ export function UsefulLinks() {
           href={'https://revolut.me/kpostekk'}
           text={'Donate me'}
           tooltip={"coffee && booze ain't cheap ☕️ 🥃"}
+        />
+        <UsefulLink
+          icon={<FontAwesomeIcon icon={faRobot} />}
+          // customColor={'#e0a8dd'}
+          href={'/dev'}
+          text={'Status'}
         />
       </Grid.Container>
     </>
