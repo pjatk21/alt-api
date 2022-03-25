@@ -13,6 +13,7 @@ export default defineConfig({
         description: 'Lepsza implementacja dla planu zajęć PJATK.',
         start_url: './app/',
         theme_color: '#000',
+        categories: ['education', 'productivity'],
         icons: [
           {
             src: 'img/AltapiIcon_192.png',
