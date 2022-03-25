@@ -97,6 +97,7 @@ export function CalendarAdd() {
           <Button
             auto
             icon={<FontAwesomeIcon icon={faAdd} />}
+            disabled={groupSearch.length === 0}
             onClick={() => setGroups([...groups, groupSearch])}
           >
             Add
