@@ -118,22 +118,6 @@ export function CalendarAdd() {
           ))}
         </Grid>
       </Grid.Container>
-
-      {/* <Grid.Container gap={2}>
-        <Grid></Grid>
-        <Grid css={{ overflow: 'auto', maxHeight: (33.25 + 16) * 10 }}>
-          {groupsFiltered.slice(0, 50).map((group) => (
-            <p key={group}>
-              <Checkbox onChange={() => setGroups([...groups, group])} checked={false}>
-                {group}
-              </Checkbox>
-            </p>
-          ))}
-          {groupsFiltered.length > 50 && (
-            <Text i>And {groupsFiltered.length - 50} more...</Text>
-          )}
-          </Grid>
-      </Grid.Container> */}
     </>
   )
 }
