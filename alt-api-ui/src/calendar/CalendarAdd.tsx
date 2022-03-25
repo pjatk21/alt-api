@@ -71,11 +71,9 @@ export function CalendarAdd() {
       <Grid.Container alignItems={'flex-end'} gap={2}>
         <Grid>
           <Input
-            clearable
             bordered
             label="Group name"
             placeholder="WIs I.2 - 1w"
-            css={{ width: '320px' }}
             onChange={(e) => setGroupSearch(e.target.value)}
             list={'groupsAvailable'}
           />

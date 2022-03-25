@@ -118,7 +118,6 @@ export function ScheduleViewer() {
             label={'Group name'}
             placeholder={'WIs I.2 - 1w'}
             list={'allGroups'}
-            clearable
             onChange={() => setButtonDisabled(shouldDisableButton())}
             onFocus={() => setButtonDisabled(shouldDisableButton())}
           />
