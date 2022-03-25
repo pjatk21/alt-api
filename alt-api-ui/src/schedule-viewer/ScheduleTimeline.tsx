@@ -40,7 +40,7 @@ function getSchedule(
 
 export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
   const [timePointer, setTimePoiner] = useState(timepointerOffset())
-  useInterval(() => setTimePoiner(timepointerOffset()), 10000)
+  useInterval(() => setTimePoiner(timepointerOffset()), 5000)
 
   const { data, isLoading } = useQuery<
     { entries: ScheduleEntryRawResponse[] },
@@ -80,7 +80,7 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
       {DateTime.now().startOf('day').plus({ hours: 6 }) < date &&
         DateTime.now().startOf('day').plus({ hours: 21 }) > date && (
           <div className={styles.timePointer}>
-            <hr style={{ top: timePointer * 55 }} />
+            <hr style={{ top: timePointer * 55 + 1 }} />
           </div>
         )}
     </div>
