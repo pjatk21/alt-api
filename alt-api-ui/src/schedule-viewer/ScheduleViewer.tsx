@@ -72,6 +72,7 @@ export function ScheduleViewer() {
         </Grid>
         <Grid>
           <Input
+            bordered
             type={'date'}
             onChange={(e) => {
               setActiveDate(DateTime.fromISO(e.target.value))
