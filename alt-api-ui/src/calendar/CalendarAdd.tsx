@@ -1,4 +1,4 @@
-import { faCopy, faDownload, faWarning } from '@fortawesome/free-solid-svg-icons'
+import { faAdd, faCopy, faDownload, faWarning } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   Button,
@@ -14,6 +14,7 @@ import {
 import ky from 'ky'
 import React, { useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
+import { GroupDatalist } from '../datalists/GroupDatalist'
 import { baseUrl } from '../util'
 
 type CalendarUrlProps = {
@@ -42,7 +43,7 @@ function CalendarUrl({ groups }: CalendarUrlProps) {
       {icsUrl.toString().length > 256 && (
         <Tooltip
           content={
-            'Generated URL is over 256 chars, some calendars may issues processing that long URL!'
+            'Generated URL is over 256 chars, some web calendars may issues processing that long URL!'
           }
         >
           <Text color={'warning'}>
@@ -50,76 +51,76 @@ function CalendarUrl({ groups }: CalendarUrlProps) {
           </Text>
         </Tooltip>
       )}
-      <Button
-        icon={<FontAwesomeIcon icon={faCopy} />}
-        auto
-        onClick={() => navigator.clipboard.writeText(icsUrl.toString())}
-      >
-        Copy ICS URL
-      </Button>
-      <Spacer />
-      <Link href={icsUrl.toString()}>
-        <Button icon={<FontAwesomeIcon icon={faDownload} />} auto>
-          Download ICS
-        </Button>
-      </Link>
+      <Grid.Container gap={2}>
+        <Grid>
+          <Button
+            icon={<FontAwesomeIcon icon={faCopy} />}
+            auto
+            onClick={() => navigator.clipboard.writeText(icsUrl.toString())}
+          >
+            Copy ICS URL
+          </Button>
+        </Grid>
+        <Grid>
+          <Link href={icsUrl.toString()}>
+            <Button icon={<FontAwesomeIcon icon={faDownload} />} auto>
+              Download ICS
+            </Button>
+          </Link>
+        </Grid>
+      </Grid.Container>
     </>
   )
 }
 
-const getAvailableGroups: () => Promise<{ groupsAvailable: string[] }> = () =>
-  ky.get(`${baseUrl}v1/timetable/groups`).json()
-
 export function CalendarAdd() {
-  const qResponse = useQuery('groups', getAvailableGroups)
-  const { data, isLoading, isError } = qResponse
-  const { groupsAvailable } = data ?? { groupsAvailable: [] }
-
   const [groups, setGroups] = useState<string[]>([])
   const [groupSearch, setGroupSearch] = useState<string>('')
-  const groupsFiltered = useMemo(
-    () =>
-      groupsAvailable
-        .filter((group) => !groups.includes(group))
-        .filter((group) => group.toLowerCase().includes(groupSearch.toLowerCase()))
-        .sort(),
-    [groups, groupsAvailable, groupSearch],
-  )
-
-  if (isError)
-    return (
-      <Text color={'error'} as={'pre'}>
-        {isError}
-      </Text>
-    )
-  if (isLoading) return <Loading />
 
   return (
     <>
       <Text h4>Select groups</Text>
-      <Grid.Container gap={2}>
+      <Grid.Container alignItems={'flex-end'} gap={2}>
         <Grid>
           <Input
             clearable
-            underlined
+            bordered
             label="Group name"
             placeholder="WIs I.2 - 1w"
+            css={{ width: '320px'}}
             onChange={(e) => setGroupSearch(e.target.value)}
+            list={'groupsAvailable'}
           />
-          <Spacer />
-          <CalendarUrl groups={groups} />
-          <Spacer />
+          <GroupDatalist id={'groupsAvailable'} />
+        </Grid>
+        <Grid>
+          <Button
+            auto
+            icon={<FontAwesomeIcon icon={faAdd} />}
+            onClick={() => setGroups([...groups, groupSearch])}
+          >
+            Add
+          </Button>
+        </Grid>
+      </Grid.Container>
+      <CalendarUrl groups={groups} />
+      <Grid.Container gap={2}>
+        <Grid>
           {groups.map((group) => (
-            <p key={group}>
+            <div key={group}>
               <Checkbox
                 onChange={() => setGroups(groups.filter((g) => group !== g))}
                 checked={true}
               >
                 {group}
               </Checkbox>
-            </p>
+            </div>
           ))}
         </Grid>
+      </Grid.Container>
+
+      {/* <Grid.Container gap={2}>
+        <Grid></Grid>
         <Grid css={{ overflow: 'auto', maxHeight: (33.25 + 16) * 10 }}>
           {groupsFiltered.slice(0, 50).map((group) => (
             <p key={group}>
@@ -131,8 +132,8 @@ export function CalendarAdd() {
           {groupsFiltered.length > 50 && (
             <Text i>And {groupsFiltered.length - 50} more...</Text>
           )}
-        </Grid>
-      </Grid.Container>
+          </Grid>
+      </Grid.Container> */}
     </>
   )
 }
