@@ -14,5 +14,5 @@ export type ScheduleEntryRawResponse = {
    */
   end: string
   tutor: string | null
-  raw: Record<string, string>
+  raw?: Record<string, string>
 }

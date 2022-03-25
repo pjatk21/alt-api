@@ -1,0 +1,12 @@
+{
+  "colors": [
+    {
+      "type": "Ćwiczenia",
+      "color": "#56627d"
+    },
+    {
+      "type": "Wykład",
+      "color": "#4c6352"
+    }
+  ]
+}

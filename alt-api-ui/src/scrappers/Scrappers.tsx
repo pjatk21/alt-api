@@ -3,10 +3,7 @@ import { DateTime } from 'luxon'
 import React from 'react'
 import ky, { HTTPError } from 'ky'
 import { useQuery } from 'react-query'
-
-const baseUrl = import.meta.env.DEV
-  ? 'http://krystians-mac-pro.local:4000/'
-  : window.location.href
+import { baseUrl } from '../util'
 
 type ScrapperLike = {
   uuid: string

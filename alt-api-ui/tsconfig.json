@@ -16,6 +16,9 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "node_modules/vite-plugin-pwa/*"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

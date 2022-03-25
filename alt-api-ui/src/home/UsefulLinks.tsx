@@ -3,14 +3,12 @@ import { faApple, faGithub } from '@fortawesome/free-brands-svg-icons'
 import {
   faBook,
   faCircleDollarToSlot,
+  faRobot,
   faWarning,
 } from '@fortawesome/free-solid-svg-icons'
 import { Button, Grid, Link, NormalColors, Tooltip } from '@nextui-org/react'
 import React from 'react'
-
-const baseUrl = import.meta.env.DEV
-  ? 'http://krystians-mac-pro.local:4000/'
-  : window.location.href
+import { baseUrl } from '../util'
 
 type UsefulLinkProps = {
   icon?: React.ReactNode
@@ -96,6 +94,12 @@ export function UsefulLinks() {
           href={'https://revolut.me/kpostekk'}
           text={'Donate me'}
           tooltip={"coffee && booze ain't cheap ☕️ 🥃"}
+        />
+        <UsefulLink
+          icon={<FontAwesomeIcon icon={faRobot} />}
+          // customColor={'#e0a8dd'}
+          href={'/dev'}
+          text={'Status'}
         />
       </Grid.Container>
     </>

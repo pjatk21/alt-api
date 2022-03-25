@@ -1,9 +1,12 @@
-import { Card, Col, Container, Link, Spacer, Text } from '@nextui-org/react'
 import React from 'react'
+import { Button, Card, Col, Container, Link, Spacer, Text } from '@nextui-org/react'
 import { CalendarAdd } from '../calendar/CalendarAdd'
 import { Scrappers } from '../scrappers/Scrappers'
-import { LastUpdate } from './LastUpdate'
+import { LastUpdate } from '../dev/LastUpdate'
 import { UsefulLinks } from './UsefulLinks'
+import { Link as RRDLink } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
 export function AppHome() {
   return (
@@ -30,7 +33,15 @@ export function AppHome() {
                 Query PJA schedule in milliseconds. A great alternative to original
                 webpage from 2010.
               </Text>
-              <LastUpdate />
+              <RRDLink to="/app">
+                <Button
+                  iconRight={<FontAwesomeIcon icon={faArrowRight} />}
+                  color={'gradient'}
+                  auto
+                >
+                  Checkout new web app!
+                </Button>
+              </RRDLink>
               <Spacer />
               <UsefulLinks />
             </Container>
@@ -40,14 +51,7 @@ export function AppHome() {
         <Card>
           <Card.Header>
             <Container>
-              <Text
-                h2
-                css={{
-                  textGradient: 'to bottom left, #3EE5FF 0%, #FF38F2 100%',
-                }}
-              >
-                Subscribe to ICS
-              </Text>
+              <Text h2>Add to calendar</Text>
               <Link
                 href="https://github.com/pjatk21/alt-api/wiki/ICS-integration"
                 css={{ opacity: 0.5 }}
@@ -59,19 +63,6 @@ export function AppHome() {
           <Card.Body>
             <Container>
               <CalendarAdd />
-            </Container>
-          </Card.Body>
-        </Card>
-        <Spacer />
-        <Card>
-          <Card.Header>
-            <Container>
-              <Text h2>Scrappers</Text>
-            </Container>
-          </Card.Header>
-          <Card.Body>
-            <Container>
-              <Scrappers />
             </Container>
           </Card.Body>
         </Card>

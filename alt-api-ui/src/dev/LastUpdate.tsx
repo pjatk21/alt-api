@@ -3,10 +3,7 @@ import { Loading, Text } from '@nextui-org/react'
 import { useQuery } from 'react-query'
 import { DateTime } from 'luxon'
 import ky from 'ky'
-
-const baseUrl = import.meta.env.DEV
-  ? 'http://krystians-mac-pro.local:4000/'
-  : window.location.href
+import { baseUrl } from '../util'
 
 type LastUpdateLike = {
   lastScrapperUpload: string
@@ -34,27 +31,27 @@ export function LastUpdate() {
   if (data) {
     return (
       <>
-        <Text h3>Last update</Text>
         <Text h5>Last (any) schedule entry update was</Text>
         <Text>
           {DateTime.fromISO(data.lastScrapperUpload)
             .diffNow()
             .negate()
             .shiftTo('days', 'hours', 'minutes')
-            .toHuman()} ago ({data.lastScrapperUpload})
+            .toHuman()}{' '}
+          ago ({data.lastScrapperUpload})
         </Text>
         <Text h5>Data provided for next</Text>
         <Text>
           {DateTime.fromISO(data.dataUpTo)
             .diffNow()
             .shiftTo('months', 'days', 'hours')
-            .toHuman()} ({data.dataUpTo})
+            .toHuman()}{' '}
+          ({data.dataUpTo})
         </Text>
         <Text h5>While scrapping, scrappers found</Text>
         <Text>
           {data.count.groups} groups and {data.count.tutors} tutors
         </Text>
-        {/* <Text as={'pre'}>{JSON.stringify(data, undefined, 2)}</Text> */}
       </>
     )
   }

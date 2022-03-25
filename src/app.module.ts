@@ -14,6 +14,11 @@ import { MongooseModule } from '@nestjs/mongoose'
     HypervisorModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'alt-api-ui', 'dist'),
+      exclude: ['/img*'],
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'alt-api-ui', 'img'),
+      serveRoot: '/img',
     }),
   ],
   controllers: [AppController],
