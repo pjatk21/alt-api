@@ -87,7 +87,7 @@ export function CalendarAdd() {
             bordered
             label="Group name"
             placeholder="WIs I.2 - 1w"
-            css={{ width: '320px'}}
+            css={{ width: '320px' }}
             onChange={(e) => setGroupSearch(e.target.value)}
             list={'groupsAvailable'}
           />
