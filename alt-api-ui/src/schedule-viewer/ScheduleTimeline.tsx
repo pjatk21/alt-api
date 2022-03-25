@@ -1,4 +1,4 @@
-import { Loading } from '@nextui-org/react'
+import { Loading, Text } from '@nextui-org/react'
 import ky from 'ky'
 import { DateTime } from 'luxon'
 import React, { useState } from 'react'
@@ -51,7 +51,7 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
   const [timePointer, setTimePoiner] = useState(timepointerOffset())
   useInterval(() => setTimePoiner(timepointerOffset()), 5000)
 
-  const { data, isLoading } = useQuery<
+  const { data, error, isLoading } = useQuery<
     { entries: ScheduleEntryRawResponse[] },
     Error,
     ScheduleEntryRawResponse[]
@@ -63,6 +63,13 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Loading>Pobieranie planu zajęć</Loading>
+      </div>
+    )
+
+  if (error)
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Text color={'error'}>{error.name} - {error.message}</Text>
       </div>
     )
 
