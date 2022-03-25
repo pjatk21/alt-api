@@ -6,14 +6,18 @@ import { useQueryClient } from 'react-query'
 import { useLocalStorage, useTimeout } from 'usehooks-ts'
 import './ScheduleViewer.sass'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAdd, faArrowLeft, faArrowRight, faTrash } from '@fortawesome/free-solid-svg-icons'
+import {
+  faAdd,
+  faArrowLeft,
+  faArrowRight,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons'
 import { GroupDatalist } from '../datalists/GroupDatalist'
 
 const urlInit = new URL(window.location.href)
 const initalGroups = urlInit.searchParams.getAll('set')
 const initalDate = urlInit.searchParams.get('date')
 let initFinished = false
-
 
 export function ScheduleViewer() {
   const queryClient = useQueryClient()
@@ -26,6 +30,8 @@ export function ScheduleViewer() {
     setGroups(initalGroups)
     window.location.href = window.location.protocol + window.location.pathname
   }
+
+  const [buttonDisabled, setButtonDisabled] = useState(false)
 
   const shouldDisableButton = () => {
     const v = (document.querySelector('#addGroupInput') as HTMLInputElement)?.value
@@ -43,10 +49,12 @@ export function ScheduleViewer() {
     if (groups.includes(group)) return
     setGroups([...groups, group].sort())
     queryClient.invalidateQueries({ queryKey: 'schedule' })
+    setButtonDisabled(shouldDisableButton())
   }
   const removeGroup = (group: string) => {
     setGroups(groups.filter((x) => x !== group))
     queryClient.invalidateQueries({ queryKey: 'schedule' })
+    setButtonDisabled(shouldDisableButton())
   }
   console.log(groups, activeDate, initalDate)
 
@@ -97,6 +105,11 @@ export function ScheduleViewer() {
           <Text>Add groups</Text>
         </Modal.Header>
         <Modal.Body>
+          {buttonDisabled && (
+            <Text color={'warning'}>
+              Group name is required or group is already added!
+            </Text>
+          )}
           <GroupDatalist id={'allGroups'} />
           <Input
             id={'addGroupInput'}
@@ -105,13 +118,15 @@ export function ScheduleViewer() {
             placeholder={'WIs I.2 - 1w'}
             list={'allGroups'}
             clearable
+            onChange={() => setButtonDisabled(shouldDisableButton())}
+            onFocus={() => setButtonDisabled(shouldDisableButton())}
           />
           <Button
-            bordered
+            // bordered
             auto
             id={'addGroupButton'}
             icon={<FontAwesomeIcon icon={faAdd} />}
-            disabled={shouldDisableButton()}
+            disabled={buttonDisabled}
             onClick={() =>
               addGroup(
                 (document.querySelector('#addGroupInput') as HTMLInputElement)!.value,
