@@ -38,6 +38,15 @@ function getSchedule(
     .json()
 }
 
+function describeDay(entries: ScheduleEntryRawResponse[]) {
+  if (entries.length === 0) return 'Nie ma zaplanowanych zajęć na ten dzień.'
+  const begin = DateTime.fromISO(entries[0].begin)
+  const end = DateTime.fromISO(entries.slice(-1)[0].end)
+  const duration = end.diff(begin).shiftTo('hours')
+
+  return `Na ten dzień zaplanowano ${entries.length} zajęcia, w godzinach ${begin.toLocaleString({ timeStyle: 'short' })} - ${end.toLocaleString({ timeStyle: 'short' })} trwające łącznie ${duration.toHuman()}`
+}
+
 export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
   const [timePointer, setTimePoiner] = useState(timepointerOffset())
   useInterval(() => setTimePoiner(timepointerOffset()), 5000)
@@ -58,31 +67,36 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
     )
 
   return (
-    <div className={styles.timelineContainer}>
-      <div className={styles.background}>
-        {[...Array(22 - 6)].map((x, y) => {
-          const h = DateTime.fromObject({ hour: 6 + y })
-          return (
-            <div key={y} className={styles.line}>
-              <div>
-                <span>{h.toLocaleString({ timeStyle: 'short', hourCycle: 'h24' })}</span>
+    <>
+      {data && <p>{describeDay(data)}</p>}
+      <div className={styles.timelineContainer}>
+        <div className={styles.background}>
+          {[...Array(22 - 6)].map((x, y) => {
+            const h = DateTime.fromObject({ hour: 6 + y })
+            return (
+              <div key={y} className={styles.line}>
+                <div>
+                  <span>
+                    {h.toLocaleString({ timeStyle: 'short', hourCycle: 'h24' })}
+                  </span>
+                </div>
+                <hr />
               </div>
-              <hr />
+            )
+          })}
+        </div>
+        <div className={styles.content}>
+          {data?.map((x, y) => (
+            <ScheduleBlock key={y} data={x} />
+          ))}
+        </div>
+        {DateTime.now().startOf('day').plus({ hours: 6 }) < date &&
+          DateTime.now().startOf('day').plus({ hours: 21 }) > date && (
+            <div className={styles.timePointer}>
+              <hr style={{ top: timePointer * 55 + 1 }} />
             </div>
-          )
-        })}
+          )}
       </div>
-      <div className={styles.content}>
-        {data?.map((x, y) => (
-          <ScheduleBlock key={y} data={x} />
-        ))}
-      </div>
-      {DateTime.now().startOf('day').plus({ hours: 6 }) < date &&
-        DateTime.now().startOf('day').plus({ hours: 21 }) > date && (
-          <div className={styles.timePointer}>
-            <hr style={{ top: timePointer * 55 + 1 }} />
-          </div>
-        )}
-    </div>
+    </>
   )
 }
