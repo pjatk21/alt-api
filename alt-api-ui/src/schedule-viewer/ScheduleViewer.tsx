@@ -3,15 +3,17 @@ import { Button, Container, Grid, Input, Modal, Spacer, Text } from '@nextui-org
 import { ScheduleTimeline } from './ScheduleTimeline'
 import { DateTime } from 'luxon'
 import { useQueryClient } from 'react-query'
-import { useLocalStorage } from 'usehooks-ts'
+import { useLocalStorage, useTimeout } from 'usehooks-ts'
 import './ScheduleViewer.sass'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faArrowRight, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faAdd, faArrowLeft, faArrowRight, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { GroupDatalist } from '../datalists/GroupDatalist'
 
 const urlInit = new URL(window.location.href)
 const initalGroups = urlInit.searchParams.getAll('set')
 const initalDate = urlInit.searchParams.get('date')
 let initFinished = false
+
 
 export function ScheduleViewer() {
   const queryClient = useQueryClient()
@@ -23,6 +25,14 @@ export function ScheduleViewer() {
   if (initalGroups.length > 0 && !initFinished) {
     setGroups(initalGroups)
     window.location.href = window.location.protocol + window.location.pathname
+  }
+
+  const shouldDisableButton = () => {
+    const v = (document.querySelector('#addGroupInput') as HTMLInputElement)?.value
+    // if (!v) return true
+    if (v.length === 0) return true
+    // if (groups.includes(v)) return true
+    return false
   }
 
   initFinished = true
@@ -87,16 +97,21 @@ export function ScheduleViewer() {
           <Text>Add groups</Text>
         </Modal.Header>
         <Modal.Body>
+          <GroupDatalist id={'allGroups'} />
           <Input
             id={'addGroupInput'}
             bordered
             label={'Group name'}
             placeholder={'WIs I.2 - 1w'}
+            list={'allGroups'}
             clearable
           />
           <Button
             bordered
             auto
+            id={'addGroupButton'}
+            icon={<FontAwesomeIcon icon={faAdd} />}
+            disabled={shouldDisableButton()}
             onClick={() =>
               addGroup(
                 (document.querySelector('#addGroupInput') as HTMLInputElement)!.value,
@@ -105,7 +120,6 @@ export function ScheduleViewer() {
           >
             Add
           </Button>
-          <Text color={'warning'}>If nothing changed, try refreshing page</Text>
           {groups.map((g, i) => {
             return (
               <p key={i}>

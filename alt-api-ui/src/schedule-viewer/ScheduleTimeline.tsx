@@ -24,6 +24,8 @@ function getSchedule(
   date: DateTime,
   groups: string[],
 ): Promise<{ entries: ScheduleEntryRawResponse[] }> {
+  if (groups.length === 0) return Promise.resolve({ entries: [] })
+
   const params = new URLSearchParams()
   for (const g of groups) params.append('groups', g)
 
@@ -44,10 +46,9 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
     { entries: ScheduleEntryRawResponse[] },
     Error,
     ScheduleEntryRawResponse[]
-  >(['schedule', date], () => getSchedule(date, groups), {
+  >(['schedule', date, groups], () => getSchedule(date, groups), {
     select: (x) => x.entries,
   })
-  console.log(data)
 
   if (isLoading)
     return (
