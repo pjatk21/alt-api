@@ -11,6 +11,7 @@ export default defineConfig({
         name: 'Plan zajęć Altapi',
         short_name: 'Altapi',
         description: 'Lepsza implementacja dla planu zajęć PJATK.',
+        start_url: './app/',
         theme_color: '#000',
         icons: [
           {
