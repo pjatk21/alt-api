@@ -13,6 +13,7 @@ export default defineConfig({
         short_name: 'Altapi',
         description: 'Lepsza implementacja dla planu zajęć PJATK.',
         scope: './app/',
+        display: 'standalone',
         start_url: './app/',
         theme_color: '#000',
         categories: ['education', 'productivity'],
