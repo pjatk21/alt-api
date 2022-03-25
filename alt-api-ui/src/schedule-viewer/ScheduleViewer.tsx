@@ -29,9 +29,9 @@ export function ScheduleViewer() {
 
   const shouldDisableButton = () => {
     const v = (document.querySelector('#addGroupInput') as HTMLInputElement)?.value
-    // if (!v) return true
-    if (v.length === 0) return true
-    // if (groups.includes(v)) return true
+    if (!v) return true
+    if (v?.length === 0) return true
+    if (groups.includes(v)) return true
     return false
   }
 

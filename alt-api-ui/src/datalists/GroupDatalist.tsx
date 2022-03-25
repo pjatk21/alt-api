@@ -15,7 +15,7 @@ export function GroupDatalist({ id }: DatalistProps) {
 
   return (
     <datalist id={id}>
-      {(data?.groupsAvailable || []).map((group) => (
+      {(data?.groupsAvailable ?? []).map((group) => (
         <option key={group} value={group} />
       ))}
     </datalist>
