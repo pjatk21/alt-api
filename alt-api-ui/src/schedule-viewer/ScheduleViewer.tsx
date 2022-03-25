@@ -3,7 +3,7 @@ import { Button, Container, Grid, Input, Modal, Spacer, Text } from '@nextui-org
 import { ScheduleTimeline } from './ScheduleTimeline'
 import { DateTime } from 'luxon'
 import { useQueryClient } from 'react-query'
-import { useLocalStorage, useTimeout } from 'usehooks-ts'
+import { useLocalStorage } from 'usehooks-ts'
 import './ScheduleViewer.sass'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {

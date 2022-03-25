@@ -1,19 +1,7 @@
 import { faAdd, faCopy, faDownload, faWarning } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  Button,
-  Checkbox,
-  Grid,
-  Input,
-  Link,
-  Loading,
-  Spacer,
-  Text,
-  Tooltip,
-} from '@nextui-org/react'
-import ky from 'ky'
+import { Button, Checkbox, Grid, Input, Link, Text, Tooltip } from '@nextui-org/react'
 import React, { useMemo, useState } from 'react'
-import { useQuery } from 'react-query'
 import { GroupDatalist } from '../datalists/GroupDatalist'
 import { baseUrl } from '../util'
 
