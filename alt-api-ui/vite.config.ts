@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
     vitePWA({
+      registerType: 'autoUpdate',
       manifest: {
         name: 'Plan zajęć Altapi',
         short_name: 'Altapi',
