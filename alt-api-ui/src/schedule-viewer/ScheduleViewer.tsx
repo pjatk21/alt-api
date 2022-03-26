@@ -12,10 +12,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 // import { Settings } from './Settings'
 import { GroupPicker } from './GroupPicker'
+import { useLocation } from 'react-router-dom'
 
 type DateNaviButtonProps = {
   icon: IconDefinition
-  onClick: () => void
+  onClick?: () => void
 }
 
 function DateNaviButton({ icon, onClick }: DateNaviButtonProps) {
@@ -54,10 +55,21 @@ export function DateNavigator({ date, setDate }: DateNavigatorProps) {
   )
 }
 
+function useQueryArgs() {
+  const { search } = useLocation()
+
+  return React.useMemo(() => new URLSearchParams(search), [search])
+}
+
 export function ScheduleViewer() {
-  const [activeDate, setActiveDate] = useState(DateTime.now())
+  const queryArgs = useQueryArgs()
+  const initalDate = DateTime.fromISO(queryArgs.get('date') ?? '')
+  const [activeDate, setActiveDate] = useState(
+    initalDate.isValid ? initalDate : DateTime.now(),
+  )
   const [groups, setGroups] = useLocalStorage<string[]>('groups', [])
   const [groupPickerVisible, setGroupPickerVisible] = useState(groups.length === 0)
+
   // const [settingsVisible, setSettingsVisible] = useState(false)
 
   return (
