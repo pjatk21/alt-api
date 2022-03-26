@@ -4,6 +4,31 @@ import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: [
+            'react',
+            'react-dom',
+            'react-query',
+            'react-router-dom',
+            'usehooks-ts',
+            '@nextui-org/react',
+          ],
+          libs: ['lodash', 'ky', 'luxon'],
+          icons: [
+            '@fortawesome/fontawesome-svg-core',
+            '@fortawesome/free-brands-svg-icons',
+            '@fortawesome/free-regular-svg-icons',
+            '@fortawesome/free-solid-svg-icons',
+            '@fortawesome/react-fontawesome',
+          ],
+          sentry: ['@sentry/react', '@sentry/tracing'],
+        },
+      },
+    },
+  },
   plugins: [
     react(),
     vitePWA({
