@@ -10,7 +10,7 @@ import {
   faArrowRight,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
-import { Settings } from './Settings'
+// import { Settings } from './Settings'
 import { GroupPicker } from './GroupPicker'
 
 type DateNaviButtonProps = {
@@ -58,7 +58,7 @@ export function ScheduleViewer() {
   const [activeDate, setActiveDate] = useState(DateTime.now())
   const [groups, setGroups] = useLocalStorage<string[]>('groups', [])
   const [groupPickerVisible, setGroupPickerVisible] = useState(groups.length === 0)
-  const [settingsVisible, setSettingsVisible] = useState(false)
+  // const [settingsVisible, setSettingsVisible] = useState(false)
 
   return (
     <Container xs>
@@ -76,10 +76,10 @@ export function ScheduleViewer() {
         setVisible={setGroupPickerVisible}
       />
       <Spacer />
-      <Button auto bordered onClick={() => setSettingsVisible(true)}>
+      {/* <Button auto bordered onClick={() => setSettingsVisible(true)}>
         Settings
       </Button>
-      <Settings visible={settingsVisible} setVisible={setSettingsVisible} />
+      <Settings visible={settingsVisible} setVisible={setSettingsVisible} /> */}
     </Container>
   )
 }

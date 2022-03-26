@@ -60,11 +60,6 @@ export function Settings({ visible, setVisible }: SettingsProps) {
       </Modal.Header>
       <Modal.Body>
         <SettingsSwitch settingsKey={'allowPrefetch'} description={'Prefetch schedule'} />
-        <SettingsSwitch
-          experimental
-          settingsKey={'experimentalCache'}
-          description={'Use presitQueryClient'}
-        />
       </Modal.Body>
     </Modal>
   )
