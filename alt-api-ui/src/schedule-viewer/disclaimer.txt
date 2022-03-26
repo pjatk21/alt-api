@@ -1,0 +1,10 @@
+Uwaga! To NIE jest oficjalna implementacja planu zajęć PJATK.
+
+Ze względu na architekturę tego oprogramowania (data source <-> scrapper <-> server <-> client)
+trzeba liczyć się z możliwością wystąpienia problemów tj.:
+ - Nieaktualne dane ze względu na opóźnienia w scrappowaniu
+ - Potencjalnie błędne dane
+   (np. brak konkretnego rozróżnienia pomiędzy zajęciami zdalnymi a stacjonarnymi)
+ - Inne problemy spowodowane naturą reverse engineeringu
+
+Używasz na własną odpowiedzialność.

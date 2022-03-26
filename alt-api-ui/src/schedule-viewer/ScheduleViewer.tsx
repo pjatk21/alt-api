@@ -13,6 +13,7 @@ import {
 // import { Settings } from './Settings'
 import { GroupPicker } from './GroupPicker'
 import { useLocation } from 'react-router-dom'
+import { Disclaimer } from './Disclaimer'
 
 type DateNaviButtonProps = {
   icon: IconDefinition
@@ -88,6 +89,7 @@ export function ScheduleViewer() {
         setVisible={setGroupPickerVisible}
       />
       <Spacer />
+      <Disclaimer />
       {/* <Button auto bordered onClick={() => setSettingsVisible(true)}>
         Settings
       </Button>
