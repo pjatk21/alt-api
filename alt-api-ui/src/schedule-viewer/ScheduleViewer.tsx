@@ -30,6 +30,7 @@ export function ScheduleViewer() {
   initFinished = true
 
   const [groupPickerVisible, setGroupPickerVisible] = useState(groups.length === 0)
+  const [settingsVisible, setSettingsVisible] = useState(false)
 
   return (
     <Container xs>
@@ -75,6 +76,10 @@ export function ScheduleViewer() {
         setVisible={setGroupPickerVisible}
       />
       <Spacer />
+      <Button auto bordered onClick={() => setSettingsVisible(true)}>
+        Settings
+      </Button>
+      <Settings visible={settingsVisible} setVisible={setSettingsVisible} />
     </Container>
   )
 }
