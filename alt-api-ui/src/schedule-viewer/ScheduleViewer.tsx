@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Container, Grid, Input, Spacer, Text } from '@nextui-org/react'
+import { Button, Container, Grid, Input, Link, Spacer, Text } from '@nextui-org/react'
 import { ScheduleTimeline } from './ScheduleTimeline'
 import { DateTime } from 'luxon'
 import { useLocalStorage } from 'usehooks-ts'
@@ -91,16 +91,15 @@ export function ScheduleViewer() {
           icon={<FontAwesomeIcon icon={faCogs} />}
         />
       </Button.Group>
+      <Spacer />
       <GroupPicker
         groups={groups}
         setGroups={setGroups}
         visible={groupPickerVisible}
         setVisible={setGroupPickerVisible}
       />
-      <Spacer />
-      <Disclaimer />
-
       <Settings visible={settingsVisible} setVisible={setSettingsVisible} />
+      <Disclaimer />
     </Container>
   )
 }

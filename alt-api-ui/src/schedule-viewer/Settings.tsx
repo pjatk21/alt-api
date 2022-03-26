@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Modal, Switch } from '@nextui-org/react'
+import { Grid, Link, Modal, Switch } from '@nextui-org/react'
 import { useLocalStorage } from 'usehooks-ts'
 
 type SettingsOptions = Partial<{
@@ -53,13 +53,19 @@ export function Settings({ visible, setVisible }: SettingsProps) {
   }
 
   return (
-    <Modal open={visible} onClose={closeHandler} closeButton>
+    <Modal preventClose open={visible} onClose={closeHandler} closeButton>
       <Modal.Header>
-        <p>Settings</p>
+        <p>Ustawienia</p>
       </Modal.Header>
       <Modal.Body>
+        <h4>Prywatność</h4>
         <SettingsSwitch settingsKey={'disableSentry'} description={'Wyłącz Sentry SDK'} />
+        <h4>Pomoc</h4>
+        <Link href={'https://github.com/pjatk21/alt-api/wiki/Install-PWA'}>
+          Jak zainstalować aplikację PWA
+        </Link>
       </Modal.Body>
+      <Modal.Footer />
     </Modal>
   )
 }
