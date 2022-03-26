@@ -29,6 +29,7 @@ export function ScheduleBlock({ data }: ScheduleBlockProps) {
   // Check ScheduleTimeline.module.sass for sizes
   return (
     <div
+      id={encodeURIComponent(`${data.code}_in_${data.room}`)}
       className={styles.timelineBlock}
       style={{
         top: offset * 55 + 10 + 1,
