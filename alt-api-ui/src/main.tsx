@@ -19,9 +19,6 @@ if (import.meta.env.PROD)
 // set locale
 Settings.defaultLocale = navigator.language
 
-// register service worker
-registerSW()
-
 ReactDOM.render(
   <React.StrictMode>
     <App />

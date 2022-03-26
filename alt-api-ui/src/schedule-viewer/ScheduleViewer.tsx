@@ -14,6 +14,7 @@ import {
 import { GroupPicker } from './GroupPicker'
 import { useLocation } from 'react-router-dom'
 import { Disclaimer } from './Disclaimer'
+import { registerSW } from 'virtual:pwa-register'
 
 type DateNaviButtonProps = {
   icon: IconDefinition
@@ -63,6 +64,9 @@ function useQueryArgs() {
 }
 
 export function ScheduleViewer() {
+  // register service worker
+  registerSW()
+
   const queryArgs = useQueryArgs()
   const initalDate = DateTime.fromISO(queryArgs.get('date') ?? '')
   const [activeDate, setActiveDate] = useState(
