@@ -15,7 +15,8 @@ export default defineConfig({
         scope: './app/',
         display: 'standalone',
         start_url: './app/',
-        theme_color: '#000',
+        theme_color: '#000000',
+        background_color: '#000000',
         categories: ['education', 'productivity'],
         icons: [
           {
@@ -27,12 +28,6 @@ export default defineConfig({
             src: 'img/AltapiIcon_512.png',
             sizes: '512x512',
             type: 'image/png',
-          },
-          {
-            src: 'img/AltapiIcon_512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable',
           },
         ],
       },
