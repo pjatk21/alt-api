@@ -10,25 +10,10 @@ import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { Settings } from './Settings'
 import { GroupPicker } from './GroupPicker'
 
-const urlInit = new URL(window.location.href)
-const initalGroups = urlInit.searchParams.getAll('set')
-const initalDate = urlInit.searchParams.get('date')
-let initFinished = false
-
 export function ScheduleViewer() {
   const queryClient = useQueryClient()
-
   const [activeDate, setActiveDate] = useState(DateTime.now())
-  if (initalDate && !initFinished) setActiveDate(DateTime.fromISO(initalDate))
-
   const [groups, setGroups] = useLocalStorage<string[]>('groups', [])
-  if (initalGroups.length > 0 && !initFinished) {
-    setGroups(initalGroups)
-    window.location.href = window.location.protocol + window.location.pathname
-  }
-
-  initFinished = true
-
   const [groupPickerVisible, setGroupPickerVisible] = useState(groups.length === 0)
   const [settingsVisible, setSettingsVisible] = useState(false)
 
