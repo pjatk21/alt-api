@@ -57,6 +57,9 @@ export function ScheduleBlock({ data }: ScheduleBlockProps) {
         </Modal.Header>
         <Modal.Body>
           <p>
+            <b>Rodzaj zajęć:</b> {data.type}
+          </p>
+          <p>
             <b>Prowadzący:</b> {data.tutor}
           </p>
           <p>
