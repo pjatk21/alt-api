@@ -1,4 +1,4 @@
-import { Loading, Text } from '@nextui-org/react'
+import { Loading, Spacer, Text } from '@nextui-org/react'
 import ky from 'ky'
 import { DateTime } from 'luxon'
 import React, { useState } from 'react'
@@ -69,13 +69,16 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
   if (error)
     return (
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Text color={'error'}>{error.name} - {error.message}</Text>
+        <Text color={'error'}>
+          {error.name} - {error.message}
+        </Text>
       </div>
     )
 
   return (
     <>
-      {data && <p>{describeDay(data)}</p>}
+      {data && <Text blockquote>{describeDay(data)}</Text>}
+      <Spacer />
       <div className={styles.timelineContainer}>
         <div className={styles.background}>
           {[...Array(22 - 6)].map((x, y) => {

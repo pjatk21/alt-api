@@ -80,7 +80,7 @@ export function ScheduleViewer() {
       <ScheduleTimeline date={activeDate} groups={groups} />
       <Spacer />
       <Button auto bordered onClick={() => setGroupPickerVisible(true)}>
-        Change groups
+        Zmień grupy
       </Button>
       <GroupPicker
         groups={groups}

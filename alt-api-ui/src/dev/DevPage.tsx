@@ -8,9 +8,9 @@ export function DevPage() {
     <Container md>
       <Card>
         <Card.Body>
-          <Text h3>Data up-to-date&apos;ness</Text>
+          <Text h3>Aktualność danych</Text>
           <LastUpdate />
-          <Text h3>Connected scrappers</Text>
+          <Text h3>Połączone scrappery</Text>
           <Scrappers />
         </Card.Body>
       </Card>

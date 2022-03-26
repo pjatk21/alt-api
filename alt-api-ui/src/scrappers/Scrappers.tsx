@@ -40,7 +40,7 @@ export function Scrappers() {
   }
 
   if (data) {
-    if (data.length === 0) return <p>There are not any connected scrappers...</p>
+    if (data.length === 0) return <p>Nie ma podłączonych scrapperów...</p>
 
     return (
       <Grid.Container gap={2} wrap={'wrap'}>
@@ -57,13 +57,13 @@ export function Scrappers() {
 
               <Card>
                 <Text>
-                  State:{' '}
+                  Stan:{' '}
                   <Text span css={{ fontFamily: '$mono' }}>
                     {scrapper.lastState}
                   </Text>
                 </Text>
                 <Text>
-                  Last state update: <br />{' '}
+                  Ostatnia aktualizacja stanu: <br />{' '}
                   {DateTime.fromISO(scrapper.lastUpdated).toISO()}
                 </Text>
               </Card>
@@ -77,6 +77,6 @@ export function Scrappers() {
   }
 }
 
-export function ScrappersWrapper() {
-  return <Scrappers />
-}
+// export function ScrappersWrapper() {
+//   return <Scrappers />
+// }

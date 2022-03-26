@@ -31,16 +31,16 @@ export function LastUpdate() {
   if (data) {
     return (
       <>
-        <Text h5>Last (any) schedule entry update was</Text>
+        <Text h5>Ostatnia, dowolna, cząstkowa aktualizacja danych była</Text>
         <Text>
           {DateTime.fromISO(data.lastScrapperUpload)
             .diffNow()
             .negate()
             .shiftTo('days', 'hours', 'minutes')
             .toHuman()}{' '}
-          ago ({data.lastScrapperUpload})
+          temu ({data.lastScrapperUpload})
         </Text>
-        <Text h5>Data provided for next</Text>
+        <Text h5>Pobrane dane na następne</Text>
         <Text>
           {DateTime.fromISO(data.dataUpTo)
             .diffNow()
@@ -48,9 +48,9 @@ export function LastUpdate() {
             .toHuman()}{' '}
           ({data.dataUpTo})
         </Text>
-        <Text h5>While scrapping, scrappers found</Text>
+        <Text h5>Posiadane dane dla</Text>
         <Text>
-          {data.count.groups} groups and {data.count.tutors} tutors
+          {data.count.groups} grup i {data.count.tutors} wykładowców/ćwiczeniowców
         </Text>
       </>
     )

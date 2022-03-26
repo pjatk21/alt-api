@@ -2,7 +2,7 @@ import React from 'react'
 import { createTheme, NextUIProvider } from '@nextui-org/react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { NotFound } from './NotFound'
-import { ScrappersWrapper } from './scrappers/Scrappers'
+import { Scrappers } from './scrappers/Scrappers'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { AppHome } from './home/AppHome'
 import { DevPage } from './dev/DevPage'
@@ -21,7 +21,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<AppHome />} />
-            <Route path="scrappers/" element={<ScrappersWrapper />} />
+            <Route path="scrappers/" element={<Scrappers />} />
             <Route path="app/" element={<ScheduleViewer />} />
             <Route path="dev/" element={<DevPage />} />
             <Route path="*" element={<NotFound />} />

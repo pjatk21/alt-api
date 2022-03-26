@@ -67,7 +67,7 @@ export function CalendarAdd() {
 
   return (
     <>
-      <Text h4>Select groups</Text>
+      <Text h4>Wybierz grupy</Text>
       <Grid.Container alignItems={'flex-end'} gap={2}>
         <Grid>
           <Input
@@ -86,7 +86,7 @@ export function CalendarAdd() {
             disabled={groupSearch.length === 0}
             onClick={() => setGroups([...groups, groupSearch])}
           >
-            Add
+            Dodaj
           </Button>
         </Grid>
       </Grid.Container>

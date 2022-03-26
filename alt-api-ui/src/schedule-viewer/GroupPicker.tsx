@@ -50,17 +50,14 @@ export function GroupPicker({
       onClose={closeHandler}
     >
       <Modal.Header>
-        <Text>Add groups</Text>
+        <Text>Dodaj grupy</Text>
       </Modal.Header>
       <Modal.Body>
-        {buttonDisabled && (
-          <Text color={'warning'}>Group name is required or group is already added!</Text>
-        )}
         <GroupDatalist id={'allGroups'} />
         <Input
           id={'addGroupInput'}
           bordered
-          label={'Group name'}
+          label={'Nazwa grupy'}
           placeholder={'WIs I.2 - 1w'}
           list={'allGroups'}
           onChange={({ target }) =>
@@ -78,7 +75,7 @@ export function GroupPicker({
           disabled={buttonDisabled}
           onClick={addGroup}
         >
-          Add
+          Dodaj
         </Button>
         {groups.map((g, i) => {
           return (

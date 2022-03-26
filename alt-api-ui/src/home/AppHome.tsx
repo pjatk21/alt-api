@@ -29,17 +29,14 @@ export function AppHome() {
           </Card.Header>
           <Card.Body>
             <Container>
-              <Text margin={1}>
-                Query PJA schedule in milliseconds. A great alternative to original
-                webpage from 2010.
-              </Text>
+              <Text margin={1}>Nowy, lepszy plan zajęć dla PJATK.</Text>
               <RRDLink to="/app">
                 <Button
                   iconRight={<FontAwesomeIcon icon={faArrowRight} />}
                   color={'gradient'}
                   auto
                 >
-                  Checkout new web app!
+                  Sprawdź nową web appkę!
                 </Button>
               </RRDLink>
               <Spacer />
@@ -51,12 +48,12 @@ export function AppHome() {
         <Card>
           <Card.Header>
             <Container>
-              <Text h2>Add to calendar</Text>
+              <Text h2>Skonfiguruj kalendarz</Text>
               <Link
                 href="https://github.com/pjatk21/alt-api/wiki/ICS-integration"
                 css={{ opacity: 0.5 }}
               >
-                Read more about ICS integration here
+                Dowiedz się więcej na temat integracji ICS wraz z kalendarzem
               </Link>
             </Container>
           </Card.Header>
@@ -68,7 +65,7 @@ export function AppHome() {
         </Card>
         <Spacer />
         <Text style={{ textAlign: 'center', opacity: 0.4 }}>
-          Created with ❤️ && ☕️ by @kpostekk
+          Stworzone z ❤️ && ☕️ przez @kpostekk
         </Text>
         <Spacer />
       </Col>

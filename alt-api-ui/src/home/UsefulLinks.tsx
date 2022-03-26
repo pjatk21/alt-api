@@ -78,7 +78,7 @@ export function UsefulLinks() {
           icon={<FontAwesomeIcon icon={faWarning} />}
           builtinColor={'warning'}
           href={'https://github.com/pjatk21/alt-api/issues/new/choose'}
-          text={'Report issue'}
+          text={'Zgłoś usterkę'}
         />
         <UsefulLink
           icon={<FontAwesomeIcon icon={faApple} />}
@@ -86,7 +86,7 @@ export function UsefulLinks() {
           href={'https://github.com/pjatk21/Pie-Schedule'}
           disabled
           text={'iOS app (𝝰)'}
-          tooltip={'I need money for Apple licences'}
+          tooltip={'Potrzebuję pieniędzy na licencję do dystrybucji'}
         />
         <UsefulLink
           icon={<FontAwesomeIcon icon={faCircleDollarToSlot} />}
