@@ -1,4 +1,4 @@
-import { faAdd, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faAdd, faCheck, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Input, Modal, Text } from '@nextui-org/react'
 import React, { useState } from 'react'
@@ -94,6 +94,15 @@ export function GroupPicker({
             </p>
           )
         })}
+        <Button
+          auto
+          disabled={groups.length === 0}
+          icon={<FontAwesomeIcon icon={faCheck} />}
+          color={groups.length > 0 ? 'success' : undefined}
+          onClick={() => setVisible(false)}
+        >
+          Gotowe
+        </Button>
       </Modal.Body>
     </Modal>
   )
