@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faArrowLeft,
   faArrowRight,
+  faCogs,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
 // import { Settings } from './Settings'
@@ -15,6 +16,7 @@ import { GroupPicker } from './GroupPicker'
 import { useLocation } from 'react-router-dom'
 import { Disclaimer } from './Disclaimer'
 import { registerSW } from 'virtual:pwa-register'
+import { Settings } from './Settings'
 
 type DateNaviButtonProps = {
   icon: IconDefinition
@@ -64,9 +66,6 @@ function useQueryArgs() {
 }
 
 export function ScheduleViewer() {
-  // register service worker
-  registerSW()
-
   const queryArgs = useQueryArgs()
   const initalDate = DateTime.fromISO(queryArgs.get('date') ?? '')
   const [activeDate, setActiveDate] = useState(
@@ -74,8 +73,7 @@ export function ScheduleViewer() {
   )
   const [groups, setGroups] = useLocalStorage<string[]>('groups', [])
   const [groupPickerVisible, setGroupPickerVisible] = useState(groups.length === 0)
-
-  // const [settingsVisible, setSettingsVisible] = useState(false)
+  const [settingsVisible, setSettingsVisible] = useState(false)
 
   return (
     <Container xs>
@@ -83,9 +81,16 @@ export function ScheduleViewer() {
       <DateNavigator date={activeDate} setDate={setActiveDate} />
       <ScheduleTimeline date={activeDate} groups={groups} />
       <Spacer />
-      <Button auto bordered onClick={() => setGroupPickerVisible(true)}>
-        Zmień grupy
-      </Button>
+      <Button.Group bordered>
+        <Button auto onClick={() => setGroupPickerVisible(true)}>
+          Zmień grupy
+        </Button>
+        <Button
+          auto
+          onClick={() => setSettingsVisible(true)}
+          icon={<FontAwesomeIcon icon={faCogs} />}
+        />
+      </Button.Group>
       <GroupPicker
         groups={groups}
         setGroups={setGroups}
@@ -94,10 +99,8 @@ export function ScheduleViewer() {
       />
       <Spacer />
       <Disclaimer />
-      {/* <Button auto bordered onClick={() => setSettingsVisible(true)}>
-        Settings
-      </Button>
-      <Settings visible={settingsVisible} setVisible={setSettingsVisible} /> */}
+
+      <Settings visible={settingsVisible} setVisible={setSettingsVisible} />
     </Container>
   )
 }

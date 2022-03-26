@@ -14,10 +14,14 @@ if (import.meta.env.PROD)
     integrations: [new BrowserTracing()],
     tracesSampleRate: 1.0,
     environment: 'PRODUCTION',
+    enabled: !localStorage.getItem('disableSentry') ?? false,
   })
 
 // set locale
 Settings.defaultLocale = navigator.language
+
+// register service worker
+registerSW()
 
 ReactDOM.render(
   <React.StrictMode>

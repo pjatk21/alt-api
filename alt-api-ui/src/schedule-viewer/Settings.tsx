@@ -3,8 +3,7 @@ import { Grid, Modal, Switch } from '@nextui-org/react'
 import { useLocalStorage } from 'usehooks-ts'
 
 type SettingsOptions = Partial<{
-  allowPrefetch: boolean
-  experimentalCache: boolean
+  disableSentry: boolean
 }>
 
 type SettingsProps = {
@@ -59,7 +58,7 @@ export function Settings({ visible, setVisible }: SettingsProps) {
         <p>Settings</p>
       </Modal.Header>
       <Modal.Body>
-        <SettingsSwitch settingsKey={'allowPrefetch'} description={'Prefetch schedule'} />
+        <SettingsSwitch settingsKey={'disableSentry'} description={'Wyłącz Sentry SDK'} />
       </Modal.Body>
     </Modal>
   )
