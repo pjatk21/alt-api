@@ -143,11 +143,6 @@ export class PublicTimetableService {
       const re = row.entry
       const begin = DateTime.fromJSDate(re.begin).setZone()
       const end = DateTime.fromJSDate(re.end).setZone()
-      const previewUrl = new URL('https://altapi.kpostek.dev/app')
-      previewUrl.searchParams.append('date', begin.toISODate())
-      for (const g of optionalFilters.groups ?? re.groups) {
-        previewUrl.searchParams.append('set', g)
-      }
 
       const eventHashId =
         'altid-' +
@@ -168,7 +163,6 @@ export class PublicTimetableService {
         title: `${re.type} z ${re.code} (${re.room})`,
         description: `${re.type} z ${re.name} w budynku ${re.room} prowadzone przez ${re.tutor}.`,
         busyStatus: 'BUSY',
-        url: previewUrl.toString(),
         alarms: [
           {
             action: 'display',
