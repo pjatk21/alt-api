@@ -8,6 +8,9 @@ import { GroupsAvailableDto } from './dto/groups-available.dto'
 import { TutorsAvailableDto } from './dto/tutors-available.dto'
 import { Alarm, createEvents, EventAttributes } from 'ics'
 import { createHash } from 'crypto'
+import { difference, differenceWith, isEqual } from 'lodash'
+import { MailService } from '@sendgrid/mail'
+import * as YAML from 'yaml'
 
 type ScheduleOptionalFilters = {
   groups?: string[]
@@ -16,12 +19,15 @@ type ScheduleOptionalFilters = {
 
 @Injectable()
 export class PublicTimetableService {
-  private readonly log = new Logger('Public timetables')
+  private readonly logger = new Logger('Public timetables')
+  private readonly sendgridMail = new MailService()
 
   constructor(
     @InjectModel(Timetable.name)
     private timetableModel: Model<TimetableDocument>,
-  ) {}
+  ) {
+    this.sendgridMail.setApiKey(process.env.SENDGRID_API_KEY)
+  }
 
   async create(timetable: ScheduleEntryDto): Promise<TimetableDocument> {
     const createdTimetable = new this.timetableModel(timetable)
@@ -29,15 +35,45 @@ export class PublicTimetableService {
   }
 
   async updateOneEntry(htmlId: string, changeHash: string, entry: ScheduleEntryDto) {
-    return await this.timetableModel.findOneAndUpdate(
+    const previous = await this.timetableModel.findOneAndUpdate(
       {
         'entry.groups': entry.groups,
         'entry.begin': entry.begin,
         'entry.code': entry.code,
       },
       { $set: { htmlId, changeHash, entry } },
-      { new: true, upsert: true },
+      { new: false, upsert: true },
     )
+
+    if (previous.changeHash !== changeHash) {
+      this.logger.warn(`Received new hash, ${previous.changeHash} became ${changeHash}`)
+      // get delta
+      const delta = differenceWith(
+        Object.entries(entry),
+        Object.entries(previous.entry),
+        isEqual,
+      )
+      if (delta.length > 0) {
+        this.logger.warn(`Delta: ${JSON.stringify(Object.fromEntries(delta))}`)
+        this.sendgridMail.send({
+          from: 'schedule-changes@kpostek.dev',
+          templateId: 'd-9f3f6c1d58f44e51832818998666d406',
+          to: 's25290@pjwstk.edu.pl',
+          dynamicTemplateData: {
+            outdated: YAML.stringify(previous.entry),
+            updated: YAML.stringify(entry),
+            delta: YAML.stringify(Object.fromEntries(delta)),
+          },
+        })
+      } else {
+        this.logger.log(
+          'Delta returened 0 changes! Probably hashing fuction related change...',
+        )
+      }
+      return await this.timetableModel.findOne({ changeHash })
+    }
+
+    return previous
   }
 
   async timetableForDay(date: DateTime, optionalFilters: ScheduleOptionalFilters) {

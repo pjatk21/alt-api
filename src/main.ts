@@ -6,6 +6,7 @@ import { PublicTimetableModule } from './public-timetable/public-timetable.modul
 import { RedocModule, RedocOptions } from 'nestjs-redoc'
 import { VersioningType } from '@nestjs/common'
 import { HypervisorModule } from './hypervisor/hypervisor.module'
+import 'dotenv/config'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
