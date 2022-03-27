@@ -28,31 +28,6 @@ export class PublicTimetableService {
     return createdTimetable.save()
   }
 
-  /**
-   * Updates all occurances in selected date (removeMany + save)
-   * @param timetable array of schedule entries
-   * @param date date string
-   * @deprecated
-   * @returns
-   */
-  async flushAndSink(timetable: ScheduleEntryDto[], date: DateTime) {
-    const removed = await this.timetableModel.deleteMany({
-      'entry.begin': {
-        $gte: date.toBSON(),
-        $lte: date.endOf('day').toBSON(),
-      },
-    })
-    this.log.verbose(`Overriding ${removed.deletedCount} results`)
-
-    for (const entry of timetable) {
-      await new this.timetableModel({ entry }).save()
-    }
-
-    return {
-      result: removed.deletedCount ? 'replaced' : 'added',
-    }
-  }
-
   async updateOneEntry(htmlId: string, changeHash: string, entry: ScheduleEntryDto) {
     return await this.timetableModel.findOneAndUpdate(
       {
