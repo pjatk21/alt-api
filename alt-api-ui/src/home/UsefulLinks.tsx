@@ -54,7 +54,7 @@ function UsefulLink(props: UsefulLinkProps) {
 export function UsefulLinks() {
   return (
     <>
-      <h3>Useful links</h3>
+      <h3>Przydatne linki</h3>
       <Grid.Container
         gap={1}
         alignItems={'center'}
