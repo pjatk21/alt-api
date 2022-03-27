@@ -19,10 +19,12 @@ import {
   ApiParam,
   ApiProduces,
   ApiQuery,
+  ApiResponse,
 } from '@nestjs/swagger'
 import { Response as Res } from 'express'
 import { DateTime } from 'luxon'
 import { HttpExceptionResponseDto } from 'src/dto/http-exception-response.dto'
+import { CurrentScheduleEntryResponseDto } from './dto/current-schedule-entry.dto'
 import { GroupsAvailableDto } from './dto/groups-available.dto'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
 import { ScheduleResponseDto } from './dto/schedule-response.dto'
@@ -231,5 +233,41 @@ export class PublicTimetableController {
     if (!ics) throw new HttpException(err, 418) // 🫖
 
     return res.contentType('.ics').attachment('AltapiSchedule.ics').send(ics)
+  }
+
+  @Get('current')
+  @ApiOperation({
+    summary: 'Get current entry/activity',
+  })
+  @ApiQuery({
+    name: 'groups',
+    type: [String],
+    example: ['WIs I.2 - 46c', 'WIs I.2 - 1w'],
+    description: 'Groups to search for current activites.',
+    schema: {
+      minItems: 1,
+    },
+    required: false,
+  })
+  @ApiQuery({
+    name: 'tutor',
+    type: String,
+    description: 'Tutor to search for current activites.',
+    required: false,
+  })
+  @ApiResponse({ type: CurrentScheduleEntryResponseDto })
+  async getCurrentLesson(
+    @Query(
+      'groups',
+      new ParseArrayPipe({ items: String, separator: ',', optional: true }),
+    )
+    groups?: string[],
+    @Query('tutor') tutor?: string,
+  ): Promise<CurrentScheduleEntryResponseDto> {
+    return {
+      currentEntry: await this.timetableService
+        .currentStatus({ groups, tutor })
+        .then((x) => x?.entry ?? null),
+    }
   }
 }
