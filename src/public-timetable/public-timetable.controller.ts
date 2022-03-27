@@ -230,7 +230,7 @@ export class PublicTimetableController {
       groups,
     })
 
-    if (!ics) throw new HttpException(err, 418) // 🫖
+    if (!ics) throw new HttpException(err, 500)
 
     return res.contentType('.ics').attachment('AltapiSchedule.ics').send(ics)
   }
