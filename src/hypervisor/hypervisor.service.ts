@@ -53,15 +53,10 @@ export class HypervisorService {
 
   /**
    * Creates hash used for detecting chanegs in the schedule
-   * @param htmlId id of the entry (scrapped from html)
-   * @returns 32 char prefix of the sha1 hash
+   * @returns 16 char prefix of the sha1 hash
    */
-  private getChangeHash(htmlId: string, se: ScheduleEntryDto) {
-    return createHash('sha1')
-      .update(JSON.stringify(se))
-      .update(htmlId)
-      .digest('hex')
-      .slice(0, 32)
+  private getChangeHash(se: ScheduleEntryDto) {
+    return createHash('sha1').update(JSON.stringify(se)).digest('hex').slice(0, 16)
   }
 
   /**
@@ -105,11 +100,7 @@ export class HypervisorService {
 
     if (entry.tutor === '---') entry.tutor = null
 
-    return await this.timetables.updateOneEntry(
-      htmlId,
-      this.getChangeHash(htmlId, entry),
-      entry,
-    )
+    return await this.timetables.updateOneEntry(htmlId, this.getChangeHash(entry), entry)
   }
 
   async getScrappersStatus() {
