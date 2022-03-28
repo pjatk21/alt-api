@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Timetable, TimetableDocument } from './schemas/timetable.schema'
 import { Model } from 'mongoose'
 import { ScheduleEntryDto } from './dto/schedule-entry.dto'
-import { DateTime } from 'luxon'
+import { DateTime, Duration } from 'luxon'
 import { GroupsAvailableDto } from './dto/groups-available.dto'
 import { TutorsAvailableDto } from './dto/tutors-available.dto'
 import { Alarm, createEvents, EventAttributes } from 'ics'
@@ -19,7 +19,7 @@ type ScheduleOptionalFilters = {
 
 @Injectable()
 export class PublicTimetableService {
-  private readonly logger = new Logger('Public timetables')
+  private readonly logger = new Logger(PublicTimetableService.name)
   private readonly sendgridMail = new MailService()
 
   constructor(
@@ -35,16 +35,43 @@ export class PublicTimetableService {
   }
 
   async updateOneEntry(htmlId: string, changeHash: string, entry: ScheduleEntryDto) {
-    const previous = await this.timetableModel.findOneAndUpdate(
+    const previous = await this.timetableModel.findOne({
+      'entry.groups': entry.groups,
+      'entry.begin': entry.begin,
+      'entry.code': entry.code,
+    })
+
+    // this if statements prevents redundant writes
+    if (previous)
+      if (
+        DateTime.fromJSDate(previous.updatedAt).diffNow().negate() <=
+        Duration.fromDurationLike({ minutes: 5 })
+      ) {
+        this.logger.verbose(
+          `Entry ${changeHash} is too fresh, skipping update and delta check`,
+        )
+        return previous
+      }
+
+    const updated = await this.timetableModel.findOneAndUpdate(
       {
         'entry.groups': entry.groups,
         'entry.begin': entry.begin,
         'entry.code': entry.code,
       },
       { $set: { htmlId, changeHash, entry } },
-      { new: false, upsert: true },
+      { new: true, upsert: true },
     )
 
+    // this if statement prevents redundant delta check
+    if (previous === null) {
+      this.logger.verbose(
+        `Created ${changeHash} (${entry.code} ${entry.groups}), skipping delta check`,
+      )
+      return updated
+    }
+
+    // if previous has different change hash, get delta of new and outdated entries, then send email
     if ((previous?.changeHash ?? changeHash) !== changeHash) {
       this.logger.warn(`Received new hash, ${previous.changeHash} became ${changeHash}`)
       // get delta
@@ -54,7 +81,11 @@ export class PublicTimetableService {
         isEqual,
       )
       if (delta.length > 0) {
-        this.logger.warn(`Delta: ${JSON.stringify(Object.fromEntries(delta))}`)
+        this.logger.verbose(
+          `Differnces between ${previous.entry} and ${updated.entry} : ${JSON.stringify(
+            Object.fromEntries(delta),
+          )}`,
+        )
         this.sendgridMail.send({
           from: 'schedule-changes@kpostek.dev',
           templateId: 'd-9f3f6c1d58f44e51832818998666d406',
@@ -66,14 +97,13 @@ export class PublicTimetableService {
           },
         })
       } else {
-        this.logger.log(
-          'Delta returened 0 changes! Probably hashing fuction related change...',
-        )
+        this.logger.log('Hash mismatch and delta=0, updating just hash...')
       }
-      return await this.timetableModel.findOne({ changeHash })
+    } else {
+      this.logger.verbose(`Updated ${changeHash}, delta=0, no changes detected...`)
     }
 
-    return previous
+    return updated
   }
 
   async timetableForDay(date: DateTime, optionalFilters: ScheduleOptionalFilters) {
