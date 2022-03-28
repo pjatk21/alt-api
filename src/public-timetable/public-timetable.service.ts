@@ -45,7 +45,7 @@ export class PublicTimetableService {
       { new: false, upsert: true },
     )
 
-    if (previous.changeHash !== changeHash) {
+    if ((previous?.changeHash ?? changeHash) !== changeHash) {
       this.logger.warn(`Received new hash, ${previous.changeHash} became ${changeHash}`)
       // get delta
       const delta = differenceWith(
