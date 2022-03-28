@@ -1,6 +1,7 @@
 import {
   Logger,
   ParseEnumPipe,
+  UseFilters,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -25,7 +26,9 @@ import { ScrapperVisa, ScrapperVisaDocument } from './schemas/scrapper-visa.sche
 import { HypervisorGuard } from './hypervisor.guard'
 import { DispositorService } from './dispositor/dispositor.service'
 import { MissingDOMElement } from './hypervisor.errors'
+import { SentryWsExceptionsFilter } from 'src/app.sentry'
 
+@UseFilters(SentryWsExceptionsFilter)
 @WebSocketGateway(4010, { transports: ['websocket', 'polling'] })
 export class HypervisorGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
