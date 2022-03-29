@@ -1,7 +1,15 @@
-import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common'
+import {
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  UseInterceptors,
+} from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { ScrapperStatusDto } from './dto/scrapper-status.dto'
 import { HypervisorService } from './hypervisor.service'
+import { ScrapperState } from './schemas/scrapper-state.schema'
 
 @Controller('hypervisor')
 @ApiTags('Hypervisor')
@@ -20,8 +28,16 @@ export class HypervisorController {
     )
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('history/:uuid')
+  @ApiOperation({ summary: "Get scrapper's historical states" })
+  @ApiResponse({ type: [ScrapperState] })
   async historyByUuid(@Param('uuid', new ParseUUIDPipe()) uuid: string) {
-    return await this.hypervisor.getScrapperStateHistory(uuid)
+    return await this.hypervisor.getScrapperStateHistory(uuid).then((r) =>
+      r.map(({ createdAt, newState }) => ({
+        newState,
+        createdAt,
+      })),
+    )
   }
 }

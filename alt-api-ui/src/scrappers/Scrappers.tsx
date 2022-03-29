@@ -1,11 +1,12 @@
-import { Card, Grid, Loading, Text, Tooltip } from '@nextui-org/react'
+import { Button, Card, Grid, Loading, Text, Tooltip } from '@nextui-org/react'
 import { DateTime } from 'luxon'
-import React from 'react'
+import React, { useState } from 'react'
 import ky, { HTTPError } from 'ky'
 import { useQuery } from 'react-query'
 import { baseUrl } from '../util'
+import { ModalStateHistory } from '../dev/ModalStateHistory'
 
-type ScrapperLike = {
+export type ScrapperLike = {
   uuid: string
   name: string
   lastState: string
@@ -28,6 +29,42 @@ function colorFromState(state: string) {
   }
 }
 
+function ScrapperStatusCard(props: { scrapper: ScrapperLike }) {
+  const [historyVisible, setHistoryVisible] = useState(false)
+  const { scrapper } = props
+  const color = colorFromState(scrapper.lastState)
+
+  return (
+    <Card color={color}>
+      <Tooltip content={<Text css={{ fontFamily: '$mono' }}>{scrapper.uuid}</Text>}>
+        <Text h4 style={{ fontStyle: 'italic' }}>
+          {scrapper.name}
+        </Text>
+      </Tooltip>
+
+      <Card>
+        <Text>
+          Stan:{' '}
+          <Text span css={{ fontFamily: '$mono' }}>
+            {scrapper.lastState}
+          </Text>
+        </Text>
+        <Text>
+          Ostatnia aktualizacja stanu: <br />{' '}
+          {DateTime.fromISO(scrapper.lastUpdated).toISO()}
+        </Text>
+        <Button color={color} bordered onClick={() => setHistoryVisible(true)}>Historia statusów</Button>
+      </Card>
+
+      <ModalStateHistory
+        scrapper={scrapper}
+        visible={historyVisible}
+        setVisible={setHistoryVisible}
+      />
+    </Card>
+  )
+}
+
 export function Scrappers() {
   const { data, error, isLoading, isError } = useQuery('scrappers', getScrappers, {
     refetchInterval: 5_000,
@@ -46,28 +83,7 @@ export function Scrappers() {
       <Grid.Container gap={2} wrap={'wrap'}>
         {data.map((scrapper) => (
           <Grid sm={6} key={scrapper.uuid}>
-            <Card color={colorFromState(scrapper.lastState)}>
-              <Tooltip
-                content={<Text css={{ fontFamily: '$mono' }}>{scrapper.uuid}</Text>}
-              >
-                <Text h4 style={{ fontStyle: 'italic' }}>
-                  {scrapper.name}
-                </Text>
-              </Tooltip>
-
-              <Card>
-                <Text>
-                  Stan:{' '}
-                  <Text span css={{ fontFamily: '$mono' }}>
-                    {scrapper.lastState}
-                  </Text>
-                </Text>
-                <Text>
-                  Ostatnia aktualizacja stanu: <br />{' '}
-                  {DateTime.fromISO(scrapper.lastUpdated).toISO()}
-                </Text>
-              </Card>
-            </Card>
+            <ScrapperStatusCard scrapper={scrapper} />
           </Grid>
         ))}
       </Grid.Container>

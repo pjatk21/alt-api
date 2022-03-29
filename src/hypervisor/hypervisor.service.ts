@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { createHash } from 'crypto'
 import { JSDOM } from 'jsdom'
@@ -128,6 +128,7 @@ export class HypervisorService {
 
   async getScrapperStateHistory(uuid: string) {
     const v = await this.visaModel.findOne({ 'passport.uuid': uuid })
-    return await this.statesModel.find({ visa: v })
+    if (!v) throw new NotFoundException()
+    return await this.statesModel.find({ visa: v }).sort({ createdAt: -1 }).limit(200)
   }
 }
