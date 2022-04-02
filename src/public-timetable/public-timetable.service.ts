@@ -28,6 +28,13 @@ export class PublicTimetableService {
     private postOffice: PostOfficeService,
   ) {}
 
+  /**
+   * Pass scrapped and serialised data to process it, and save it to collection.
+   * @param htmlId id scrapped from html
+   * @param changeHash hash of content to find chages quicker
+   * @param entry object with data about schedule entry
+   * @returns updated/created object
+   */
   async updateOneEntry(htmlId: string, changeHash: string, entry: ScheduleEntryDto) {
     const previous = await this.timetableModel.findOne({
       'entry.groups': entry.groups,
@@ -198,6 +205,9 @@ export class PublicTimetableService {
       .then((r) => r[0])
   }
 
+  /**
+   * @returns lastest timestamp for update of any entry
+   */
   async lastUpdate() {
     const lastValue = await this.timetableModel
       .findOne()
