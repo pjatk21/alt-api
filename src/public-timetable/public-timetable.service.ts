@@ -28,11 +28,6 @@ export class PublicTimetableService {
     private postOffice: PostOfficeService,
   ) {}
 
-  async create(timetable: ScheduleEntryDto): Promise<TimetableDocument> {
-    const createdTimetable = new this.timetableModel(timetable)
-    return createdTimetable.save()
-  }
-
   async updateOneEntry(htmlId: string, changeHash: string, entry: ScheduleEntryDto) {
     const previous = await this.timetableModel.findOne({
       'entry.groups': entry.groups,
