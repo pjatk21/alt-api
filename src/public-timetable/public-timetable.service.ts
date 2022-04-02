@@ -6,12 +6,11 @@ import { ScheduleEntryDto } from './dto/schedule-entry.dto'
 import { DateTime, Duration } from 'luxon'
 import { GroupsAvailableDto } from './dto/groups-available.dto'
 import { TutorsAvailableDto } from './dto/tutors-available.dto'
-import { Alarm, createEvents, EventAttributes } from 'ics'
-import { createHash } from 'crypto'
-import { difference, differenceWith, isEqual } from 'lodash'
+import { differenceWith, isEqual } from 'lodash'
 import { MailService } from '@sendgrid/mail'
 import * as YAML from 'yaml'
 import { CalendarService } from './calendar/calendar.service'
+import { PostOfficeService } from 'src/post-office/post-office.service'
 
 export type ScheduleOptionalFilters = {
   groups?: string[]
@@ -21,15 +20,13 @@ export type ScheduleOptionalFilters = {
 @Injectable()
 export class PublicTimetableService {
   private readonly logger = new Logger(PublicTimetableService.name)
-  private readonly sendgridMail = new MailService()
 
   constructor(
     @InjectModel(Timetable.name)
     private timetableModel: Model<TimetableDocument>,
     public calendar: CalendarService,
-  ) {
-    this.sendgridMail.setApiKey(process.env.SENDGRID_API_KEY)
-  }
+    private postOffice: PostOfficeService,
+  ) {}
 
   async create(timetable: ScheduleEntryDto): Promise<TimetableDocument> {
     const createdTimetable = new this.timetableModel(timetable)
@@ -45,12 +42,9 @@ export class PublicTimetableService {
 
     // this if statements prevents redundant writes
     if (previous)
-      if (
-        DateTime.fromJSDate(previous.updatedAt).diffNow().negate() <=
-        Duration.fromDurationLike({ minutes: 5 })
-      ) {
+      if (DateTime.fromJSDate(previous.updatedAt).diffNow().negate().minutes <= 5) {
         this.logger.verbose(
-          `Entry ${changeHash} is too fresh, skipping update and delta check`,
+          `Entry ${changeHash} is already fresh, skipping update and delta check`,
         )
         return previous
       }
@@ -73,37 +67,28 @@ export class PublicTimetableService {
       return updated
     }
 
+    if (previous.changeHash === updated.changeHash) {
+      this.logger.verbose(`Updated ${changeHash}, hashes matches, skipping delta check`)
+      return updated
+    }
+
     // if previous has different change hash, get delta of new and outdated entries, then send email
-    if ((previous?.changeHash ?? changeHash) !== changeHash) {
-      this.logger.warn(`Received new hash, ${previous.changeHash} became ${changeHash}`)
-      // get delta
-      const delta = differenceWith(
-        Object.entries(entry),
-        Object.entries(previous.entry),
-        isEqual,
+    this.logger.warn(`Received new hash, ${previous.changeHash} became ${changeHash}`)
+    // get delta
+    const delta = differenceWith(
+      Object.entries(entry),
+      Object.entries(previous.entry),
+      isEqual,
+    )
+    if (delta.length > 0) {
+      this.logger.verbose(
+        `Differnces between ${previous.entry} and ${updated.entry} : ${JSON.stringify(
+          Object.fromEntries(delta),
+        )}`,
       )
-      if (delta.length > 0) {
-        this.logger.verbose(
-          `Differnces between ${previous.entry} and ${updated.entry} : ${JSON.stringify(
-            Object.fromEntries(delta),
-          )}`,
-        )
-        // TODO: migrate this code to post-office
-        this.sendgridMail.send({
-          from: 'schedule-changes@kpostek.dev',
-          templateId: 'd-9f3f6c1d58f44e51832818998666d406',
-          to: 's25290@pjwstk.edu.pl',
-          dynamicTemplateData: {
-            outdated: YAML.stringify(previous.entry),
-            updated: YAML.stringify(entry),
-            delta: YAML.stringify(Object.fromEntries(delta)),
-          },
-        })
-      } else {
-        this.logger.log('Hash mismatch and delta=0, updating just hash...')
-      }
+      this.postOffice.notifyScheduleChange(delta, updated, previous)
     } else {
-      this.logger.verbose(`Updated ${changeHash}, delta=0, no changes detected...`)
+      this.logger.log('Hash mismatch and delta=0, updating just hash...')
     }
 
     return updated
@@ -123,6 +108,7 @@ export class PublicTimetableService {
     dateRange: { from: DateTime; to: DateTime },
     optionalFilters: ScheduleOptionalFilters,
   ) {
+    // todo: convert to aggregate
     const dateRangeQuery = {
       'entry.begin': {
         $gte: dateRange.from.toBSON(),
