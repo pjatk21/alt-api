@@ -13,6 +13,10 @@ import { MissingDOMElement } from './hypervisor.errors'
 import { ScrapperState, ScrapperStateDocument } from './schemas/scrapper-state.schema'
 import { ScrapperVisa, ScrapperVisaDocument } from './schemas/scrapper-visa.schema'
 
+/**
+ * This service is responsible for managing scrappers, and receving and serializing data
+ * from scrappers. Also has subservice called `Dispositor` for just disposing tasks to the scrappers.
+ */
 @Injectable()
 export class HypervisorService {
   private server: Server = null

@@ -15,6 +15,10 @@ export type ScheduleOptionalFilters = {
   tutors?: string[]
 }
 
+/**
+ * This service is responsible for distributing and processing data
+ * related with PJATK timetable.
+ */
 @Injectable()
 export class PublicTimetableService {
   private readonly logger = new Logger(PublicTimetableService.name)

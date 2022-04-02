@@ -9,6 +9,9 @@ import {
 } from '../hypervisor.enum'
 import { HypervisorService } from '../hypervisor.service'
 
+/**
+ * Type representing task rule.
+ */
 type TaskDisposition = {
   /**
    * Name of the task, should be unique
@@ -65,6 +68,11 @@ const tasks: TaskDisposition[] = [
   },
 ]
 
+/**
+ * The only responsiblity of this service is sending new tasks to scrappers.
+ * In future, also will generate tasks dynamically.
+ * For now, tasks aren't presistent. That means, after restart of app, tasks will start over again.
+ */
 @Injectable()
 export class DispositorService {
   private readonly logger = new Logger(DispositorService.name)
@@ -78,6 +86,11 @@ export class DispositorService {
     for (const task of tasks) this.taskLastRun.set(task.name, DateTime.fromMillis(0))
   }
 
+  /**
+   * Handle case where scrapper disconnects while awaiting/doing task.
+   * @param client 
+   * @param server 
+   */
   public async cleanupOnDisconnect(client: Socket, server: Server) {
     if (this.activeTasks.has(client.id)) {
       this.logger.warn(
@@ -98,11 +111,20 @@ export class DispositorService {
     }
   }
 
+  /**
+   * Get time to run next task.
+   * @param task 
+   * @returns 
+   */
   private getRunIn(task: TaskDisposition) {
     if (this.taskLastRun.has(task.name))
       return this.taskLastRun.get(task.name).diffNow().plus(task.runNewAfter)
   }
 
+  /**
+   * Dispatches new task depending on priority and avaliablity
+   * @returns 
+   */
   private getNextTask(): [TaskDisposition | null, number | null] {
     const tasksAvailable = tasks
       .sort((x, y) => y.priority - x.priority)
@@ -129,6 +151,11 @@ export class DispositorService {
     return [null, null]
   }
 
+  /**
+   * Gets dispatched task, and assings this task to scrapper.
+   * @param client 
+   * @returns 
+   */
   public async assignTask(client: Socket) {
     const [task, startIn] = this.getNextTask()
 
@@ -156,6 +183,12 @@ export class DispositorService {
     }, startIn ?? 1000)
   }
 
+  /**
+   * After receiving status update from scrapper, releases task and makes it available
+   * for other scrappers.
+   * @param client 
+   * @returns 
+   */
   public async releaseTask(client: Socket) {
     if (!this.activeTasks.has(client.id)) return
 
