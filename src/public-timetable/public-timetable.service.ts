@@ -226,14 +226,7 @@ export class PublicTimetableService {
   }
 
   async currentStatus(targets: { groups?: string[]; tutor?: string }) {
-    //const now = DateTime.now().toBSON()
-    const now = DateTime.fromObject({
-      year: 2022,
-      month: 3,
-      day: 28,
-      hour: 14,
-      minute: 3,
-    })
+    const now = DateTime.now().toBSON()
     const activeLesson = await this.timetableModel.findOne({
       $or: [
         { 'entry.groups': { $in: targets.groups ?? [] } },
