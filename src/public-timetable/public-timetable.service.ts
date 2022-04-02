@@ -11,8 +11,9 @@ import { createHash } from 'crypto'
 import { difference, differenceWith, isEqual } from 'lodash'
 import { MailService } from '@sendgrid/mail'
 import * as YAML from 'yaml'
+import { CalendarService } from './calendar/calendar.service'
 
-type ScheduleOptionalFilters = {
+export type ScheduleOptionalFilters = {
   groups?: string[]
   tutors?: string[]
 }
@@ -25,6 +26,7 @@ export class PublicTimetableService {
   constructor(
     @InjectModel(Timetable.name)
     private timetableModel: Model<TimetableDocument>,
+    public calendar: CalendarService,
   ) {
     this.sendgridMail.setApiKey(process.env.SENDGRID_API_KEY)
   }
@@ -86,6 +88,7 @@ export class PublicTimetableService {
             Object.fromEntries(delta),
           )}`,
         )
+        // TODO: migrate this code to post-office
         this.sendgridMail.send({
           from: 'schedule-changes@kpostek.dev',
           templateId: 'd-9f3f6c1d58f44e51832818998666d406',
@@ -141,74 +144,6 @@ export class PublicTimetableService {
     return await this.timetableModel.find(
       Object.assign(dateRangeQuery, groupsQuery, tutorsQuery),
     )
-  }
-
-  async createICS(optionalFilters: ScheduleOptionalFilters) {
-    if (!(optionalFilters.groups || optionalFilters.tutors))
-      throw new Error('Specify groups or tutor!')
-
-    const rawEntries: Timetable[] = await this.timetableModel
-      .aggregate([
-        {
-          $project: {
-            entry: true,
-            group: '$entry.groups',
-            uploadedAt: true,
-          },
-        },
-        {
-          $unwind: '$group',
-        },
-        {
-          $match: {
-            $expr: {
-              $or: [{ $in: ['$group', optionalFilters.groups] }],
-            },
-          },
-        },
-      ])
-      .exec()
-
-    const events: EventAttributes[] = rawEntries.map((row) => {
-      const re = row.entry
-      const begin = DateTime.fromJSDate(re.begin).setZone()
-      const end = DateTime.fromJSDate(re.end).setZone()
-
-      const eventHashId =
-        'altid-' +
-        createHash('sha1')
-          .update(re.begin.getTime().toString())
-          .update(re.groups.toString())
-          .update(re.code)
-          .update(re.room)
-          .update(re.tutor ?? 'Not assigned')
-          .digest('hex')
-          .slice(0, 20)
-
-      return {
-        uid: eventHashId,
-        productId: 'altapi/ics',
-        start: [begin.year, begin.month, begin.day, begin.hour, begin.minute],
-        end: [end.year, end.month, end.day, end.hour, end.minute],
-        title: `${re.type} z ${re.code} (${re.room})`,
-        description: `${re.type} z ${re.name} w budynku ${re.room} prowadzone przez ${re.tutor}.`,
-        busyStatus: 'BUSY',
-        alarms: [
-          {
-            action: 'display',
-            trigger: {
-              before: true,
-              minutes: 15,
-            },
-          } as Alarm,
-        ],
-      }
-    })
-    const icsBuild = createEvents(events)
-    return {
-      ics: icsBuild.value,
-      err: icsBuild.error,
-    }
   }
 
   async findSingleEntry(

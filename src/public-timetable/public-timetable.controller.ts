@@ -226,7 +226,7 @@ export class PublicTimetableController {
     if ((groups ?? []).length < 1)
       throw new HttpException('You have to choose at least one group!', 400)
 
-    const { ics, err } = await this.timetableService.createICS({
+    const { ics, err } = await this.timetableService.calendar.createICS({
       groups,
     })
 

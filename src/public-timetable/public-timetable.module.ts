@@ -5,6 +5,7 @@ import { PublicTimetableService } from './public-timetable.service'
 import { PublicTimetableController } from './public-timetable.controller'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { APP_GUARD } from '@nestjs/core'
+import { CalendarService } from './calendar/calendar.service'
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { APP_GUARD } from '@nestjs/core'
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
+    CalendarService,
   ],
   controllers: [PublicTimetableController],
   exports: [
