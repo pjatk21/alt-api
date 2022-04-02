@@ -9,7 +9,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { SentryModule } from '@ntegral/nestjs-sentry'
 import { APP_FILTER } from '@nestjs/core'
 import { SentryAppExceptionsFilter } from './app.sentry'
-import { PostOfficeService } from './post-office/post-office.service';
+import { PostOfficeService } from './post-office/post-office.service'
 
 @Module({
   imports: [
