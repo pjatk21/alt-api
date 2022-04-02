@@ -1,24 +1,29 @@
-import { ArgumentsHost, Catch, Logger } from '@nestjs/common'
+import { ArgumentsHost, Logger } from '@nestjs/common'
 import { BaseExceptionFilter } from '@nestjs/core'
 import { BaseWsExceptionFilter } from '@nestjs/websockets'
 import { SentryService } from '@ntegral/nestjs-sentry'
 
-export class SentryWsExceptionsFilter extends BaseWsExceptionFilter {
+class SentryAdapter {
   private readonly logger = new Logger('Sentry')
 
-  catch(exception: unknown, host: ArgumentsHost) {
+  static default = new SentryAdapter()
+
+  reportException(exception: unknown) {
     SentryService.SentryServiceInstance().instance().captureException(exception)
-    this.logger.debug(`WS error repoted to sentry...`)
+    this.logger.debug(`Error repoted to sentry...`)
+  }
+}
+
+export class SentryWsExceptionsFilter extends BaseWsExceptionFilter {
+  catch(exception: unknown, host: ArgumentsHost) {
+    SentryAdapter.default.reportException(exception)
     super.catch(exception, host)
   }
 }
 
 export class SentryAppExceptionsFilter extends BaseExceptionFilter {
-  private readonly logger = new Logger('Sentry')
-
   catch(exception: unknown, host: ArgumentsHost) {
-    SentryService.SentryServiceInstance().instance().captureException(exception)
-    this.logger.debug(`App error repoted to sentry...`)
+    SentryAdapter.default.reportException(exception)
     super.catch(exception, host)
   }
 }
