@@ -8,16 +8,10 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: [
-            'react',
-            'react-dom',
-            'react-query',
-            'react-router-dom',
-            'usehooks-ts',
-            '@nextui-org/react',
-          ],
-          libs: ['lodash', 'ky', 'luxon'],
-          icons: [
+          react: ['react', 'react-dom', 'react-query', 'react-router-dom', 'usehooks-ts'],
+          essentials: ['lodash', 'ky', 'luxon'],
+          nextui: ['@nextui-org/react'],
+          fontawesome: [
             '@fortawesome/fontawesome-svg-core',
             '@fortawesome/free-brands-svg-icons',
             '@fortawesome/free-regular-svg-icons',
