@@ -9,23 +9,27 @@
   <a href="https://wakatime.com/badge/user/304093ee-926f-40f9-980c-65ea3d5a15b7/project/26f543df-5e37-4313-b4c3-42e9216cded4"><img src="https://wakatime.com/badge/user/304093ee-926f-40f9-980c-65ea3d5a15b7/project/26f543df-5e37-4313-b4c3-42e9216cded4.svg" alt="wakatime"></a>
 </div>
 
-## Feature'y
+## Różnice względem oryginalnego planu
+
+- Nowoczesna i szybka aplikacja webowa
+
+- ICS Feed (zamiast pojedyńczych plików ICS)
 
 - JSON API wraz z dokumentacją OpenAPI
 
-- ICS Feed
-
 - Bardzo szybki czas odpowedzi w porównaniu do orginalnego planu zajęć
-  
-  - Like you know, cacheowanie istnieje
-  
-  - MongoDB is kinda fast tho
 
-### JSON API
+### Aplikacja
+[<img width="90" alt="AltapiIcon_192" src="https://user-images.githubusercontent.com/30326322/161425352-c9ddceba-d6ea-4437-a9e4-d2da3a12ffbc.png">](https://altapi.kpostek.dev/app)
 
-API potrafi odpowiadać na zapytania w stylu *"jakie są zajęcia w planie dla grup x, y, z od dnia do dnia"* lub *"jakie są zajęcia dla wykładowcy x danego dnia"*
+Moja implementacja vs. implementacja uczelni (z 2010r.)
 
-Wszystkie endpointy związane z planem zajęć są udokumentowane [tutaj](https://altapi.kpostek.dev/redoc). Jeżeli chcesz potestować sobie ręcznie to polecam pobrać sobie z dokumentacji `OpenAPI schema` i testować zapytania sobie w programie typu Insomnia.
+<div align="center">
+  <img height="520" src="https://user-images.githubusercontent.com/30326322/161425539-9ad1e72d-2286-4199-8ad9-1b2eb902be32.png">
+  <img height="520" src="https://user-images.githubusercontent.com/30326322/161425665-6558cfe1-f483-4d81-a3e5-28f61217e32b.png">
+  <img height="520" src="https://user-images.githubusercontent.com/30326322/161425698-60944d76-f539-462e-9fe7-d5c759073fea.png">
+  <img height="520" src="https://user-images.githubusercontent.com/30326322/161425700-828644da-7afe-4608-8034-275ece33501d.png">
+</div>
 
 ### ICS Feed
 
@@ -33,25 +37,31 @@ Główną różnicę z tym co dostarcza stara stronka, jest możliwość subskry
 
 Również same dane dostarczane przez usługę się różnią:
 
-<img title="" src="https://github.com/pjatk21/alt-api/blob/main/.github/assets/Screenshot%202022-03-05%20at%2001.23.54.png?raw=true" alt="Screenshot 2022-03-05 at 01.23.54.png" width="406">
+![Screenshot 2022-04-03 at 13 32 18](https://user-images.githubusercontent.com/30326322/161425838-889c892d-3d58-4aef-9dff-f13656bc1b7f.png)
 
-> Na górze znajdują się wydarzenia dostarczone przez `altapi` a poniżej te dostarczone przez stronę PJATKa
+
+> Po prawej znajdują się wydarzenia dostarczone przez `altapi`, a po lewej te dostarczone przez stronę PJATKa
+
+### JSON API
+
+API potrafi odpowiadać na zapytania w stylu *"jakie są zajęcia w planie dla grup x, y, z od dnia do dnia"* lub *"jakie są zajęcia dla wykładowcy x danego dnia"*
+
+Wszystkie endpointy związane z planem zajęć są udokumentowane [tutaj](https://altapi.kpostek.dev/redoc). Jeżeli chcesz potestować sobie ręcznie to polecam pobrać sobie z dokumentacji `OpenAPI schema` i testować zapytania sobie w programie typu Insomnia.
 
 ### Wydajność
 
-> Dla kontekstu, CPU: i5-3470S, RAM: 8GB DDR3, Dyski HDD (deadline-mq), Docker, Fedora 35
+Po prostu jest szybciej.
 
-`no cache, TTFB, cały dzień 07-03-2022`
+Mój timing (infrastruktura infotmatyczna warta 300-400 pln + cloudflare), timing uczelnianego serwera (infrastruktura informatyczna warta spokojnie z mln pln)
 
-Altapi: `103.35ms`
+<div align="center">
+  
+  <img src="https://user-images.githubusercontent.com/30326322/161426061-eb376e03-0689-4f95-8b4d-cab0f0f61a6d.png">
+  <img src="https://user-images.githubusercontent.com/30326322/161426185-99509af7-321c-40a3-b292-3b61ce8b3843.png">
 
-`cache, TTFB, cały dzień 07-03-2022`
+</div>
 
-Altapi: `6.22ms`
-
-Dla tego samego dnia, zapytanie do `https://planzajec.pjwstk.edu.pl/PlanOgolny.aspx` trwało `1.50s` (TTFB). Oznaczało by, że bez cache, `altapi` jest ok. 15 razy szybsze, a z cache 241 razy szybsze.
-
-> Na komputerze deweloperskim: CPU: i5-10600K, RAM 16GB DDR4@3200MHz, Dysk SSD PCIe, Docker Desktop, macOS 12, był w stanie osiągnąć czasy no cache: `44.15ms`, cache: `2.59ms`, co daje 33 razy szybciej bez cache, i **579 razy szybciej** przy użyciu cache.
+> Ciekawostka: W środowisku developerskim udało mi się osiągnąć requesty na poziomie 2.3ms, co daje 391x szybsze zapytania niż oryginalna usługa
 
 ## Uruchamianie
 
