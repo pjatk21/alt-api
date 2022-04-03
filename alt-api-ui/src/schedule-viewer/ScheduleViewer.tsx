@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Container, Grid, Input, Link, Spacer, Text } from '@nextui-org/react'
+import { Button, Container, Grid, Input, Spacer, Text } from '@nextui-org/react'
 import { ScheduleTimeline } from './ScheduleTimeline'
 import { DateTime } from 'luxon'
 import { useLocalStorage } from 'usehooks-ts'
@@ -11,11 +11,9 @@ import {
   faCogs,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
-// import { Settings } from './Settings'
 import { GroupPicker } from './GroupPicker'
 import { useLocation } from 'react-router-dom'
 import { Disclaimer } from './Disclaimer'
-import { registerSW } from 'virtual:pwa-register'
 import { Settings } from './Settings'
 
 type DateNaviButtonProps = {
