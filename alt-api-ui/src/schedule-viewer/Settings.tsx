@@ -2,8 +2,9 @@ import React from 'react'
 import { Grid, Link, Modal, Switch } from '@nextui-org/react'
 import { useLocalStorage } from 'usehooks-ts'
 
-type SettingsOptions = Partial<{
+export type SettingsOptions = Partial<{
   disableSentry: boolean
+  olaMode: boolean // everyone need some positivity in theirs live
 }>
 
 type SettingsProps = {
@@ -60,6 +61,8 @@ export function Settings({ visible, setVisible }: SettingsProps) {
       <Modal.Body>
         <h4>Prywatność</h4>
         <SettingsSwitch settingsKey={'disableSentry'} description={'Wyłącz Sentry SDK'} />
+        <h4>✨Specials✨</h4>
+        <SettingsSwitch settingsKey={'olaMode'} description={'✨Ola mode✨'} />
         <h4>Pomoc</h4>
         <Link href={'https://github.com/pjatk21/alt-api/wiki/Install-PWA'}>
           Jak zainstalować aplikację PWA

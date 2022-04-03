@@ -5,9 +5,10 @@ import React, { useState } from 'react'
 import { useQuery } from 'react-query'
 import { ScheduleEntryRawResponse } from '../types'
 import { ScheduleBlock } from './ScheduleBlock'
-import { useInterval } from 'usehooks-ts'
+import { useInterval, useReadLocalStorage } from 'usehooks-ts'
 import styles from './ScheduleTimeline.module.sass'
 import { baseUrl } from '../util'
+import type { SettingsOptions } from './Settings'
 
 type ScheduleTimelineProps = {
   date: DateTime
@@ -38,16 +39,30 @@ function getSchedule(
     .json()
 }
 
+function describeDayPositively(entries: ScheduleEntryRawResponse[]) {
+  if (entries.length === 0) return 'ten dzień jest wolny od zajęć 😌'
+  if (entries.filter((x) => x.type === 'Ćwiczenia').length === 0)
+    return 'dziś można zostać spokojnie w domku 😌'
+  return `na ten dzień są zaplanowane jedynie ✨${entries.length}✨ zajęcia`
+}
+
 function describeDay(entries: ScheduleEntryRawResponse[]) {
   if (entries.length === 0) return 'Nie ma zaplanowanych zajęć na ten dzień.'
   const begin = DateTime.fromISO(entries[0].begin)
   const end = DateTime.fromISO(entries.slice(-1)[0].end)
   const duration = end.diff(begin).shiftTo('hours')
 
-  return `Na ten dzień zaplanowano ${entries.length} zajęcia, w godzinach ${begin.toLocaleString({ timeStyle: 'short' })} - ${end.toLocaleString({ timeStyle: 'short' })} trwające łącznie ${duration.toHuman()}`
+  return `Na ten dzień zaplanowano ${
+    entries.length
+  } zajęcia, w godzinach ${begin.toLocaleString({
+    timeStyle: 'short',
+  })} - ${end.toLocaleString({
+    timeStyle: 'short',
+  })} trwające łącznie ${duration.toHuman()}`
 }
 
 export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
+  const settings = useReadLocalStorage<SettingsOptions>('settings')
   const [timePointer, setTimePoiner] = useState(timepointerOffset())
   useInterval(() => setTimePoiner(timepointerOffset()), 5000)
 
@@ -75,9 +90,14 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
       </div>
     )
 
+  console.log(settings?.olaMode)
   return (
     <>
-      {data && <Text blockquote>{describeDay(data)}</Text>}
+      {data && (
+        <Text blockquote>
+          {settings?.olaMode ? describeDayPositively(data) : describeDay(data)}
+        </Text>
+      )}
       <Spacer />
       <div className={styles.timelineContainer}>
         <div className={styles.background}>
