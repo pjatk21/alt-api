@@ -66,6 +66,7 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
   const [timePointer, setTimePoiner] = useState(timepointerOffset())
   useInterval(() => setTimePoiner(timepointerOffset()), 5000)
 
+  // load current day
   const { data, error, isLoading } = useQuery<
     { entries: ScheduleEntryRawResponse[] },
     Error,
@@ -73,6 +74,11 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
   >(['schedule', date, groups], () => getSchedule(date, groups), {
     select: (x) => x.entries,
   })
+
+  // preload next day
+  useQuery(['schedule', date.plus({ day: 1 }), groups], () =>
+    getSchedule(date.plus({ day: 1 }), groups),
+  )
 
   if (isLoading)
     return (
