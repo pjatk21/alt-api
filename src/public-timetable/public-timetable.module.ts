@@ -6,6 +6,7 @@ import { PublicTimetableController } from './public-timetable.controller'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { APP_GUARD } from '@nestjs/core'
 import { CalendarService } from './calendar/calendar.service'
+import { PostOfficeService } from './post-office/post-office.service'
 
 @Module({
   imports: [
@@ -14,16 +15,19 @@ import { CalendarService } from './calendar/calendar.service'
     ThrottlerModule.forRoot({ ttl: 600, limit: 1200 }), // 2 requests per second
   ],
   providers: [
+    CalendarService,
+    PostOfficeService,
     PublicTimetableService,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
-    CalendarService,
   ],
   controllers: [PublicTimetableController],
   exports: [
     MongooseModule.forFeature([{ name: Timetable.name, schema: TimetableSchema }]),
+    CalendarService,
+    PostOfficeService,
   ],
 })
 export class PublicTimetableModule {}

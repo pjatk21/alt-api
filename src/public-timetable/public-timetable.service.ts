@@ -8,7 +8,7 @@ import { GroupsAvailableDto } from './dto/groups-available.dto'
 import { TutorsAvailableDto } from './dto/tutors-available.dto'
 import { differenceWith, isEqual } from 'lodash'
 import { CalendarService } from './calendar/calendar.service'
-import { PostOfficeService } from 'src/post-office/post-office.service'
+import { PostOfficeService } from 'src/public-timetable/post-office/post-office.service'
 
 export type ScheduleOptionalFilters = {
   groups?: string[]
