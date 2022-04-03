@@ -51,6 +51,10 @@ export default defineConfig({
         ],
       },
       scope: './app/',
+      workbox: {
+        cleanupOutdatedCaches: true,
+        sourcemap: true,
+      },
     }),
   ],
 })
