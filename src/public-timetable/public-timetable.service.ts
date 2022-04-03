@@ -112,28 +112,21 @@ export class PublicTimetableService {
     dateRange: { from: DateTime; to: DateTime },
     optionalFilters: ScheduleOptionalFilters,
   ) {
-    // todo: convert to aggregate
-    const dateRangeQuery = {
-      'entry.begin': {
-        $gte: dateRange.from.toBSON(),
-        $lte: dateRange.to.toBSON(),
-      },
-    }
+    let query = this.timetableModel.aggregate().match({
+      'entry.begin': { $gte: dateRange.from.toBSON(), $lte: dateRange.to.toBSON() },
+    })
 
-    const groupsQuery = optionalFilters.groups?.length
-      ? {
-          'entry.groups': { $in: optionalFilters.groups },
-        }
-      : undefined
-    const tutorsQuery = optionalFilters.tutors?.length
-      ? {
-          'entry.tutor': { $in: optionalFilters.tutors },
-        }
-      : undefined
+    if (optionalFilters.groups)
+      query = query.match({
+        'entry.groups': { $in: optionalFilters.groups },
+      })
 
-    return await this.timetableModel.find(
-      Object.assign(dateRangeQuery, groupsQuery, tutorsQuery),
-    )
+    if (optionalFilters.tutors)
+      query = query.match({
+        'entry.tutor': { $in: optionalFilters.tutors },
+      })
+
+    return await query.exec()
   }
 
   async findSingleEntry(
@@ -149,60 +142,26 @@ export class PublicTimetableService {
 
   async listAvailableGroups(): Promise<GroupsAvailableDto> {
     return this.timetableModel
-      .aggregate([
-        { $unwind: '$entry.groups' },
-        {
-          $project: {
-            group: '$entry.groups',
-          },
-        },
-        {
-          $group: {
-            _id: '$group',
-          },
-        },
-        {
-          $project: {
-            _id: false,
-            groupName: '$_id',
-          },
-        },
-        {
-          $group: {
-            _id: 'groupsAvaliable',
-            groupsAvailable: { $push: '$groupName' },
-          },
-        },
-        {
-          $project: {
-            _id: false,
-          },
-        },
-      ])
+      .aggregate()
+      .unwind('$entry.groups')
+      .project({ group: '$entry.groups' })
+      .group({ _id: '$group' })
+      .project({ _id: false, groupName: '$_id' })
+      .group({ _id: 'groupsAvaliable', groupsAvailable: { $push: '$groupName' } })
+      .project({ _id: false })
       .exec()
       .then((r) => r[0])
   }
 
   async listAvailableTutors(): Promise<TutorsAvailableDto> {
     return this.timetableModel
-      .aggregate([
-        {
-          $match: {
-            $expr: { $ne: ['$entry.tutor', null] },
-          },
-        },
-        {
-          $group: {
-            _id: 'tutors',
-            tutorsAvailable: { $addToSet: '$entry.tutor' },
-          },
-        },
-        {
-          $project: {
-            _id: false,
-          },
-        },
-      ])
+      .aggregate()
+      .match({ $expr: { $ne: ['$entry.tutor', null] } })
+      .group({
+        _id: 'tutors',
+        tutorsAvailable: { $addToSet: '$entry.tutor' },
+      })
+      .project({ _id: false })
       .exec()
       .then((r) => r[0])
   }
@@ -219,20 +178,13 @@ export class PublicTimetableService {
 
   async dataFetchedToDate() {
     const lastEntry = await this.timetableModel
-      .aggregate([
-        {
-          $project: {
-            _id: false,
-            date: '$entry.end',
-          },
-        },
-        {
-          $sort: { date: -1 },
-        },
-        {
-          $limit: 1,
-        },
-      ])
+      .aggregate()
+      .project({
+        _id: false,
+        date: '$entry.end',
+      })
+      .sort({ date: -1 })
+      .limit(1)
       .exec()
     return DateTime.fromJSDate(lastEntry[0].date).toISO()
   }
