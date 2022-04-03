@@ -22,7 +22,7 @@
 ### Aplikacja
 [<img width="90" alt="AltapiIcon_192" src="https://user-images.githubusercontent.com/30326322/161425352-c9ddceba-d6ea-4437-a9e4-d2da3a12ffbc.png">](https://altapi.kpostek.dev/app)
 
-Moja implementacja vs. implementacja uczelni (z 2010r.)
+Moja implementacja vs. implementacja uczelni
 
 <div align="center">
   <img height="520" src="https://user-images.githubusercontent.com/30326322/161425539-9ad1e72d-2286-4199-8ad9-1b2eb902be32.png">
