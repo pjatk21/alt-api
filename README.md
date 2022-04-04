@@ -69,11 +69,18 @@ Mój timing (infrastruktura infotmatyczna warta 300-400 pln + cloudflare), timin
 
 Wymagania:
 
-- Docker
-- `docker-compose`
+- Docker engine
+- Docker compose
 
+Przed pierwszym uruchomieniem
 ```
-docker-compose up
+cp docker-compose.yml docker-compose.prod.yml
+vim docker-compose.prod.yml # przy pomocy edytora tekstu dopisz zmienne środowiskowe: SENDGRID_API_KEY, możesz oczywiście dodać również takie usługi jak mongo-express albo cloudflared
+```
+
+Kolejne uruchomienia
+```
+docker-compose -f docker-compose.prod.yml up -d
 ```
 
 ## Rozwój projektu
