@@ -10,23 +10,15 @@ services:
     restart: unless-stopped
     depends_on:
       - database
-  # Scrappers, a lot of them
-  scrapper-zimmer:
+  scrapper:
     image: ghcr.io/pjatk21/alt-scrap:main
     restart: unless-stopped
     environment:
-      SCRAPPER_NAME: Zimmer
+      SCRAPPER_NAME: parseInt('f*ck', 16)
       ALTAPI_GATEWAY: ws://altapi:4010/
     depends_on:
       - altapi
-  scrapper-benia:
-    image: ghcr.io/pjatk21/alt-scrap:main
-    restart: unless-stopped
-    environment:
-      SCRAPPER_NAME: Benia
-      ALTAPI_GATEWAY: ws://altapi:4010/
-    depends_on:
-      - altapi
+    entrypoint: yarn docker.entrypoint.stealer --delayPerEntry 700
   # Other useful containers
   database:
     image: mongo:latest
