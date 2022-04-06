@@ -104,6 +104,6 @@
     "testEnvironment": "node"
   },
   "engines": {
-    "node": "17"
+    "node": ">=16"
   }
 }
