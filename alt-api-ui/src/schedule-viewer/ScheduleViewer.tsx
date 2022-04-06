@@ -71,6 +71,8 @@ export function ScheduleViewer() {
   )
   const [groups, setGroups] = useLocalStorage<string[]>('groups', [])
   const [groupPickerVisible, setGroupPickerVisible] = useState(groups.length === 0)
+  const [tutors, setTutors] = useLocalStorage<string[]>('groups', [])
+  const [tutorPickerVisible, setTutorPickerVisible] = useState(tutors.length === 0)
   const [settingsVisible, setSettingsVisible] = useState(false)
 
   return (
