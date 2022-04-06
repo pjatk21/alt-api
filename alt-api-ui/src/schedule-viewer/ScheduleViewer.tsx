@@ -15,6 +15,7 @@ import { GroupPicker } from './GroupPicker'
 import { useLocation } from 'react-router-dom'
 import { Disclaimer } from './Disclaimer'
 import { Settings } from './Settings'
+import { TutorPicker } from './TutorPicker'
 
 type DateNaviButtonProps = {
   icon: IconDefinition
@@ -97,6 +98,12 @@ export function ScheduleViewer() {
         setGroups={setGroups}
         visible={groupPickerVisible}
         setVisible={setGroupPickerVisible}
+      />
+      <TutorPicker
+        tutors={tutors}
+        setTutors={setTutors}
+        visible={tutorPickerVisible}
+        setVisible={setTutorPickerVisible}
       />
       <Settings visible={settingsVisible} setVisible={setSettingsVisible} />
       <Disclaimer />
