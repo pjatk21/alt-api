@@ -18,9 +18,6 @@ import { SentryAppExceptionsFilter } from './app.sentry'
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'alt-api-ui', 'dist'),
       exclude: ['/img*'],
-      serveStaticOptions: {
-        fallthrough: false,
-      },
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'alt-api-ui', 'img'),
