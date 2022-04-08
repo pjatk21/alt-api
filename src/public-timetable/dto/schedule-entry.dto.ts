@@ -52,9 +52,9 @@ export class ScheduleEntryDto {
   end: Date
 
   @ApiProperty({
-    nullable: true,
-    example: '🥰 Michał Tomaszewski ❤️',
+    example: ['🥰 Michał Tomaszewski ❤️'],
     description: 'Lecutrer assigned to the class',
+    type: [String],
   })
-  tutor: string | null
+  tutors: string[]
 }

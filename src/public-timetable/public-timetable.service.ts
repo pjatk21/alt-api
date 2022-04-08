@@ -123,7 +123,7 @@ export class PublicTimetableService {
 
     if (optionalFilters.tutors)
       query = query.match({
-        'entry.tutor': { $in: optionalFilters.tutors },
+        'entry.tutors': { $in: optionalFilters.tutors },
       })
 
     return await query.exec()
@@ -156,10 +156,10 @@ export class PublicTimetableService {
   async listAvailableTutors(): Promise<TutorsAvailableDto> {
     return this.timetableModel
       .aggregate()
-      .match({ $expr: { $ne: ['$entry.tutor', null] } })
+      .unwind({ path: '$entry.tutors', preserveNullAndEmptyArrays: false })
       .group({
         _id: 'tutors',
-        tutorsAvailable: { $addToSet: '$entry.tutor' },
+        tutorsAvailable: { $addToSet: '$entry.tutors' },
       })
       .project({ _id: false })
       .exec()

@@ -26,7 +26,7 @@ export class CalendarService {
         .update(re.groups.toString())
         .update(re.code)
         .update(re.room)
-        .update(re.tutor ?? 'Not assigned')
+        .update(re.tutors.join(','))
         .digest('hex')
         .slice(0, 20)
 
@@ -36,7 +36,7 @@ export class CalendarService {
       start: [begin.year, begin.month, begin.day, begin.hour, begin.minute],
       end: [end.year, end.month, end.day, end.hour, end.minute],
       title: `${re.type} z ${re.code} (${re.room})`,
-      description: `${re.type} z ${re.name} w budynku ${re.room} prowadzone przez ${re.tutor}.`,
+      description: `${re.type} z ${re.name} w budynku ${re.room} prowadzone przez ${re.tutors}.`,
       busyStatus: 'BUSY',
       alarms: [
         {

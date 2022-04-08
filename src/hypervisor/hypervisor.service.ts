@@ -84,7 +84,10 @@ export class HypervisorService {
       room: htmlFrag.querySelector('[id*="SalaLabel"]').textContent.trim(),
       begin: undefined,
       end: undefined,
-      tutor: htmlFrag.querySelector('[id*="DydaktycyLabel"]').textContent.trim(),
+      tutors: htmlFrag
+        .querySelector('[id*="DydaktycyLabel"]')
+        .textContent.trim()
+        .split(', '),
     }
 
     const dateBuilder = (datePart: string, timePart: string) =>
@@ -102,7 +105,7 @@ export class HypervisorService {
       htmlFrag.querySelector('[id*=GodzZakonLabel]').textContent.trim(),
     ).toJSDate()
 
-    if (entry.tutor === '---') entry.tutor = null
+    if (entry.tutors.includes('---')) entry.tutors = []
 
     return await this.timetables.updateOneEntry(htmlId, this.getChangeHash(entry), entry)
   }
