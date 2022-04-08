@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 export type ScheduleEntryRawResponse = {
   name: string
   code: string

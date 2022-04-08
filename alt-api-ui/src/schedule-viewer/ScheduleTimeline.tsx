@@ -3,12 +3,14 @@ import ky from 'ky'
 import { DateTime } from 'luxon'
 import React, { useState } from 'react'
 import { useQuery } from 'react-query'
-import { ScheduleEntryRawResponse } from '../types'
 import { ScheduleBlock } from './ScheduleBlock'
 import { useInterval, useReadLocalStorage } from 'usehooks-ts'
 import styles from './ScheduleTimeline.module.sass'
 import { baseUrl } from '../util'
 import type { SettingsOptions } from './Settings'
+import { AltapiScheduleEntry } from '../altapi'
+import { plainToClass, plainToInstance } from 'class-transformer'
+import { entries } from 'lodash'
 
 type ScheduleTimelineProps = {
   date: DateTime
@@ -24,7 +26,7 @@ function timepointerOffset() {
 function getSchedule(
   date: DateTime,
   groups: string[],
-): Promise<{ entries: ScheduleEntryRawResponse[] }> {
+): Promise<{ entries: AltapiScheduleEntry[] }> {
   if (groups.length === 0) return Promise.resolve({ entries: [] })
 
   const params = new URLSearchParams()
@@ -36,20 +38,23 @@ function getSchedule(
     .get(`${baseUrl}v1/timetable/range`, {
       searchParams: params,
     })
-    .json()
+    .json<{ entries: unknown[] }>()
+    .then((body) => ({
+      entries: plainToInstance(AltapiScheduleEntry, body.entries),
+    }))
 }
 
-function describeDayPositively(entries: ScheduleEntryRawResponse[]) {
+function describeDayPositively(entries: AltapiScheduleEntry[]) {
   if (entries.length === 0) return 'ten dzień jest wolny od zajęć 😌'
   if (entries.filter((x) => x.type === 'Ćwiczenia').length === 0)
     return 'dziś można zostać spokojnie w domku 😌'
   return `na ten dzień są zaplanowane jedynie ✨${entries.length}✨ zajęcia`
 }
 
-function describeDay(entries: ScheduleEntryRawResponse[]) {
+function describeDay(entries: AltapiScheduleEntry[]) {
   if (entries.length === 0) return 'Nie ma zaplanowanych zajęć na ten dzień.'
-  const begin = DateTime.fromISO(entries[0].begin)
-  const end = DateTime.fromISO(entries.slice(-1)[0].end)
+  const begin = entries[0].begin
+  const end = entries.slice(-1)[0].end
   const duration = end.diff(begin).shiftTo('hours')
 
   return `Na ten dzień zaplanowano ${
@@ -68,9 +73,9 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
 
   // load current day
   const { data, error, isLoading } = useQuery<
-    { entries: ScheduleEntryRawResponse[] },
+    { entries: AltapiScheduleEntry[] },
     Error,
-    ScheduleEntryRawResponse[]
+    AltapiScheduleEntry[]
   >(['schedule', date, groups], () => getSchedule(date, groups), {
     select: (x) => x.entries,
   })

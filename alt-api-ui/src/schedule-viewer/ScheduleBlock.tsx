@@ -1,20 +1,18 @@
-import { DateTime } from 'luxon'
 import React, { useState } from 'react'
-import { ScheduleEntryRawResponse } from '../types'
 import styles from './ScheduleBlock.module.sass'
 import { colors } from './colors.json'
 import { Button, Modal, Text, Link } from '@nextui-org/react'
 import { buildings } from '../calendar/buildings.json'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRoute } from '@fortawesome/free-solid-svg-icons'
+import { AltapiScheduleEntry } from '../altapi'
 
 type ScheduleBlockProps = {
-  data: ScheduleEntryRawResponse
+  data: AltapiScheduleEntry
 }
 
 export function ScheduleBlock({ data }: ScheduleBlockProps) {
-  const begin = DateTime.fromISO(data.begin)
-  const end = DateTime.fromISO(data.end)
+  const { begin, end } = data
   const timeBegin = begin.startOf('day').plus({ hours: 6 })
   const offset = begin.diff(timeBegin).as('hours')
   const heightByDuration = end.diff(begin).as('hours')
@@ -60,7 +58,7 @@ export function ScheduleBlock({ data }: ScheduleBlockProps) {
             <b>Rodzaj zajęć:</b> {data.type}
           </p>
           <p>
-            <b>Prowadzący:</b> {data.tutor}
+            <b>Prowadzący:</b> {data.tutors.join(', ')}
           </p>
           <p>
             <b>Czas trwania:</b> {end.diff(begin).shiftTo('hours', 'minutes').toHuman()}
