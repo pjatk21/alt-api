@@ -17,6 +17,11 @@ import { Disclaimer } from './Disclaimer'
 import { Settings } from './Settings'
 import { TutorPicker } from './TutorPicker'
 
+export type AltapiQueryOptions = Partial<{
+  groups: string[]
+  tutors: string
+}>
+
 type DateNaviButtonProps = {
   icon: IconDefinition
   onClick?: () => void
@@ -71,6 +76,10 @@ export function ScheduleViewer() {
     initalDate.isValid ? initalDate : DateTime.now(),
   )
   const [groups, setGroups] = useLocalStorage<string[]>('groups', [])
+  const [queryOptions, setQueryOptions] = useLocalStorage<AltapiQueryOptions>(
+    'queryOptions',
+    {},
+  )
   const [groupPickerVisible, setGroupPickerVisible] = useState(groups.length === 0)
   const [tutors, setTutors] = useLocalStorage<string[]>('tutors', [])
   const [tutorPickerVisible, setTutorPickerVisible] = useState(tutors.length === 0)
