@@ -6,7 +6,7 @@ import { GroupDatalist } from '../datalists/GroupDatalist'
 
 type GroupPickerProps = {
   groups: string[]
-  setGroups: (value: React.SetStateAction<string[]>) => void
+  setGroups: (value: []) => void
   visible: boolean
   setVisible: (value: React.SetStateAction<boolean>) => void
 }
