@@ -40,7 +40,9 @@ function getSchedule(
     })
     .json<{ entries: unknown[] }>()
     .then((body) => ({
-      entries: plainToInstance(AltapiScheduleEntry, body.entries),
+      entries: plainToInstance(AltapiScheduleEntry, body.entries).sort((x, y) =>
+        x.begin.diff(y.begin).as('milliseconds'),
+      ),
     }))
 }
 
