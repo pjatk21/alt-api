@@ -9,8 +9,7 @@ import styles from './ScheduleTimeline.module.sass'
 import { baseUrl } from '../util'
 import type { SettingsOptions } from './Settings'
 import { AltapiScheduleEntry } from '../altapi'
-import { plainToClass, plainToInstance } from 'class-transformer'
-import { entries } from 'lodash'
+import { plainToInstance } from 'class-transformer'
 
 type ScheduleTimelineProps = {
   date: DateTime
