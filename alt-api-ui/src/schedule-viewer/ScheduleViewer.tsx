@@ -19,7 +19,7 @@ import { TutorPicker } from './TutorPicker'
 
 export type AltapiQueryOptions = Partial<{
   groups: string[]
-  tutors: string
+  tutors: string[]
 }>
 
 type DateNaviButtonProps = {
@@ -75,21 +75,29 @@ export function ScheduleViewer() {
   const [activeDate, setActiveDate] = useState(
     initalDate.isValid ? initalDate : DateTime.now(),
   )
-  const [groups, setGroups] = useLocalStorage<string[]>('groups', [])
   const [queryOptions, setQueryOptions] = useLocalStorage<AltapiQueryOptions>(
     'queryOptions',
     {},
   )
-  const [groupPickerVisible, setGroupPickerVisible] = useState(groups.length === 0)
-  const [tutors, setTutors] = useLocalStorage<string[]>('tutors', [])
-  const [tutorPickerVisible, setTutorPickerVisible] = useState(tutors.length === 0)
+
+  // migration stuff
+  if (localStorage.getItem('groups')) {
+    setQueryOptions({ groups: JSON.parse(localStorage.getItem('groups') as string) })
+    localStorage.removeItem('groups')
+  }
+
+  const { groups, tutors } = queryOptions
+  const [groupPickerVisible, setGroupPickerVisible] = useState(
+    (groups ?? []).length === 0 && (tutors ?? []).length === 0,
+  )
+  const [preferTutor, setPreferTutor] = useLocalStorage('preferTutor', false)
   const [settingsVisible, setSettingsVisible] = useState(false)
 
   return (
     <Container xs>
       <Text h2>Plan zajęć</Text>
       <DateNavigator date={activeDate} setDate={setActiveDate} />
-      <ScheduleTimeline date={activeDate} groups={groups} />
+      <ScheduleTimeline date={activeDate} groups={groups ?? []} />
       <Spacer />
       <Button.Group bordered>
         <Button auto onClick={() => setGroupPickerVisible(true)}>
@@ -103,16 +111,16 @@ export function ScheduleViewer() {
       </Button.Group>
       <Spacer />
       <GroupPicker
-        groups={groups}
-        setGroups={setGroups}
+        groups={queryOptions.groups ?? []}
+        setGroups={(groups) => setQueryOptions({ groups })}
         visible={groupPickerVisible}
         setVisible={setGroupPickerVisible}
       />
       <TutorPicker
-        tutors={tutors}
-        setTutors={setTutors}
-        visible={tutorPickerVisible}
-        setVisible={setTutorPickerVisible}
+        tutors={queryOptions.tutors ?? []}
+        setTutors={(tutors) => setQueryOptions({ tutors })}
+        visible={false}
+        setVisible={setGroupPickerVisible}
       />
       <Settings visible={settingsVisible} setVisible={setSettingsVisible} />
       <Disclaimer />
