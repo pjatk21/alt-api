@@ -9,6 +9,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { SentryModule } from '@ntegral/nestjs-sentry'
 import { APP_FILTER } from '@nestjs/core'
 import { SentryAppExceptionsFilter } from './app.sentry'
+import { LoggerModule } from 'nestjs-pino'
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { SentryAppExceptionsFilter } from './app.sentry'
       tracesSampleRate: 1.0,
       enabled: true,
     }),
+    LoggerModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [
