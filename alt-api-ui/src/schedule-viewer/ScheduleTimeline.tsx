@@ -48,7 +48,7 @@ function getSchedule(
 function describeDayPositively(entries: AltapiScheduleEntry[]) {
   if (entries.length === 0) return 'ten dzień jest wolny od zajęć 😌'
   if (entries.filter((x) => x.type === 'Ćwiczenia').length === 0)
-    return 'dziś można zostać spokojnie w domku 😌'
+    return 'dziś można spokojnie zostać w domku 😌'
   return `na ten dzień są zaplanowane jedynie ✨${entries.length}✨ zajęcia`
 }
 
