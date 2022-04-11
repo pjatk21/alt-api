@@ -6,7 +6,7 @@ import { TutorDatalist } from '../datalists/TutorDatalist'
 
 type TutorPickerProps = {
   tutors: string[]
-  setTutors: (value: React.SetStateAction<string[]>) => void
+  setTutors: (value: string[]) => void
   visible: boolean
   setVisible: (value: React.SetStateAction<boolean>) => void
 }
@@ -19,8 +19,8 @@ function shouldDisableButton(input: string, tutors: string[]) {
 }
 
 export function TutorPicker({
-  tutors: tutors,
-  setTutors: setTutors,
+  tutors,
+  setTutors,
   visible,
   setVisible,
 }: TutorPickerProps) {
