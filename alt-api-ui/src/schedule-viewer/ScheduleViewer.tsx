@@ -89,21 +89,22 @@ export function ScheduleViewer() {
   }
 
   const { choice, groups, tutors } = queryOptions
+  const [preferredChoice, setPreferredChoice] = useLocalStorage(
+    'preferedChoice',
+    choice ?? ModeChoice.UNDEFINED,
+  )
   const [choicePickerVisible, setChoicePickerVisible] = useState(
     (groups ?? []).length === 0 &&
       (tutors ?? []).length === 0 &&
-      choice === ModeChoice.UNDEFINED,
+      preferredChoice === ModeChoice.UNDEFINED,
   )
   const [groupsPickerVisible, setGroupsPickerVisible] = useState(
-    (groups ?? []).length === 0 && choice === ModeChoice.STUDENT,
+    (groups ?? []).length === 0 && preferredChoice === ModeChoice.STUDENT,
   )
   const [tutorsPickerVisible, setTutorsPickerVisible] = useState(
-    (tutors ?? []).length === 0 && choice === ModeChoice.TUTOR,
+    (tutors ?? []).length === 0 && preferredChoice === ModeChoice.TUTOR,
   )
-  const [preferedChoice, setPreferedChoice] = useLocalStorage(
-    'preferedChoice',
-    ModeChoice.UNDEFINED,
-  )
+
   const [settingsVisible, setSettingsVisible] = useState(false)
 
   return (
@@ -136,8 +137,12 @@ export function ScheduleViewer() {
         setVisible={setTutorsPickerVisible}
       />
       <ChoicePicker
-        choice={queryOptions.choice ?? ModeChoice.UNDEFINED}
-        setChoice={(choice) => setQueryOptions({ choice })}
+        choice={preferredChoice ?? ModeChoice.UNDEFINED}
+        setChoice={(choice) => {
+          setQueryOptions({ choice })
+          setGroupsPickerVisible(choice === ModeChoice.STUDENT)
+          setTutorsPickerVisible(choice === ModeChoice.TUTOR)
+        }}
         visible={choicePickerVisible}
         setVisible={setChoicePickerVisible}
       />

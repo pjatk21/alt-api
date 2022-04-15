@@ -1,4 +1,10 @@
-import { faAdd, faBriefcase, faCheck, faSchool, faTrash } from '@fortawesome/free-solid-svg-icons'
+import {
+  faAdd,
+  faBriefcase,
+  faCheck,
+  faSchool,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Input, Modal, Text } from '@nextui-org/react'
 import React, { useState } from 'react'
@@ -16,9 +22,12 @@ type ChoicePickerParams = {
   setVisible: (value: React.SetStateAction<boolean>) => void
 }
 
-export function ChoicePicker({ choice, setChoice, visible, setVisible }: ChoicePickerParams) {
-  const [buttonDisabled, setButtonDisabled] = useState(true)
-
+export function ChoicePicker({
+  choice,
+  setChoice,
+  visible,
+  setVisible,
+}: ChoicePickerParams) {
   const closeHandler = () => {
     setVisible(false)
   }
@@ -28,8 +37,28 @@ export function ChoicePicker({ choice, setChoice, visible, setVisible }: ChoiceP
         <Text>Wybierz tryb</Text>
       </Modal.Header>
       <Modal.Body>
-        <Button auto id={'studentChoice'} onClick={() => { setChoice(ModeChoice.STUDENT); closeHandler() }} icon={<FontAwesomeIcon icon={faSchool} />}>Student</Button>
-        <Button auto id={'tutorChoice'} onClick={() => { setChoice(ModeChoice.TUTOR); closeHandler() }} icon={<FontAwesomeIcon icon={faBriefcase} />}>Pracownik</Button>
+        <Button
+          auto
+          id={'studentChoice'}
+          onClick={() => {
+            setChoice(ModeChoice.STUDENT)
+            closeHandler()
+          }}
+          icon={<FontAwesomeIcon icon={faSchool} />}
+        >
+          Student
+        </Button>
+        <Button
+          auto
+          id={'tutorChoice'}
+          onClick={() => {
+            setChoice(ModeChoice.TUTOR)
+            closeHandler()
+          }}
+          icon={<FontAwesomeIcon icon={faBriefcase} />}
+        >
+          Pracownik
+        </Button>
       </Modal.Body>
     </Modal>
   )
