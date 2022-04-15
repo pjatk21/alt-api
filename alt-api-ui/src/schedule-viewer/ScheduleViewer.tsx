@@ -16,8 +16,10 @@ import { useLocation } from 'react-router-dom'
 import { Disclaimer } from './Disclaimer'
 import { Settings } from './Settings'
 import { TutorPicker } from './TutorPicker'
+import { ChoicePicker, ModeChoice } from './ChoicePicker'
 
 export type AltapiQueryOptions = Partial<{
+  choice: ModeChoice
   groups: string[]
   tutors: string[]
 }>
@@ -86,11 +88,22 @@ export function ScheduleViewer() {
     localStorage.removeItem('groups')
   }
 
-  const { groups, tutors } = queryOptions
-  const [groupPickerVisible, setGroupPickerVisible] = useState(
-    (groups ?? []).length === 0 && (tutors ?? []).length === 0,
+  const { choice, groups, tutors } = queryOptions
+  const [choicePickerVisible, setChoicePickerVisible] = useState(
+    (groups ?? []).length === 0 &&
+      (tutors ?? []).length === 0 &&
+      choice === ModeChoice.UNDEFINED,
   )
-  const [preferTutor, setPreferTutor] = useLocalStorage('preferTutor', false)
+  const [groupsPickerVisible, setGroupsPickerVisible] = useState(
+    (groups ?? []).length === 0 && choice === ModeChoice.STUDENT,
+  )
+  const [tutorsPickerVisible, setTutorsPickerVisible] = useState(
+    (tutors ?? []).length === 0 && choice === ModeChoice.TUTOR,
+  )
+  const [preferedChoice, setPreferedChoice] = useLocalStorage(
+    'preferedChoice',
+    ModeChoice.UNDEFINED,
+  )
   const [settingsVisible, setSettingsVisible] = useState(false)
 
   return (
@@ -100,8 +113,8 @@ export function ScheduleViewer() {
       <ScheduleTimeline date={activeDate} groups={groups ?? []} />
       <Spacer />
       <Button.Group bordered>
-        <Button auto onClick={() => setGroupPickerVisible(true)}>
-          Zmień grupy
+        <Button auto onClick={() => setChoicePickerVisible(true)}>
+          Zmień grupy / prowadzącego
         </Button>
         <Button
           auto
@@ -113,14 +126,20 @@ export function ScheduleViewer() {
       <GroupPicker
         groups={queryOptions.groups ?? []}
         setGroups={(groups) => setQueryOptions({ groups })}
-        visible={groupPickerVisible}
-        setVisible={setGroupPickerVisible}
+        visible={groupsPickerVisible}
+        setVisible={setGroupsPickerVisible}
       />
       <TutorPicker
         tutors={queryOptions.tutors ?? []}
         setTutors={(tutors) => setQueryOptions({ tutors })}
-        visible={false}
-        setVisible={setGroupPickerVisible}
+        visible={tutorsPickerVisible}
+        setVisible={setTutorsPickerVisible}
+      />
+      <ChoicePicker
+        choice={queryOptions.choice ?? ModeChoice.UNDEFINED}
+        setChoice={(choice) => setQueryOptions({ choice })}
+        visible={choicePickerVisible}
+        setVisible={setChoicePickerVisible}
       />
       <Settings visible={settingsVisible} setVisible={setSettingsVisible} />
       <Disclaimer />
