@@ -9,10 +9,13 @@ import { useInterval, useReadLocalStorage } from 'usehooks-ts'
 import styles from './ScheduleTimeline.module.sass'
 import { baseUrl } from '../util'
 import type { SettingsOptions } from './Settings'
+import { ModeChoice } from './ChoicePicker'
+import { ScheduleBlockTutor } from './ScheduleBlockTutor'
 
 type ScheduleTimelineProps = {
   date: DateTime
-  groups: string[]
+  queryData: string[]
+  choice: ModeChoice
 }
 
 function timepointerOffset() {
@@ -23,12 +26,14 @@ function timepointerOffset() {
 
 function getSchedule(
   date: DateTime,
-  groups: string[],
+  queryData: string[],
+  choice: ModeChoice,
 ): Promise<{ entries: ScheduleEntryRawResponse[] }> {
-  if (groups.length === 0) return Promise.resolve({ entries: [] })
+  if (queryData.length === 0) return Promise.resolve({ entries: [] })
 
   const params = new URLSearchParams()
-  for (const g of groups) params.append('groups', g)
+  const mode = choice === ModeChoice.TUTOR ? 'tutors' : 'groups'
+  for (const q of queryData) params.append(mode, q)
 
   params.append('from', date.startOf('day').toISO())
   params.append('to', date.endOf('day').toISO())
@@ -61,7 +66,7 @@ function describeDay(entries: ScheduleEntryRawResponse[]) {
   })} trwające łącznie ${duration.toHuman()}`
 }
 
-export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
+export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelineProps) {
   const settings = useReadLocalStorage<SettingsOptions>('settings')
   const [timePointer, setTimePoiner] = useState(timepointerOffset())
   useInterval(() => setTimePoiner(timepointerOffset()), 5000)
@@ -71,13 +76,13 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
     { entries: ScheduleEntryRawResponse[] },
     Error,
     ScheduleEntryRawResponse[]
-  >(['schedule', date, groups], () => getSchedule(date, groups), {
+  >(['schedule', date, queryData, choice], () => getSchedule(date, queryData, choice), {
     select: (x) => x.entries,
   })
 
   // preload next day
-  useQuery(['schedule', date.plus({ day: 1 }), groups], () =>
-    getSchedule(date.plus({ day: 1 }), groups),
+  useQuery(['schedule', date.plus({ day: 1 }), queryData, choice], () =>
+    getSchedule(date.plus({ day: 1 }), queryData, choice),
   )
 
   if (isLoading)
@@ -122,9 +127,13 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
           })}
         </div>
         <div className={styles.content}>
-          {data?.map((x, y) => (
-            <ScheduleBlock key={y} data={x} />
-          ))}
+          {data?.map((x, y) =>
+            choice === ModeChoice.TUTOR ? (
+              <ScheduleBlockTutor key={y} data={x} />
+            ) : (
+              <ScheduleBlock key={y} data={x} />
+            ),
+          )}
         </div>
         {DateTime.now().startOf('day').plus({ hours: 6 }) < date &&
           DateTime.now().startOf('day').plus({ hours: 21 }) > date && (
