@@ -10,7 +10,6 @@ import { baseUrl } from '../util'
 import type { SettingsOptions } from './Settings'
 import { AltapiScheduleEntry } from '../altapi'
 import { plainToInstance } from 'class-transformer'
-import { ScheduleEntryRawResponse } from '../types'
 import { ModeChoice } from './ChoicePicker'
 import { ScheduleBlockTutor } from './ScheduleBlockTutor'
 
