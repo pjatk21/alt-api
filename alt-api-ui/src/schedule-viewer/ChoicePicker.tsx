@@ -1,13 +1,7 @@
-import {
-  faAdd,
-  faBriefcase,
-  faCheck,
-  faSchool,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons'
+import { faBriefcase, faSchool } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Input, Modal, Text } from '@nextui-org/react'
-import React, { useState } from 'react'
+import { Button, Modal, Text } from '@nextui-org/react'
+import React from 'react'
 
 export enum ModeChoice {
   STUDENT,
@@ -32,7 +26,13 @@ export function ChoicePicker({
     setVisible(false)
   }
   return (
-    <Modal closeButton={true} blur preventClose open={visible} onClose={closeHandler}>
+    <Modal
+      closeButton={choice !== undefined && choice !== ModeChoice.UNDEFINED}
+      blur
+      preventClose
+      open={visible}
+      onClose={closeHandler}
+    >
       <Modal.Header>
         <Text>Wybierz tryb</Text>
       </Modal.Header>
