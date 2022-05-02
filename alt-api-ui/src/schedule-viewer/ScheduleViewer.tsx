@@ -68,23 +68,24 @@ export function ScheduleViewer() {
   const navi = useNavigate()
 
   const activeDate = dateRaw ? DateTime.fromISO(dateRaw) : DateTime.now()
-  if (!dateRaw && activeDate.isValid)
+  if (!dateRaw || !activeDate.isValid)
     navi({
       pathname: '/app/',
       search: createSearchParams({
-        date: activeDate.toISODate(),
+        date: DateTime.now().toISODate(),
       }).toString(),
     })
-  if (dateRaw) if (!DateTime.fromISO(dateRaw).isValid) navi('/app/')
 
   return (
     <Container xs>
       <Text h2>Plan zajęć</Text>
       <DateNavigator date={activeDate} />
-      <Text style={{ textAlign: 'center' }}>
-        {activeDate.toLocaleString({ weekday: 'long' })},{' '}
-        {activeDate.diff(DateTime.now().startOf('day')).shiftTo('days').toHuman()} od dziś
-      </Text>
+      {activeDate.isValid && (
+        <Text style={{ textAlign: 'center' }}>
+          {activeDate.toLocaleString({ weekday: 'long' })},{' '}
+          {activeDate.diff(DateTime.now().startOf('day')).shiftTo('days').toHuman()} od dziś
+        </Text>
+      )}
       <ScheduleTimeline date={activeDate} groups={groups} />
       <Spacer />
       <Button.Group bordered>
