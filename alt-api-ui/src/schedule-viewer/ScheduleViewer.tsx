@@ -12,7 +12,7 @@ import {
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
 import { GroupPicker } from './GroupPicker'
-import { useNavigate, useParams } from 'react-router-dom'
+import { createSearchParams, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Disclaimer } from './Disclaimer'
 import { Settings } from './Settings'
 import { Link } from 'react-router-dom'
@@ -36,7 +36,7 @@ export function DateNavigator({ date }: DateNavigatorProps) {
   return (
     <Grid.Container gap={1} justify={'center'}>
       <Grid>
-        <Link to={'/app/' + date.minus({ day: 1 }).toISODate()}>
+        <Link to={'/app/?date=' + date.minus({ day: 1 }).toISODate()}>
           <DateNaviButton icon={faArrowLeft} />
         </Link>
       </Grid>
@@ -44,12 +44,12 @@ export function DateNavigator({ date }: DateNavigatorProps) {
         <Input
           bordered
           type={'date'}
-          onChange={(e) => navi('/app/' + e.target.value)}
+          onChange={(e) => navi('/app/?date=' + e.target.value)}
           value={date.toISODate()}
         />
       </Grid>
       <Grid>
-        <Link to={'/app/' + date.plus({ day: 1 }).toISODate()}>
+        <Link to={'/app/?date=' + date.plus({ day: 1 }).toISODate()}>
           <DateNaviButton icon={faArrowRight} />
         </Link>
       </Grid>
@@ -58,11 +58,18 @@ export function DateNavigator({ date }: DateNavigatorProps) {
 }
 
 export function ScheduleViewer() {
-  const params = useParams()
+  const [params] = useSearchParams()
+  const dateRaw = params.get('date')
   const navi = useNavigate()
-  const activeDate = params.date ? DateTime.fromISO(params.date) : DateTime.now()
-  if (!params.date && activeDate.isValid) navi('/app/' + activeDate.toISODate())
-  if (params.date) if (!DateTime.fromISO(params.date).isValid) navi('/app/')
+  const activeDate = dateRaw ? DateTime.fromISO(dateRaw) : DateTime.now()
+  if (!dateRaw && activeDate.isValid)
+    navi({
+      pathname: '/app/',
+      search: createSearchParams({
+        date: activeDate.toISODate(),
+      }).toString(),
+    })
+  if (dateRaw) if (!DateTime.fromISO(dateRaw).isValid) navi('/app/')
   console.log(params)
 
   const [groups, setGroups] = useLocalStorage<string[]>('groups', [])
