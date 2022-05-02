@@ -50,10 +50,11 @@ function ScrapperStatusCard(props: { scrapper: ScrapperLike }) {
           </Text>
         </Text>
         <Text>
-          Ostatnia aktualizacja stanu: <br />{' '}
-          {DateTime.fromISO(scrapper.lastUpdated).toISO()}
+          Ostatnia aktualizacja stanu: <br /> {DateTime.fromISO(scrapper.lastUpdated).toISO()}
         </Text>
-        <Button color={color} bordered onClick={() => setHistoryVisible(true)}>Historia statusów</Button>
+        <Button color={color} bordered onClick={() => setHistoryVisible(true)}>
+          Historia statusów
+        </Button>
       </Card>
 
       <ModalStateHistory

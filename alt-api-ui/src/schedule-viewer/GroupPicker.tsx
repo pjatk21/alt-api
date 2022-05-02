@@ -18,12 +18,7 @@ function shouldDisableButton(input: string, groups: string[]) {
   return false
 }
 
-export function GroupPicker({
-  groups,
-  setGroups,
-  visible,
-  setVisible,
-}: GroupPickerProps) {
+export function GroupPicker({ groups, setGroups, visible, setVisible }: GroupPickerProps) {
   const [buttonDisabled, setButtonDisabled] = useState(true)
 
   const closeHandler = () => {
@@ -63,9 +58,7 @@ export function GroupPicker({
           onChange={({ target }) =>
             setButtonDisabled(shouldDisableButton(target.value, groups))
           }
-          onFocus={({ target }) =>
-            setButtonDisabled(shouldDisableButton(target.value, groups))
-          }
+          onFocus={({ target }) => setButtonDisabled(shouldDisableButton(target.value, groups))}
         />
         <Button
           // bordered

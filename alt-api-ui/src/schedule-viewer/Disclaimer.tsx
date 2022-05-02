@@ -17,9 +17,7 @@ export function Disclaimer() {
         </Text>
       </Modal.Header>
       <Modal.Body>
-        <p style={{ whiteSpace: 'pre-line', fontFamily: 'JetBrains Mono' }}>
-          {disclaimer}
-        </p>
+        <p style={{ whiteSpace: 'pre-line', fontFamily: 'JetBrains Mono' }}>{disclaimer}</p>
       </Modal.Body>
       <Modal.Footer>
         {allowAccept ? (

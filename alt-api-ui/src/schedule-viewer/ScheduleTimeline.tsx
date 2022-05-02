@@ -118,9 +118,7 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
             return (
               <div key={y} className={styles.line}>
                 <div>
-                  <span>
-                    {h.toLocaleString({ timeStyle: 'short', hourCycle: 'h24' })}
-                  </span>
+                  <span>{h.toLocaleString({ timeStyle: 'short', hourCycle: 'h24' })}</span>
                 </div>
                 <hr />
               </div>

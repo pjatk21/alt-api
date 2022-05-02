@@ -30,11 +30,7 @@ const getStateHistory = (uuid: string) =>
     { newState: string; createdAt: string }[]
   >
 
-export function ModalStateHistory({
-  scrapper,
-  visible,
-  setVisible,
-}: ModalStateHistoryProps) {
+export function ModalStateHistory({ scrapper, visible, setVisible }: ModalStateHistoryProps) {
   const { isLoading, data, error } = useQuery(['history', scrapper.uuid], () =>
     getStateHistory(scrapper.uuid),
   )

@@ -13,8 +13,7 @@ type LastUpdateLike = {
   }
 }
 
-const getLastUpdate: () => Promise<LastUpdateLike> = () =>
-  ky.get(`${baseUrl}lastUpdate`).json()
+const getLastUpdate: () => Promise<LastUpdateLike> = () => ky.get(`${baseUrl}lastUpdate`).json()
 
 export function LastUpdate() {
   const { data, error, isLoading } = useQuery(`${baseUrl}lastUpdate`, getLastUpdate)

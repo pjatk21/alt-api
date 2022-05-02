@@ -72,9 +72,7 @@ export function ScheduleBlock({ data }: ScheduleBlockProps) {
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Link
-            href={`https://www.google.com/maps/dir/?api=1&destination=${location.where}`}
-          >
+          <Link href={`https://www.google.com/maps/dir/?api=1&destination=${location.where}`}>
             <Button auto icon={<FontAwesomeIcon icon={faRoute} />}>
               Nawiguj
             </Button>
