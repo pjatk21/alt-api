@@ -102,7 +102,6 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
       </div>
     )
 
-  console.log(settings?.olaMode)
   return (
     <>
       {data && (

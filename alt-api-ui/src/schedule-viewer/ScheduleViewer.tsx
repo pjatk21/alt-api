@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Button, Container, Grid, Input, Spacer, Text } from '@nextui-org/react'
 import { ScheduleTimeline } from './ScheduleTimeline'
 import { DateTime } from 'luxon'
@@ -12,7 +12,7 @@ import {
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
 import { GroupPicker } from './GroupPicker'
-import { createSearchParams, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { Disclaimer } from './Disclaimer'
 import { Settings } from './Settings'
 import { Link } from 'react-router-dom'
@@ -70,7 +70,6 @@ export function ScheduleViewer() {
       }).toString(),
     })
   if (dateRaw) if (!DateTime.fromISO(dateRaw).isValid) navi('/app/')
-  console.log(params)
 
   const [groups, setGroups] = useLocalStorage<string[]>('groups', [])
   const [groupPickerVisible, setGroupPickerVisible] = useState(groups.length === 0)
@@ -81,7 +80,8 @@ export function ScheduleViewer() {
       <Text h2>Plan zajęć</Text>
       <DateNavigator date={activeDate} />
       <Text style={{ textAlign: 'center' }}>
-        {activeDate.toLocaleString({ weekday: 'long' })}, {activeDate.diff(DateTime.now().startOf('day')).shiftTo('days').toHuman()} od dziś
+        {activeDate.toLocaleString({ weekday: 'long' })},{' '}
+        {activeDate.diff(DateTime.now().startOf('day')).shiftTo('days').toHuman()} od dziś
       </Text>
       <ScheduleTimeline date={activeDate} groups={groups} />
       <Spacer />
