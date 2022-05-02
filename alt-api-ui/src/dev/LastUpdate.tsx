@@ -1,4 +1,3 @@
-import React from 'react'
 import { Loading, Text } from '@nextui-org/react'
 import { useQuery } from 'react-query'
 import { DateTime } from 'luxon'

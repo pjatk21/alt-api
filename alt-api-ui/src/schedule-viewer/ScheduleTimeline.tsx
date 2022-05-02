@@ -1,7 +1,7 @@
 import { Loading, Spacer, Text } from '@nextui-org/react'
 import ky from 'ky'
 import { DateTime } from 'luxon'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { ScheduleBlock } from './ScheduleBlock'
 import { useInterval, useReadLocalStorage } from 'usehooks-ts'

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import styles from './ScheduleBlock.module.sass'
 import { colors } from './colors.json'
 import { Button, Modal, Text, Link } from '@nextui-org/react'

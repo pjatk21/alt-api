@@ -1,5 +1,5 @@
 import { Button, Loading, Modal, Text } from '@nextui-org/react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useLocalStorage, useTimeout } from 'usehooks-ts'
 import disclaimer from './disclaimer.txt?raw'
 

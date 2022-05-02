@@ -1,6 +1,6 @@
 import { Button, Card, Grid, Loading, Text, Tooltip } from '@nextui-org/react'
 import { DateTime } from 'luxon'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import ky, { HTTPError } from 'ky'
 import { useQuery } from 'react-query'
 import { baseUrl } from '../util'

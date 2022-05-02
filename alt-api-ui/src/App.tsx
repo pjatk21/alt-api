@@ -1,4 +1,3 @@
-import React from 'react'
 import { createTheme, NextUIProvider } from '@nextui-org/react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { NotFound } from './NotFound'

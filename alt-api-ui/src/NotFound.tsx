@@ -1,4 +1,3 @@
-import React from 'react'
 import { Button, Container, Link, NextUIProvider, Text } from '@nextui-org/react'
 import { Link as RouterLink } from 'react-router-dom'
 
