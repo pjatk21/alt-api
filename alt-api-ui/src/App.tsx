@@ -20,11 +20,10 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<AppHome />} />
-            <Route path="scrappers/" element={<Scrappers />} />
-            <Route path="app/" element={<ScheduleViewer />} />
-            <Route path="app/:date/" element={<ScheduleViewer />} />
-            <Route path="dev/" element={<DevPage />} />
-            <Route path="*" element={<NotFound />} />
+            <Route path="/scrappers/" element={<Scrappers />} />
+            <Route path="/app/" element={<ScheduleViewer />} />
+            <Route path="/dev/" element={<DevPage />} />
+            <Route path="/*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </NextUIProvider>
