@@ -23,7 +23,8 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "prettier/prettier": "warn"
+        "prettier/prettier": "warn",
+        "no-console": "warn"
     },
     "settings": {
       "react": {
