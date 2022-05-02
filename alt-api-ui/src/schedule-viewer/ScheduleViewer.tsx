@@ -81,7 +81,7 @@ export function ScheduleViewer() {
       <Text h2>Plan zajęć</Text>
       <DateNavigator date={activeDate} />
       <Text style={{ textAlign: 'center' }}>
-        {activeDate.toLocaleString({ weekday: 'long' })}
+        {activeDate.toLocaleString({ weekday: 'long' })}, {activeDate.diff(DateTime.now().startOf('day')).shiftTo('days').toHuman()} od dziś
       </Text>
       <ScheduleTimeline date={activeDate} groups={groups} />
       <Spacer />
