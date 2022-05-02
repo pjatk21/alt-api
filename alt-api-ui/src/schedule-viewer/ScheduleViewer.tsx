@@ -58,9 +58,15 @@ export function DateNavigator({ date }: DateNavigatorProps) {
 }
 
 export function ScheduleViewer() {
+  const [groups, setGroups] = useLocalStorage<string[]>('groups', [])
+  const [groupPickerVisible, setGroupPickerVisible] = useState(groups.length === 0)
+  const [settingsVisible, setSettingsVisible] = useState(false)
+
   const [params] = useSearchParams()
   const dateRaw = params.get('date')
+
   const navi = useNavigate()
+
   const activeDate = dateRaw ? DateTime.fromISO(dateRaw) : DateTime.now()
   if (!dateRaw && activeDate.isValid)
     navi({
@@ -70,10 +76,6 @@ export function ScheduleViewer() {
       }).toString(),
     })
   if (dateRaw) if (!DateTime.fromISO(dateRaw).isValid) navi('/app/')
-
-  const [groups, setGroups] = useLocalStorage<string[]>('groups', [])
-  const [groupPickerVisible, setGroupPickerVisible] = useState(groups.length === 0)
-  const [settingsVisible, setSettingsVisible] = useState(false)
 
   return (
     <Container xs>
