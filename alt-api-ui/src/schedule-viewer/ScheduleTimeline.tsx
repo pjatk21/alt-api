@@ -68,6 +68,9 @@ function describeDay(entries: AltapiScheduleEntry[]) {
 }
 
 export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
+  const { hour, minute, second } = DateTime.now().toObject()
+  const mockedTime = DateTime.fromObject({ ...date.toObject(), hour, minute, second })
+
   const settings = useReadLocalStorage<SettingsOptions>('settings')
   const [timePointer, setTimePoiner] = useState(timepointerOffset())
   useInterval(() => setTimePoiner(timepointerOffset()), 5000)
@@ -129,8 +132,8 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
             <ScheduleBlock key={y} data={x} />
           ))}
         </div>
-        {DateTime.now().startOf('day').plus({ hours: 6 }) < date &&
-          DateTime.now().startOf('day').plus({ hours: 21 }) > date && (
+        {DateTime.now().startOf('day').plus({ hours: 6 }) < mockedTime &&
+          DateTime.now().startOf('day').plus({ hours: 21 }) > mockedTime && (
             <div className={styles.timePointer}>
               <hr style={{ top: timePointer * 55 + 1 }} />
             </div>
