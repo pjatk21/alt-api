@@ -1,4 +1,4 @@
-import { Loading, Spacer, Text } from '@nextui-org/react'
+import { Loading, Spacer, Text, Card, Code } from '@nextui-org/react'
 import ky from 'ky'
 import { DateTime } from 'luxon'
 import { useState } from 'react'
@@ -91,18 +91,19 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
 
   if (isLoading)
     return (
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Loading>Pobieranie planu zajęć</Loading>
-      </div>
+      <Card>
+        <Loading color={'primary'} textColor={'primary'}>
+          Pobieranie planu zajęć
+        </Loading>
+      </Card>
     )
 
   if (error)
     return (
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Text color={'error'}>
-          {error.name} - {error.message}
-        </Text>
-      </div>
+      <Card color={'error'}>
+        ⚠️ {error.name} - {error.message}
+        <Code>{error.stack}</Code>
+      </Card>
     )
 
   return (
