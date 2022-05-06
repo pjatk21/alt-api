@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Button, Container, Grid, Input, Spacer, Text } from '@nextui-org/react'
 import { ScheduleTimeline } from './ScheduleTimeline'
 import { DateTime } from 'luxon'
@@ -12,7 +12,7 @@ import {
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
 import { GroupPicker } from './GroupPicker'
-import { useLocation } from 'react-router-dom'
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { Disclaimer } from './Disclaimer'
 import { Settings } from './Settings'
 import { TutorPicker } from './TutorPicker'
@@ -22,52 +22,46 @@ export type AltapiQueryOptions = Partial<{
   groups: string[]
   tutors: string[]
 }>
+import { Link } from 'react-router-dom'
 
 type DateNaviButtonProps = {
   icon: IconDefinition
-  onClick?: () => void
 }
 
-function DateNaviButton({ icon, onClick }: DateNaviButtonProps) {
-  return <Button bordered auto onClick={onClick} icon={<FontAwesomeIcon icon={icon} />} />
+function DateNaviButton({ icon }: DateNaviButtonProps) {
+  return <Button bordered auto icon={<FontAwesomeIcon icon={icon} />} />
 }
 
 type DateNavigatorProps = {
   date: DateTime
-  setDate: React.Dispatch<React.SetStateAction<DateTime>>
+  // setDate: React.Dispatch<React.SetStateAction<DateTime>>
 }
 
-export function DateNavigator({ date, setDate }: DateNavigatorProps) {
+export function DateNavigator({ date }: DateNavigatorProps) {
+  const navi = useNavigate()
+
   return (
     <Grid.Container gap={1} justify={'center'}>
       <Grid>
-        <DateNaviButton
-          onClick={() => setDate(date.minus({ day: 1 }))}
-          icon={faArrowLeft}
-        />
+        <Link to={'/app/?date=' + date.minus({ day: 1 }).toISODate()}>
+          <DateNaviButton icon={faArrowLeft} />
+        </Link>
       </Grid>
       <Grid>
         <Input
           bordered
           type={'date'}
-          onChange={(e) => setDate(DateTime.fromISO(e.target.value))}
+          onChange={(e) => navi('/app/?date=' + e.target.value)}
           value={date.toISODate()}
         />
       </Grid>
       <Grid>
-        <DateNaviButton
-          onClick={() => setDate(date.plus({ day: 1 }))}
-          icon={faArrowRight}
-        />
+        <Link to={'/app/?date=' + date.plus({ day: 1 }).toISODate()}>
+          <DateNaviButton icon={faArrowRight} />
+        </Link>
       </Grid>
     </Grid.Container>
   )
-}
-
-function useQueryArgs() {
-  const { search } = useLocation()
-
-  return React.useMemo(() => new URLSearchParams(search), [search])
 }
 
 export function ScheduleViewer() {
@@ -105,15 +99,31 @@ export function ScheduleViewer() {
 
   const [settingsVisible, setSettingsVisible] = useState(false)
 
+  const [params] = useSearchParams()
+  const dateRaw = params.get('date')
+
+  const navi = useNavigate()
+
+  const activeDate = dateRaw ? DateTime.fromISO(dateRaw) : DateTime.now()
+  if (!dateRaw || !activeDate.isValid)
+    navi({
+      pathname: '/app/',
+      search: createSearchParams({
+        date: DateTime.now().toISODate(),
+      }).toString(),
+    })
+
   return (
     <Container xs>
       <Text h2>Plan zajęć</Text>
-      <DateNavigator date={activeDate} setDate={setActiveDate} />
-      <ScheduleTimeline
-        date={activeDate}
-        queryData={groups ?? tutors ?? []}
-        choice={choice ?? ModeChoice.UNDEFINED}
-      />
+      <DateNavigator date={activeDate} />
+      {activeDate.isValid && (
+        <Text style={{ textAlign: 'center' }}>
+          {activeDate.toLocaleString({ weekday: 'long' })},{' '}
+          {activeDate.diff(DateTime.now().startOf('day')).shiftTo('days').toHuman()} od dziś
+        </Text>
+      )}
+      <ScheduleTimeline date={activeDate} groups={groups} />
       <Spacer />
       <Button.Group bordered>
         <Button auto onClick={() => setChoicePickerVisible(true)}>

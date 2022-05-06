@@ -14,17 +14,10 @@ import { DispositorService } from './dispositor/dispositor.service'
   imports: [
     EventEmitterModule.forRoot(),
     MongooseModule.forFeature([{ name: ScrapperVisa.name, schema: ScrapperVisaSchema }]),
-    MongooseModule.forFeature([
-      { name: ScrapperState.name, schema: ScrapperStateSchema },
-    ]),
+    MongooseModule.forFeature([{ name: ScrapperState.name, schema: ScrapperStateSchema }]),
     PublicTimetableModule,
   ],
-  providers: [
-    HypervisorGateway,
-    HypervisorService,
-    PublicTimetableService,
-    DispositorService,
-  ],
+  providers: [HypervisorGateway, HypervisorService, PublicTimetableService, DispositorService],
   controllers: [HypervisorController],
 })
 export class HypervisorModule {}
