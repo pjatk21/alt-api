@@ -11,7 +11,6 @@ import 'dotenv/config'
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
-    logger: process.env.NODE_ENV === 'production' ? ['error', 'warn', 'log'] : undefined,
   })
 
   // Enable versioning
