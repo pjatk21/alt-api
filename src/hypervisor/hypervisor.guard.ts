@@ -9,7 +9,9 @@ export class HypervisorGuard implements CanActivate {
 
   constructor(private readonly hypervisor: HypervisorService) {}
 
-  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
     const message = context.switchToWs()
     const client = message.getClient() as Socket
 

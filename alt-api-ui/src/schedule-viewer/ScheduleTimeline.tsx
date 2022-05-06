@@ -1,7 +1,7 @@
-import { Loading, Spacer, Text, Card, Code } from '@nextui-org/react'
+import { Loading, Spacer, Text } from '@nextui-org/react'
 import ky from 'ky'
 import { DateTime } from 'luxon'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useQuery } from 'react-query'
 import { ScheduleBlock } from './ScheduleBlock'
 import { useInterval, useReadLocalStorage } from 'usehooks-ts'
@@ -73,9 +73,6 @@ function describeDay(entries: AltapiScheduleEntry[]) {
 }
 
 export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelineProps) {
-  const { hour, minute, second } = DateTime.now().toObject()
-  const mockedTime = DateTime.fromObject({ ...date.toObject(), hour, minute, second })
-
   const settings = useReadLocalStorage<SettingsOptions>('settings')
   const [timePointer, setTimePoiner] = useState(timepointerOffset())
   useInterval(() => setTimePoiner(timepointerOffset()), 5000)
@@ -96,21 +93,21 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
 
   if (isLoading)
     return (
-      <Card>
-        <Loading color={'primary'} textColor={'primary'}>
-          Pobieranie planu zajęć
-        </Loading>
-      </Card>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Loading>Pobieranie planu zajęć</Loading>
+      </div>
     )
 
   if (error)
     return (
-      <Card color={'error'}>
-        {'🧰'} {error.name} - {error.message}
-        <Code>{error.stack}</Code>
-      </Card>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Text color={'error'}>
+          {error.name} - {error.message}
+        </Text>
+      </div>
     )
 
+  console.log(settings?.olaMode)
   return (
     <>
       {data && (
@@ -126,7 +123,9 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
             return (
               <div key={y} className={styles.line}>
                 <div>
-                  <span>{h.toLocaleString({ timeStyle: 'short', hourCycle: 'h24' })}</span>
+                  <span>
+                    {h.toLocaleString({ timeStyle: 'short', hourCycle: 'h24' })}
+                  </span>
                 </div>
                 <hr />
               </div>
@@ -142,8 +141,8 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
             ),
           )}
         </div>
-        {DateTime.now().startOf('day').plus({ hours: 6 }) < mockedTime &&
-          DateTime.now().startOf('day').plus({ hours: 21 }) > mockedTime && (
+        {DateTime.now().startOf('day').plus({ hours: 6 }) < date &&
+          DateTime.now().startOf('day').plus({ hours: 21 }) > date && (
             <div className={styles.timePointer}>
               <hr style={{ top: timePointer * 55 + 1 }} />
             </div>

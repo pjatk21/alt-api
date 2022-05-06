@@ -1,4 +1,5 @@
 import { Card, Container, Text } from '@nextui-org/react'
+import React from 'react'
 import { LastUpdate } from './LastUpdate'
 import { Scrappers } from '../scrappers/Scrappers'
 

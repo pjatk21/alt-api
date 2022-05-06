@@ -1,3 +1,4 @@
+import React from 'react'
 import { Loading, Text } from '@nextui-org/react'
 import { useQuery } from 'react-query'
 import { DateTime } from 'luxon'
@@ -13,7 +14,8 @@ type LastUpdateLike = {
   }
 }
 
-const getLastUpdate: () => Promise<LastUpdateLike> = () => ky.get(`${baseUrl}lastUpdate`).json()
+const getLastUpdate: () => Promise<LastUpdateLike> = () =>
+  ky.get(`${baseUrl}lastUpdate`).json()
 
 export function LastUpdate() {
   const { data, error, isLoading } = useQuery(`${baseUrl}lastUpdate`, getLastUpdate)

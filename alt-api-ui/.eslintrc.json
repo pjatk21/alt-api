@@ -6,7 +6,7 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:react/jsx-runtime",
+        "plugin:react/recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:prettier/recommended"
     ],
@@ -23,12 +23,6 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "prettier/prettier": "warn",
-        "no-console": "warn"
-    },
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
+        "prettier/prettier": "warn"
     }
 }

@@ -50,7 +50,9 @@ export class HypervisorGateway
   }
 
   handleConnection(client: Socket, ...args: any[]) {
-    this.logger.log(`Scrapper on socket ${client.id} connected! Args (${args.length}): ${args}`)
+    this.logger.log(
+      `Scrapper on socket ${client.id} connected! Args (${args.length}): ${args}`,
+    )
   }
 
   async handleDisconnect(client: Socket) {
@@ -77,7 +79,9 @@ export class HypervisorGateway
         .map((p) => p.uuid)
         .includes(passport.uuid)
     ) {
-      this.logger.warn(`Scrapper ${passport.name} already connected! Disconnecting socket!`)
+      this.logger.warn(
+        `Scrapper ${passport.name} already connected! Disconnecting socket!`,
+      )
       client.disconnect()
     }
 

@@ -9,7 +9,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           react: ['react', 'react-dom', 'react-query', 'react-router-dom', 'usehooks-ts'],
-          libs: ['lodash', 'ky', 'luxon'],
+          essentials: ['lodash', 'ky', 'luxon', 'class-transformer', 'reflect-metadata'],
           nextui: ['@nextui-org/react'],
           fontawesome: [
             '@fortawesome/fontawesome-svg-core',

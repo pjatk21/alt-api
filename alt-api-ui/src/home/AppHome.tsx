@@ -1,5 +1,8 @@
+import React from 'react'
 import { Button, Card, Col, Container, Link, Spacer, Text } from '@nextui-org/react'
 import { CalendarAdd } from '../calendar/CalendarAdd'
+import { Scrappers } from '../scrappers/Scrappers'
+import { LastUpdate } from '../dev/LastUpdate'
 import { UsefulLinks } from './UsefulLinks'
 import { Link as RRDLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

@@ -65,9 +65,15 @@ export class PublicTimetableController {
   @ApiOkResponse({ type: ScheduleResponseDto })
   async byDate(
     @Param('date', new ParseDateYmdPipe()) date: DateTime,
-    @Query('groups', new ParseArrayPipe({ items: String, separator: ',', optional: true }))
+    @Query(
+      'groups',
+      new ParseArrayPipe({ items: String, separator: ',', optional: true }),
+    )
     groups?: string[],
-    @Query('tutors', new ParseArrayPipe({ items: String, separator: ',', optional: true }))
+    @Query(
+      'tutors',
+      new ParseArrayPipe({ items: String, separator: ',', optional: true }),
+    )
     tutors?: string[],
   ) {
     const entries = await this.timetableService.timetableForDay(date, { groups, tutors })
@@ -110,9 +116,15 @@ export class PublicTimetableController {
   async byRange(
     @Query('from', new ParseDateIsoPipe()) from: DateTime,
     @Query('to', new ParseDateIsoPipe()) to: DateTime,
-    @Query('groups', new ParseArrayPipe({ items: String, separator: ',', optional: true }))
+    @Query(
+      'groups',
+      new ParseArrayPipe({ items: String, separator: ',', optional: true }),
+    )
     groups?: string[],
-    @Query('tutors', new ParseArrayPipe({ items: String, separator: ',', optional: true }))
+    @Query(
+      'tutors',
+      new ParseArrayPipe({ items: String, separator: ',', optional: true }),
+    )
     tutors?: string[],
   ) {
     const entries = await this.timetableService.timetableForDateRange(
@@ -245,7 +257,10 @@ export class PublicTimetableController {
   })
   @ApiResponse({ type: CurrentScheduleEntryResponseDto })
   async getCurrentLesson(
-    @Query('groups', new ParseArrayPipe({ items: String, separator: ',', optional: true }))
+    @Query(
+      'groups',
+      new ParseArrayPipe({ items: String, separator: ',', optional: true }),
+    )
     groups?: string[],
     @Query('tutor') tutor?: string,
   ): Promise<CurrentScheduleEntryResponseDto> {

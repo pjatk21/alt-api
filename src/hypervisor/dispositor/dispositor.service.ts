@@ -88,8 +88,8 @@ export class DispositorService {
 
   /**
    * Handle case where scrapper disconnects while awaiting/doing task.
-   * @param client
-   * @param server
+   * @param client 
+   * @param server 
    */
   public async cleanupOnDisconnect(client: Socket, server: Server) {
     if (this.activeTasks.has(client.id)) {
@@ -113,8 +113,8 @@ export class DispositorService {
 
   /**
    * Get time to run next task.
-   * @param task
-   * @returns
+   * @param task 
+   * @returns 
    */
   private getRunIn(task: TaskDisposition) {
     if (this.taskLastRun.has(task.name))
@@ -123,7 +123,7 @@ export class DispositorService {
 
   /**
    * Dispatches new task depending on priority and avaliablity
-   * @returns
+   * @returns 
    */
   private getNextTask(): [TaskDisposition | null, number | null] {
     const tasksAvailable = tasks
@@ -153,8 +153,8 @@ export class DispositorService {
 
   /**
    * Gets dispatched task, and assings this task to scrapper.
-   * @param client
-   * @returns
+   * @param client 
+   * @returns 
    */
   public async assignTask(client: Socket) {
     const [task, startIn] = this.getNextTask()
@@ -169,7 +169,9 @@ export class DispositorService {
       this.logger.log(
         `Delay ${d
           .shiftTo('hours', 'minutes', 'seconds')
-          .toHuman({ listStyle: 'short' })} for task "${task.name}", disposed to ${client.id}`,
+          .toHuman({ listStyle: 'short' })} for task "${task.name}", disposed to ${
+          client.id
+        }`,
       )
       await this.hypervisor.updateState(client.id, HypervisorScrapperState.AWAITING)
     }
@@ -184,8 +186,8 @@ export class DispositorService {
   /**
    * After receiving status update from scrapper, releases task and makes it available
    * for other scrappers.
-   * @param client
-   * @returns
+   * @param client 
+   * @returns 
    */
   public async releaseTask(client: Socket) {
     if (!this.activeTasks.has(client.id)) return

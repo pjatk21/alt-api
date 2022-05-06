@@ -36,7 +36,9 @@ export class HypervisorService {
   }
 
   public async getScrappersByState(state: HypervisorScrapperState) {
-    return await this.getScrappersStatus().then((s) => s.filter((x) => x.lastState === state))
+    return await this.getScrappersStatus().then((s) =>
+      s.filter((x) => x.lastState === state),
+    )
   }
 
   /**
@@ -82,7 +84,10 @@ export class HypervisorService {
       room: htmlFrag.querySelector('[id*="SalaLabel"]').textContent.trim(),
       begin: undefined,
       end: undefined,
-      tutors: htmlFrag.querySelector('[id*="DydaktycyLabel"]').textContent.trim().split(', '),
+      tutors: htmlFrag
+        .querySelector('[id*="DydaktycyLabel"]')
+        .textContent.trim()
+        .split(', '),
     }
 
     const dateBuilder = (datePart: string, timePart: string) =>

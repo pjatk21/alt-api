@@ -1,6 +1,6 @@
 import { Button, Card, Grid, Loading, Text, Tooltip } from '@nextui-org/react'
 import { DateTime } from 'luxon'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import ky, { HTTPError } from 'ky'
 import { useQuery } from 'react-query'
 import { baseUrl } from '../util'
@@ -50,11 +50,10 @@ function ScrapperStatusCard(props: { scrapper: ScrapperLike }) {
           </Text>
         </Text>
         <Text>
-          Ostatnia aktualizacja stanu: <br /> {DateTime.fromISO(scrapper.lastUpdated).toISO()}
+          Ostatnia aktualizacja stanu: <br />{' '}
+          {DateTime.fromISO(scrapper.lastUpdated).toISO()}
         </Text>
-        <Button color={color} bordered onClick={() => setHistoryVisible(true)}>
-          Historia statusów
-        </Button>
+        <Button color={color} bordered onClick={() => setHistoryVisible(true)}>Historia statusów</Button>
       </Card>
 
       <ModalStateHistory
