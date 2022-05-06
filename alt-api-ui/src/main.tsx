@@ -2,11 +2,12 @@ import 'reflect-metadata'
 import { Settings } from 'luxon'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
 import { registerSW } from 'virtual:pwa-register'
 import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
 import './global.sass'
+import 'reflect-metadata'
+import App from './App'
 
 // setup sentry
 if (import.meta.env.PROD)

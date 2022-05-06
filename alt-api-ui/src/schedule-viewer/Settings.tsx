@@ -19,21 +19,14 @@ type SettingsSwitchProps = {
 }
 
 export function Settings({ visible, setVisible }: SettingsProps) {
-  const [settingsStore, setSettingsStore] = useLocalStorage<SettingsOptions>(
-    'settings',
-    {},
-  )
+  const [settingsStore, setSettingsStore] = useLocalStorage<SettingsOptions>('settings', {})
 
   const closeHandler = () => {
     setVisible(false)
     setSettingsStore(settingsStore)
   }
 
-  function SettingsSwitch({
-    settingsKey,
-    description,
-    experimental,
-  }: SettingsSwitchProps) {
+  function SettingsSwitch({ settingsKey, description, experimental }: SettingsSwitchProps) {
     return (
       <Grid.Container gap={1} alignItems={'center'}>
         <Grid>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import styles from './ScheduleBlock.module.sass'
 import { colors } from './colors.json'
 import { Button, Modal, Text, Link } from '@nextui-org/react'
@@ -16,7 +16,7 @@ export function ScheduleBlockTutor({ data }: ScheduleBlockProps) {
   const timeBegin = begin.startOf('day').plus({ hours: 6 })
   const offset = begin.diff(timeBegin).as('hours')
   const heightByDuration = end.diff(begin).as('hours')
-  console.log({ code: data.code, offset, heightByDuration })
+  // console.log({ code: data.code, offset, heightByDuration })
 
   const bgColorByType = colors.filter((c) => c.type === data.type)[0]?.color ?? '#0000FF'
 
@@ -73,9 +73,7 @@ export function ScheduleBlockTutor({ data }: ScheduleBlockProps) {
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Link
-            href={`https://www.google.com/maps/dir/?api=1&destination=${location.where}`}
-          >
+          <Link href={`https://www.google.com/maps/dir/?api=1&destination=${location.where}`}>
             <Button auto icon={<FontAwesomeIcon icon={faRoute} />}>
               Nawiguj
             </Button>
