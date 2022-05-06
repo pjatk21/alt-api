@@ -79,11 +79,7 @@ export class PublicTimetableService {
     // if previous has different change hash, get delta of new and outdated entries, then send email
     this.logger.warn(`Received new hash, ${previous.changeHash} became ${changeHash}`)
     // get delta
-    const delta = differenceWith(
-      Object.entries(entry),
-      Object.entries(previous.entry),
-      isEqual,
-    )
+    const delta = differenceWith(Object.entries(entry), Object.entries(previous.entry), isEqual)
     if (delta.length > 0) {
       this.logger.verbose(
         `Differnces between ${previous.entry} and ${updated.entry} : ${JSON.stringify(
@@ -129,10 +125,7 @@ export class PublicTimetableService {
     return await query.exec()
   }
 
-  async findSingleEntry(
-    at: DateTime,
-    group: string,
-  ): Promise<ScheduleEntryDto | undefined> {
+  async findSingleEntry(at: DateTime, group: string): Promise<ScheduleEntryDto | undefined> {
     const entry = await this.timetableModel.findOne({
       'entry.begin': at.toBSON(),
       'entry.groups': { $in: [group] },
@@ -170,9 +163,7 @@ export class PublicTimetableService {
    * @returns lastest timestamp for update of any entry
    */
   async lastUpdate() {
-    const lastValue = await this.timetableModel
-      .findOne()
-      .sort({ updatedAt: 'descending' })
+    const lastValue = await this.timetableModel.findOne().sort({ updatedAt: 'descending' })
     return DateTime.fromJSDate(lastValue.updatedAt).toISO()
   }
 

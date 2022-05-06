@@ -1,5 +1,5 @@
 import { Button, Loading, Modal, Text } from '@nextui-org/react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useLocalStorage, useTimeout } from 'usehooks-ts'
 import disclaimer from './disclaimer.txt?raw'
 
@@ -17,9 +17,7 @@ export function Disclaimer() {
         </Text>
       </Modal.Header>
       <Modal.Body>
-        <p style={{ whiteSpace: 'pre-line', fontFamily: 'JetBrains Mono' }}>
-          {disclaimer}
-        </p>
+        <p style={{ whiteSpace: 'pre-line', fontFamily: 'JetBrains Mono' }}>{disclaimer}</p>
       </Modal.Body>
       <Modal.Footer>
         {allowAccept ? (
