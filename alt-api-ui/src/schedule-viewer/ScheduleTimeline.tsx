@@ -101,7 +101,7 @@ export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
   if (error)
     return (
       <Card color={'error'}>
-        ⚠️ {error.name} - {error.message}
+        {'🧰'} {error.name} - {error.message}
         <Code>{error.stack}</Code>
       </Card>
     )
