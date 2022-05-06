@@ -7,17 +7,12 @@ import { RedocModule, RedocOptions } from 'nestjs-redoc'
 import { VersioningType } from '@nestjs/common'
 import { HypervisorModule } from './hypervisor/hypervisor.module'
 import 'dotenv/config'
-import { Logger } from 'nestjs-pino'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
     logger: process.env.NODE_ENV === 'production' ? ['error', 'warn', 'log'] : undefined,
-    bufferLogs: true,
   })
-
-  // Tell nest to use pino logger
-  app.useLogger(app.get(Logger))
 
   // Enable versioning
   app.enableVersioning({
