@@ -72,7 +72,7 @@ function describeDay(entries: AltapiScheduleEntry[]) {
   })} trwające łącznie ${duration.toHuman()}`
 }
 
-export function ScheduleTimeline({ date, groups }: ScheduleTimelineProps) {
+export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelineProps) {
   const { hour, minute, second } = DateTime.now().toObject()
   const mockedTime = DateTime.fromObject({ ...date.toObject(), hour, minute, second })
 

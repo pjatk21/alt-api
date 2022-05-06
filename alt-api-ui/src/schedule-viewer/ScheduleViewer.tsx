@@ -65,11 +65,6 @@ export function DateNavigator({ date }: DateNavigatorProps) {
 }
 
 export function ScheduleViewer() {
-  const queryArgs = useQueryArgs()
-  const initalDate = DateTime.fromISO(queryArgs.get('date') ?? '')
-  const [activeDate, setActiveDate] = useState(
-    initalDate.isValid ? initalDate : DateTime.now(),
-  )
   // TODO: Why positioning of `useLocalStorage()` can impact avaliablitity of this function?
   const [choice, setChoice] = useLocalStorage<ModeChoice>('choice', ModeChoice.UNDEFINED)
   const [queryOptions, setQueryOptions] = useLocalStorage<AltapiQueryOptions>(
@@ -123,7 +118,7 @@ export function ScheduleViewer() {
           {activeDate.diff(DateTime.now().startOf('day')).shiftTo('days').toHuman()} od dziś
         </Text>
       )}
-      <ScheduleTimeline date={activeDate} groups={groups} />
+      <ScheduleTimeline date={activeDate} queryData={groups ?? tutors ?? []} choice={choice} />
       <Spacer />
       <Button.Group bordered>
         <Button auto onClick={() => setChoicePickerVisible(true)}>
