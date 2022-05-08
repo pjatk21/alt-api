@@ -2,75 +2,82 @@ import { faAdd, faCheck, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Input, Modal, Text } from '@nextui-org/react'
 import React, { useState } from 'react'
-import { GroupDatalist } from '../datalists/GroupDatalist'
+import { TutorDatalist } from '../datalists/TutorDatalist'
 
-type GroupPickerProps = {
-  groups: string[]
-  setGroups: (value: string[]) => void
+type TutorPickerProps = {
+  tutors: string[]
+  setTutors: (value: string[]) => void
   visible: boolean
   setVisible: (value: React.SetStateAction<boolean>) => void
 }
 
-function shouldDisableButton(input: string, groups: string[]) {
+function shouldDisableButton(input: string, tutors: string[]) {
   if (!input) return true
   if (input.length === 0) return true
-  if (groups.includes(input)) return true
+  if (tutors.includes(input)) return true
   return false
 }
 
-export function GroupPicker({ groups, setGroups, visible, setVisible }: GroupPickerProps) {
+export function TutorPicker({
+  tutors,
+  setTutors,
+  visible,
+  setVisible,
+}: TutorPickerProps) {
   const [buttonDisabled, setButtonDisabled] = useState(true)
 
   const closeHandler = () => {
     setVisible(false)
   }
 
-  const addGroup = () => {
-    const input = document.querySelector('#addGroupInput') as HTMLInputElement
+  const addTutor = () => {
+    const input = document.querySelector('#addTutorInput') as HTMLInputElement
     if (!input) return
-    if (groups.includes(input.value) || input.value === '') return
-    setGroups([...groups, input.value].sort())
+    if (tutors.includes(input.value) || input.value === '') return
+    setTutors([...tutors, input.value].sort())
   }
 
-  const rmGroup = (groupName: string) => {
-    setGroups(groups.filter((g) => g !== groupName))
+  const rmTutor = (tutorName: string) => {
+    setTutors(tutors.filter((g) => g !== tutorName))
   }
 
   return (
     <Modal
-      closeButton={groups.length > 0}
+      closeButton={tutors.length > 0}
       blur
       preventClose
       open={visible}
       onClose={closeHandler}
     >
       <Modal.Header>
-        <Text>Dodaj grupy</Text>
+        <Text>Wyszukaj się w liście</Text>
       </Modal.Header>
       <Modal.Body>
-        <GroupDatalist id={'allGroups'} />
+        <TutorDatalist id={'allTutors'} />
         <Input
-          id={'addGroupInput'}
+          id={'addTutorInput'}
           bordered
-          label={'Nazwa grupy'}
-          placeholder={'WIs I.2 - 1w'}
-          list={'allGroups'}
+          label={'Nazwisko i imię'}
+          placeholder={'Kowalski Adam'}
+          list={'allTutors'}
           onChange={({ target }) =>
-            setButtonDisabled(shouldDisableButton(target.value, groups))
+            setButtonDisabled(shouldDisableButton(target.value, tutors))
           }
-          onFocus={({ target }) => setButtonDisabled(shouldDisableButton(target.value, groups))}
+          onFocus={({ target }) =>
+            setButtonDisabled(shouldDisableButton(target.value, tutors))
+          }
         />
         <Button
           // bordered
           auto
-          id={'addGroupButton'}
+          id={'addTutorButton'}
           icon={<FontAwesomeIcon icon={faAdd} />}
           disabled={buttonDisabled}
-          onClick={addGroup}
+          onClick={addTutor}
         >
           Dodaj
         </Button>
-        {groups.map((g, i) => {
+        {tutors.map((g, i) => {
           return (
             <p key={i}>
               <Button
@@ -78,7 +85,7 @@ export function GroupPicker({ groups, setGroups, visible, setVisible }: GroupPic
                 auto
                 style={{ display: 'inline-block' }}
                 icon={<FontAwesomeIcon icon={faTrash} />}
-                onClick={() => rmGroup(g)}
+                onClick={() => rmTutor(g)}
               />
               <Text span>{g}</Text>
             </p>
@@ -86,9 +93,9 @@ export function GroupPicker({ groups, setGroups, visible, setVisible }: GroupPic
         })}
         <Button
           auto
-          disabled={groups.length === 0}
+          disabled={tutors.length === 0}
           icon={<FontAwesomeIcon icon={faCheck} />}
-          color={groups.length > 0 ? 'success' : undefined}
+          color={tutors.length > 0 ? 'success' : undefined}
           onClick={() => setVisible(false)}
         >
           Gotowe

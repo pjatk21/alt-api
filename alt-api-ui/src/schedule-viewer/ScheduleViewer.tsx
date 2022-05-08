@@ -15,6 +15,13 @@ import { GroupPicker } from './GroupPicker'
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { Disclaimer } from './Disclaimer'
 import { Settings } from './Settings'
+import { TutorPicker } from './TutorPicker'
+import { ChoicePicker, ModeChoice } from './ChoicePicker'
+
+export type AltapiQueryOptions = Partial<{
+  groups: string[]
+  tutors: string[]
+}>
 import { Link } from 'react-router-dom'
 
 type DateNaviButtonProps = {
@@ -58,8 +65,33 @@ export function DateNavigator({ date }: DateNavigatorProps) {
 }
 
 export function ScheduleViewer() {
-  const [groups, setGroups] = useLocalStorage<string[]>('groups', [])
-  const [groupPickerVisible, setGroupPickerVisible] = useState(groups.length === 0)
+  // TODO: Why positioning of `useLocalStorage()` can impact avaliablitity of this function?
+  const [choice, setChoice] = useLocalStorage<ModeChoice>('choice', ModeChoice.UNDEFINED)
+  const [queryOptions, setQueryOptions] = useLocalStorage<AltapiQueryOptions>(
+    'queryOptions',
+    {},
+  )
+
+  // migration stuff
+  if (localStorage.getItem('groups')) {
+    setQueryOptions({ groups: JSON.parse(localStorage.getItem('groups') as string) })
+    localStorage.removeItem('groups')
+  }
+
+  const { groups, tutors } = queryOptions
+
+  const [choicePickerVisible, setChoicePickerVisible] = useState(
+    (groups ?? []).length === 0 &&
+      (tutors ?? []).length === 0 &&
+      choice === ModeChoice.UNDEFINED,
+  )
+  const [groupsPickerVisible, setGroupsPickerVisible] = useState(
+    (groups ?? []).length === 0 && choice === ModeChoice.STUDENT,
+  )
+  const [tutorsPickerVisible, setTutorsPickerVisible] = useState(
+    (tutors ?? []).length === 0 && choice === ModeChoice.TUTOR,
+  )
+
   const [settingsVisible, setSettingsVisible] = useState(false)
 
   const [params] = useSearchParams()
@@ -86,11 +118,11 @@ export function ScheduleViewer() {
           {activeDate.diff(DateTime.now().startOf('day')).shiftTo('days').toHuman()} od dziś
         </Text>
       )}
-      <ScheduleTimeline date={activeDate} groups={groups} />
+      <ScheduleTimeline date={activeDate} queryData={groups ?? tutors ?? []} choice={choice} />
       <Spacer />
       <Button.Group bordered>
-        <Button auto onClick={() => setGroupPickerVisible(true)}>
-          Zmień grupy
+        <Button auto onClick={() => setChoicePickerVisible(true)}>
+          Zmień grupy / prowadzącego
         </Button>
         <Button
           auto
@@ -100,10 +132,26 @@ export function ScheduleViewer() {
       </Button.Group>
       <Spacer />
       <GroupPicker
-        groups={groups}
-        setGroups={setGroups}
-        visible={groupPickerVisible}
-        setVisible={setGroupPickerVisible}
+        groups={queryOptions.groups ?? []}
+        setGroups={(groups) => setQueryOptions({ groups })}
+        visible={groupsPickerVisible}
+        setVisible={setGroupsPickerVisible}
+      />
+      <TutorPicker
+        tutors={queryOptions.tutors ?? []}
+        setTutors={(tutors) => setQueryOptions({ tutors })}
+        visible={tutorsPickerVisible}
+        setVisible={setTutorsPickerVisible}
+      />
+      <ChoicePicker
+        choice={choice ?? ModeChoice.UNDEFINED}
+        setChoice={(choice) => {
+          setChoice(choice)
+          setGroupsPickerVisible(choice === ModeChoice.STUDENT)
+          setTutorsPickerVisible(choice === ModeChoice.TUTOR)
+        }}
+        visible={choicePickerVisible}
+        setVisible={setChoicePickerVisible}
       />
       <Settings visible={settingsVisible} setVisible={setSettingsVisible} />
       <Disclaimer />

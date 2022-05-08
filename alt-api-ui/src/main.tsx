@@ -6,7 +6,6 @@ import { registerSW } from 'virtual:pwa-register'
 import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
 import './global.sass'
-import 'reflect-metadata'
 import App from './App'
 
 // setup sentry
