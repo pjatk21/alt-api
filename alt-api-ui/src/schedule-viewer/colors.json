@@ -2,11 +2,11 @@
   "colors": [
     {
       "type": "Ćwiczenia",
-      "color": "#56627d"
+      "color": "#7e8fde"
     },
     {
       "type": "Wykład",
-      "color": "#4c6352"
+      "color": "#69c294"
     }
   ]
 }

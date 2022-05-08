@@ -6,17 +6,30 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { AppHome } from './home/AppHome'
 import { DevPage } from './dev/DevPage'
 import { ScheduleViewer } from './schedule-viewer/ScheduleViewer'
+import { useState } from 'react'
 
 const queryClient = new QueryClient()
 
-const darkTheme = createTheme({
-  type: 'dark',
-})
+function useDynamicTheme() {
+  const getColorScheme = () => window.matchMedia('(prefers-color-scheme: dark)')
+  const [darkModePreference, setDarkModePreference] = useState<boolean>(
+    getColorScheme().matches,
+  )
+  getColorScheme().addEventListener('change', (e) => {
+    setDarkModePreference(e.matches)
+  })
 
-function App() {
+  return createTheme({
+    type: darkModePreference ? 'dark' : 'light',
+  })
+}
+
+export default function App() {
+  const dynamicTheme = useDynamicTheme()
+
   return (
     <QueryClientProvider client={queryClient}>
-      <NextUIProvider theme={darkTheme}>
+      <NextUIProvider theme={dynamicTheme}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<AppHome />} />
@@ -30,5 +43,3 @@ function App() {
     </QueryClientProvider>
   )
 }
-
-export default App
