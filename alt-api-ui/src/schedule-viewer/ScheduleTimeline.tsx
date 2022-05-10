@@ -1,7 +1,7 @@
 import { Loading, Spacer, Text, Card, Code } from '@nextui-org/react'
 import ky from 'ky'
 import { DateTime } from 'luxon'
-import { useState } from 'react'
+import { createContext, useState } from 'react'
 import { useQuery } from 'react-query'
 import { ScheduleBlock } from './ScheduleBlock'
 import { useInterval, useReadLocalStorage } from 'usehooks-ts'
@@ -11,7 +11,6 @@ import type { SettingsOptions } from './Settings'
 import { AltapiScheduleEntry } from '../altapi'
 import { plainToInstance } from 'class-transformer'
 import { ModeChoice } from './ChoicePicker'
-import { ScheduleBlockTutor } from './ScheduleBlockTutor'
 
 type ScheduleTimelineProps = {
   date: DateTime
@@ -33,8 +32,8 @@ function getSchedule(
   if (queryData.length === 0) return Promise.resolve({ entries: [] })
 
   const params = new URLSearchParams()
-  const mode = choice === ModeChoice.TUTOR ? 'tutors' : 'groups'
-  for (const q of queryData) params.append(mode, q)
+  const queryOperationMode = choice === ModeChoice.TUTOR ? 'tutors' : 'groups'
+  for (const q of queryData) params.append(queryOperationMode, q)
 
   params.append('from', date.startOf('day').toISO())
   params.append('to', date.endOf('day').toISO())
@@ -78,7 +77,7 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
 
   const settings = useReadLocalStorage<SettingsOptions>('settings')
   const [timePointer, setTimePoiner] = useState(timepointerOffset())
-  useInterval(() => setTimePoiner(timepointerOffset()), 5000)
+  useInterval(() => setTimePoiner(timepointerOffset()), 2000)
 
   // load current day
   const { data, error, isLoading } = useQuery<
@@ -134,13 +133,9 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
           })}
         </div>
         <div className={styles.content}>
-          {data?.map((x, y) =>
-            choice === ModeChoice.TUTOR ? (
-              <ScheduleBlockTutor key={y} data={x} />
-            ) : (
-              <ScheduleBlock key={y} data={x} />
-            ),
-          )}
+          {data?.map((x, y) => (
+            <ScheduleBlock key={y} data={x} operationMode={choice} />
+          ))}
         </div>
         {DateTime.now().startOf('day').plus({ hours: 6 }) < mockedTime &&
           DateTime.now().startOf('day').plus({ hours: 21 }) > mockedTime && (
