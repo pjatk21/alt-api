@@ -11,11 +11,11 @@ import {
   faCogs,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
-import { ExperimentalGroupPicker, GroupPicker } from './pickers/GroupPicker'
+import { ExperimentalGroupPicker } from './pickers/GroupPicker'
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { Disclaimer } from './Disclaimer'
 import { Settings } from './Settings'
-import { ExperimentalTutorPicker, TutorPicker } from './pickers/TutorPicker'
+import { ExperimentalTutorPicker } from './pickers/TutorPicker'
 import { ChoicePicker, ModeChoice } from './pickers/ChoicePicker'
 
 export type AltapiQueryOptions = Partial<{

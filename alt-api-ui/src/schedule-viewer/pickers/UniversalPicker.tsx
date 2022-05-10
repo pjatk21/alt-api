@@ -3,11 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useFormik } from 'formik'
 import { Modal, Input, Button, Text } from '@nextui-org/react'
 import React from 'react'
-import { TutorDatalist } from '../../datalists/TutorDatalist'
 import { ModeChoice } from './ChoicePicker'
-import { GroupDatalist } from '../../datalists/GroupDatalist'
 import { useDatalist } from '../../datalists/datalistHook'
-import { values } from 'lodash'
 
 type UniversalPickerProps<T> = {
   values: T[]
@@ -44,7 +41,7 @@ export default function UniversalPicker(props: UniversalPickerProps<string>) {
   })
 
   const rmValue = (target: any) => {
-    props.setValues(props.values.filter(x => x !== target))
+    props.setValues(props.values.filter((x) => x !== target))
   }
 
   const Datalist = useDatalist(props.datalist, 'valuesSource')
@@ -66,8 +63,20 @@ export default function UniversalPicker(props: UniversalPickerProps<string>) {
           name={'valueSearch'}
           id={'addTutorInput'}
           bordered
-          label={'Nazwisko i imię'}
-          placeholder={'Kowalski Adam'}
+          label={
+            props.operationMode == ModeChoice.STUDENT
+              ? 'Grupa'
+              : props.operationMode == ModeChoice.TUTOR
+              ? 'Nazwisko i imię'
+              : 'Oops...'
+          }
+          placeholder={
+            props.operationMode == ModeChoice.STUDENT
+              ? 'WIs I.2 - 1w'
+              : props.operationMode == ModeChoice.TUTOR
+              ? 'Tomaszewski Michał'
+              : 'Oops once again...'
+          }
           list={'valuesSource'}
           onChange={formik.handleChange}
           status={!formik.isValid ? 'error' : 'default'}
