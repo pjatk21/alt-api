@@ -17,6 +17,7 @@
     "@sentry/react": "^6.19.2",
     "@sentry/tracing": "^6.19.3",
     "class-transformer": "^0.5.1",
+    "formik": "^2.2.9",
     "ky": "^0.30.0",
     "lodash": "^4.17.21",
     "luxon": "^2.3.1",
