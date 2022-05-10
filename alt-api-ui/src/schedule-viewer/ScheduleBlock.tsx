@@ -6,7 +6,7 @@ import { buildings } from '../calendar/buildings.json'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRoute } from '@fortawesome/free-solid-svg-icons'
 import { AltapiScheduleEntry } from '../altapi'
-import { ModeChoice } from './ChoicePicker'
+import { ModeChoice } from './pickers/ChoicePicker'
 
 type ScheduleBlockProps = {
   data: AltapiScheduleEntry

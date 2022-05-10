@@ -10,7 +10,7 @@ import { baseUrl } from '../util'
 import type { SettingsOptions } from './Settings'
 import { AltapiScheduleEntry } from '../altapi'
 import { plainToInstance } from 'class-transformer'
-import { ModeChoice } from './ChoicePicker'
+import { ModeChoice } from './pickers/ChoicePicker'
 
 type ScheduleTimelineProps = {
   date: DateTime

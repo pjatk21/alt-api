@@ -2,7 +2,11 @@ import { faAdd, faCheck, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Input, Modal, Text } from '@nextui-org/react'
 import React, { useState } from 'react'
-import { GroupDatalist } from '../datalists/GroupDatalist'
+import { useQuery } from 'react-query'
+import { GroupDatalist } from '../../datalists/GroupDatalist'
+import { baseUrl } from '../../util'
+import ky from 'ky'
+import UniversalPicker from './UniversalPicker'
 
 type GroupPickerProps = {
   groups: string[]
@@ -17,6 +21,25 @@ function shouldDisableButton(input: string, groups: string[]) {
   if (groups.includes(input)) return true
   return false
 }
+
+const getAllGroups = () =>
+  ky.get(`${baseUrl}v1/timetable/groups`).json<{ groupsAvailable: string[] }>()
+
+export function ExperimentalGroupPicker({ groups, setGroups, visible, setVisible }: GroupPickerProps) {
+  const { data: groupsData } = useQuery('groups', getAllGroups)
+
+  return (
+    <UniversalPicker
+      values={groups}
+      setValues={setGroups}
+      visible={visible}
+      setVisible={setVisible}
+      datalist={groupsData?.groupsAvailable ?? []}
+    />
+  )
+}
+
+
 
 export function GroupPicker({ groups, setGroups, visible, setVisible }: GroupPickerProps) {
   const [buttonDisabled, setButtonDisabled] = useState(true)

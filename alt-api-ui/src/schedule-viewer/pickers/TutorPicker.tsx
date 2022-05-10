@@ -1,8 +1,12 @@
 import { faAdd, faCheck, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Input, Modal, Text } from '@nextui-org/react'
+import ky from 'ky'
 import React, { useState } from 'react'
-import { TutorDatalist } from '../datalists/TutorDatalist'
+import { useQuery } from 'react-query'
+import { TutorDatalist } from '../../datalists/TutorDatalist'
+import { baseUrl } from '../../util'
+import UniversalPicker from './UniversalPicker'
 
 type TutorPickerProps = {
   tutors: string[]
@@ -16,6 +20,23 @@ function shouldDisableButton(input: string, tutors: string[]) {
   if (input.length === 0) return true
   if (tutors.includes(input)) return true
   return false
+}
+
+const getAllTutors = () =>
+  ky.get(`${baseUrl}v1/timetable/tutors`).json<{ tutorsAvailable: string[] }>()
+
+export function ExperimentalTutorPicker({ tutors, setTutors, visible, setVisible }: TutorPickerProps) {
+  const { data: tutorsData } = useQuery('tutors', getAllTutors)
+
+  return (
+    <UniversalPicker
+      values={tutors}
+      setValues={setTutors}
+      visible={visible}
+      setVisible={setVisible}
+      datalist={tutorsData?.tutorsAvailable ?? []}
+    />
+  )
 }
 
 export function TutorPicker({

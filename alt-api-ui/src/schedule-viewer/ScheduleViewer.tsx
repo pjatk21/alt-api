@@ -11,12 +11,12 @@ import {
   faCogs,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
-import { GroupPicker } from './GroupPicker'
+import { ExperimentalGroupPicker, GroupPicker } from './pickers/GroupPicker'
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { Disclaimer } from './Disclaimer'
 import { Settings } from './Settings'
-import { TutorPicker } from './TutorPicker'
-import { ChoicePicker, ModeChoice } from './ChoicePicker'
+import { ExperimentalTutorPicker, TutorPicker } from './pickers/TutorPicker'
+import { ChoicePicker, ModeChoice } from './pickers/ChoicePicker'
 
 export type AltapiQueryOptions = Partial<{
   groups: string[]
@@ -131,13 +131,13 @@ export function ScheduleViewer() {
         />
       </Button.Group>
       <Spacer />
-      <GroupPicker
+      <ExperimentalGroupPicker
         groups={queryOptions.groups ?? []}
         setGroups={(groups) => setQueryOptions({ groups })}
         visible={groupsPickerVisible}
         setVisible={setGroupsPickerVisible}
       />
-      <TutorPicker
+      <ExperimentalTutorPicker
         tutors={queryOptions.tutors ?? []}
         setTutors={(tutors) => setQueryOptions({ tutors })}
         visible={tutorsPickerVisible}
