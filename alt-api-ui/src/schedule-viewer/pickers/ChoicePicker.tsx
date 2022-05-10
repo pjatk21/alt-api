@@ -16,12 +16,7 @@ type ChoicePickerParams = {
   setVisible: (value: React.SetStateAction<boolean>) => void
 }
 
-export function ChoicePicker({
-  choice,
-  setChoice,
-  visible,
-  setVisible,
-}: ChoicePickerParams) {
+export function ChoicePicker({ choice, setChoice, visible, setVisible }: ChoicePickerParams) {
   const closeHandler = () => {
     setVisible(false)
   }

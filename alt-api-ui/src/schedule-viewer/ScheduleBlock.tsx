@@ -6,12 +6,14 @@ import { buildings } from '../calendar/buildings.json'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRoute } from '@fortawesome/free-solid-svg-icons'
 import { AltapiScheduleEntry } from '../altapi'
+import { ModeChoice } from './pickers/ChoicePicker'
 
 type ScheduleBlockProps = {
   data: AltapiScheduleEntry
+  operationMode: ModeChoice
 }
 
-export function ScheduleBlock({ data }: ScheduleBlockProps) {
+export function ScheduleBlock({ data, operationMode }: ScheduleBlockProps) {
   const { begin, end } = data
   const timeBegin = begin.startOf('day').plus({ hours: 6 })
   const offset = begin.diff(timeBegin).as('hours')
@@ -56,9 +58,16 @@ export function ScheduleBlock({ data }: ScheduleBlockProps) {
           <p>
             <b>Rodzaj zajęć:</b> {data.type}
           </p>
-          <p>
-            <b>Prowadzący:</b> {data.tutors.join(', ')}
-          </p>
+          {operationMode === ModeChoice.STUDENT && (
+            <p>
+              <b>Prowadzący:</b> {data.tutors.join(', ')}
+            </p>
+          )}
+          {operationMode === ModeChoice.TUTOR && (
+            <p>
+              <b>Grupy:</b> {data.groups.join(', ')}
+            </p>
+          )}
           <p>
             <b>Czas trwania:</b> {end.diff(begin).shiftTo('hours', 'minutes').toHuman()}
           </p>
@@ -71,11 +80,13 @@ export function ScheduleBlock({ data }: ScheduleBlockProps) {
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Link href={`https://www.google.com/maps/dir/?api=1&destination=${location.where}`}>
-            <Button auto icon={<FontAwesomeIcon icon={faRoute} />}>
-              Nawiguj
-            </Button>
-          </Link>
+          {operationMode === ModeChoice.STUDENT && (
+            <Link href={`https://www.google.com/maps/dir/?api=1&destination=${location.where}`}>
+              <Button auto icon={<FontAwesomeIcon icon={faRoute} />}>
+                Nawiguj
+              </Button>
+            </Link>
+          )}
         </Modal.Footer>
       </Modal>
     </div>
