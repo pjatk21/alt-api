@@ -98,7 +98,7 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
     getSchedule(date.plus({ day: 1 }), queryData, choice),
   )
 
-  if (isLoading)
+  if (isLoading || !data)
     return (
       <Card>
         <Loading color={'primary'} textColor={'primary'}>
@@ -115,6 +115,15 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
       </Card>
     )
 
+  if (data.length === 0) {
+    return <Card>Brak zajęć tego dnia</Card>
+  }
+
+  const displayRanges = {
+    begin: Math.min(...data.map((x) => x.begin.hour)),
+    end: Math.max(...data.map((x) => x.end.hour)) + 2,
+  }
+
   return (
     <>
       {data && (
@@ -125,8 +134,8 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
       <Spacer />
       <div className={styles.timelineContainer}>
         <div className={styles.background}>
-          {[...Array(22 - 6)].map((x, y) => {
-            const h = DateTime.fromObject({ hour: 6 + y })
+          {[...Array(displayRanges.end - displayRanges.begin)].map((x, y) => {
+            const h = DateTime.fromObject({ hour: displayRanges.begin + y })
             return (
               <div key={y} className={styles.line}>
                 <div>
@@ -139,11 +148,16 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
         </div>
         <div className={styles.content}>
           {data?.map((x, y) => (
-            <ScheduleBlock key={y} data={x} operationMode={choice} />
+            <ScheduleBlock
+              key={y}
+              data={x}
+              operationMode={choice}
+              displayRanges={displayRanges}
+            />
           ))}
         </div>
-        {DateTime.now().startOf('day').plus({ hours: 6 }) < mockedTime &&
-          DateTime.now().startOf('day').plus({ hours: 21 }) > mockedTime && (
+        {DateTime.now().startOf('day').plus({ hours: displayRanges.begin }) < mockedTime &&
+          DateTime.now().startOf('day').plus({ hours: displayRanges.end }) > mockedTime && (
             <div className={styles.timePointer}>
               <hr style={{ top: timePointer * 55 + 1 }} />
             </div>

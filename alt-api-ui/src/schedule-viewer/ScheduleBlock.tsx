@@ -11,11 +11,15 @@ import { ModeChoice } from './pickers/ChoicePicker'
 type ScheduleBlockProps = {
   data: AltapiScheduleEntry
   operationMode: ModeChoice
+  displayRanges: {
+    begin: number
+    end: number
+  }
 }
 
-export function ScheduleBlock({ data, operationMode }: ScheduleBlockProps) {
+export function ScheduleBlock({ data, operationMode, displayRanges }: ScheduleBlockProps) {
   const { begin, end } = data
-  const timeBegin = begin.startOf('day').plus({ hours: 6 })
+  const timeBegin = begin.startOf('day').plus({ hours: displayRanges.begin })
   const offset = begin.diff(timeBegin).as('hours')
   const heightByDuration = end.diff(begin).as('hours')
 
