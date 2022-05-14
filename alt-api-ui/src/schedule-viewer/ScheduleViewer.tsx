@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Container, Grid, Input, Spacer, Text } from '@nextui-org/react'
+import { Button, Card, Container, Grid, Input, Spacer, Text } from '@nextui-org/react'
 import { ScheduleTimeline } from './ScheduleTimeline'
 import { DateTime } from 'luxon'
 import { useLocalStorage } from 'usehooks-ts'
@@ -111,13 +111,17 @@ export function ScheduleViewer() {
   return (
     <Container xs>
       <Text h2>Plan zajęć</Text>
-      <DateNavigator date={activeDate} />
-      {activeDate.isValid && (
-        <Text style={{ textAlign: 'center' }}>
-          {activeDate.toLocaleString({ weekday: 'long' })},{' '}
-          {activeDate.diff(DateTime.now().startOf('day')).shiftTo('days').toHuman()} od dziś
-        </Text>
-      )}
+      <Card>
+        <DateNavigator date={activeDate} />
+        {activeDate.isValid && (
+          <>
+            <Text style={{ textAlign: 'center' }}>
+              {activeDate.toLocaleString({ weekday: 'long' })}
+            </Text>
+          </>
+        )}
+      </Card>
+      <Spacer />
       <ScheduleTimeline date={activeDate} queryData={groups ?? tutors ?? []} choice={choice} />
       <Spacer />
       <Button.Group bordered>

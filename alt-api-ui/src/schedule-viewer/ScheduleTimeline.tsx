@@ -11,6 +11,7 @@ import type { SettingsOptions } from './Settings'
 import { AltapiScheduleEntry } from '../altapi'
 import { plainToInstance } from 'class-transformer'
 import { ModeChoice } from './pickers/ChoicePicker'
+import { CountdownTimer } from './CountdownTimer'
 
 type ScheduleTimelineProps = {
   date: DateTime
@@ -18,9 +19,9 @@ type ScheduleTimelineProps = {
   choice: ModeChoice
 }
 
-function timepointerOffset() {
+function timepointerOffset(begin: number) {
   return DateTime.now()
-    .diff(DateTime.now().startOf('day').set({ hour: 6 }))
+    .diff(DateTime.now().startOf('day').set({ hour: begin }))
     .as('hours')
 }
 
@@ -71,9 +72,9 @@ function describeDay(entries: AltapiScheduleEntry[]) {
   })} trwające łącznie ${duration.toHuman()}`
 }
 
-function useTimePointer() {
-  const [timePointer, setTimePoiner] = useState(timepointerOffset())
-  useInterval(() => setTimePoiner(timepointerOffset()), 2000)
+function useTimePointer(begin: number) {
+  const [timePointer, setTimePoiner] = useState(timepointerOffset(begin))
+  useInterval(() => setTimePoiner(timepointerOffset(begin)), 1000)
   return timePointer
 }
 
@@ -82,7 +83,6 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
   const mockedTime = DateTime.fromObject({ ...date.toObject(), hour, minute, second })
 
   const settings = useReadLocalStorage<SettingsOptions>('settings')
-  const timePointer = useTimePointer()
 
   // load current day
   const { data, error, isLoading } = useQuery<
@@ -97,6 +97,13 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
   useQuery(['schedule', date.plus({ day: 1 }), queryData, choice], () =>
     getSchedule(date.plus({ day: 1 }), queryData, choice),
   )
+
+  const displayRanges = {
+    begin: Math.min(...(data ?? []).map((x) => x.begin.hour)),
+    end: Math.max(...(data ?? []).map((x) => x.end.hour)) + 2,
+  }
+
+  const timePointer = useTimePointer(displayRanges.begin)
 
   if (error)
     return (
@@ -123,11 +130,6 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
 
   if (data.length === 0) {
     return <Card>Brak zajęć tego dnia</Card>
-  }
-
-  const displayRanges = {
-    begin: Math.min(...data.map((x) => x.begin.hour)),
-    end: Math.max(...data.map((x) => x.end.hour)) + 2,
   }
 
   return (
