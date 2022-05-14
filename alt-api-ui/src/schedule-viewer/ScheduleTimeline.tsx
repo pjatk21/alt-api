@@ -1,4 +1,4 @@
-import { Loading, Spacer, Text, Card, Code } from '@nextui-org/react'
+import { Loading, Spacer, Text, Card, Code, Link } from '@nextui-org/react'
 import ky from 'ky'
 import { DateTime } from 'luxon'
 import { useState } from 'react'
@@ -98,20 +98,26 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
     getSchedule(date.plus({ day: 1 }), queryData, choice),
   )
 
+  if (error)
+    return (
+      <Card color={'error'}>
+        {'🧰'} {error.name} - {error.message}
+        <Link
+          href={
+            'https://github.com/pjatk21/alt-api/issues/new?assignees=kpostekk&labels=bug&template=-pl--zg-oszenie-b--du.md&title='
+          }
+        >
+          Zgłoś błąd
+        </Link>
+      </Card>
+    )
+
   if (isLoading || !data)
     return (
       <Card>
         <Loading color={'primary'} textColor={'primary'}>
           Pobieranie planu zajęć
         </Loading>
-      </Card>
-    )
-
-  if (error)
-    return (
-      <Card color={'error'}>
-        {'🧰'} {error.name} - {error.message}
-        <Code>{error.stack}</Code>
       </Card>
     )
 
