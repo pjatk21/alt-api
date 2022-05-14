@@ -17,4 +17,9 @@ export class AltapiScheduleEntry {
   @Type(() => DateTime)
   @Transform(({ value }) => DateTime.fromISO(value))
   end: DateTime
+
+  get isActive(): boolean {
+    const now = DateTime.now()
+    return this.begin <= now && now < this.end
+  }
 }
