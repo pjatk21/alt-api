@@ -5,6 +5,7 @@ import { Modal, Input, Button, Text } from '@nextui-org/react'
 import React from 'react'
 import { ModeChoice } from './ChoicePicker'
 import { useDatalist } from '../../datalists/datalistHook'
+import { useEffectOnce } from 'usehooks-ts'
 
 type UniversalPickerProps<T> = {
   values: T[]
@@ -43,6 +44,10 @@ export default function UniversalPicker(props: UniversalPickerProps<string>) {
   const rmValue = (target: any) => {
     props.setValues(props.values.filter((x) => x !== target))
   }
+
+  useEffectOnce(() => {
+    formik.validateForm()
+  })
 
   const Datalist = useDatalist(props.datalist, 'valuesSource')
 
