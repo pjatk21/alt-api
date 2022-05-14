@@ -71,13 +71,18 @@ function describeDay(entries: AltapiScheduleEntry[]) {
   })} trwające łącznie ${duration.toHuman()}`
 }
 
+function useTimePointer() {
+  const [timePointer, setTimePoiner] = useState(timepointerOffset())
+  useInterval(() => setTimePoiner(timepointerOffset()), 2000)
+  return timePointer
+}
+
 export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelineProps) {
   const { hour, minute, second } = DateTime.now().toObject()
   const mockedTime = DateTime.fromObject({ ...date.toObject(), hour, minute, second })
 
   const settings = useReadLocalStorage<SettingsOptions>('settings')
-  const [timePointer, setTimePoiner] = useState(timepointerOffset())
-  useInterval(() => setTimePoiner(timepointerOffset()), 2000)
+  const timePointer = useTimePointer()
 
   // load current day
   const { data, error, isLoading } = useQuery<
