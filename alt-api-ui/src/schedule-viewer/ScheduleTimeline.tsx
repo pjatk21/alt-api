@@ -133,9 +133,17 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
   return (
     <>
       {data && (
-        <Text blockquote>
-          {settings?.olaMode ? describeDayPositively(data) : describeDay(data)}
-        </Text>
+        <>
+          <Text blockquote>
+            {settings?.olaMode ? describeDayPositively(data) : describeDay(data)}
+          </Text>
+          {data.find((x) => x.isActive) && (
+            <>
+              <Spacer />
+              <CountdownTimer currentScheduledLessons={data} />
+            </>
+          )}
+        </>
       )}
       <Spacer />
       <div className={styles.timelineContainer}>
