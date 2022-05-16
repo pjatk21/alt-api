@@ -3,7 +3,7 @@
   "version": "1.1.9",
   "description": "Better backend for PJATK schedule.",
   "author": "Krystian Postek <krystian@postek.eu>, Rafał Opiłowski <me@justsomebody.dev>",
-  "private": false, 
+  "private": false,
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
@@ -22,9 +22,11 @@
     "scrapper": "docker run -d --rm --network host -e ALTAPI_GATEWAY=ws://host.docker.internal:4010/ -e PINO_LEVEL=debug ghcr.io/pjatk21/alt-scrap:main"
   },
   "dependencies": {
+    "@nestjs/apollo": "^10.0.11",
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.4.3",
     "@nestjs/event-emitter": "^1.1.0",
+    "@nestjs/graphql": "^10.0.11",
     "@nestjs/mapped-types": "*",
     "@nestjs/mongoose": "^9.0.2",
     "@nestjs/platform-express": "^8.3.1",
@@ -37,10 +39,12 @@
     "@sendgrid/mail": "^7.6.2",
     "@sentry/node": "^6.19.2",
     "@types/luxon": "^2.0.9",
+    "apollo-server-express": "^3.7.0",
     "cache-manager": "^3.6.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "dotenv": "^16.0.0",
+    "graphql": "^16.5.0",
     "ics": "^2.35.0",
     "jsdom": "^19.0.0",
     "lodash": "^4.17.21",

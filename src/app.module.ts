@@ -9,6 +9,8 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { SentryModule } from '@ntegral/nestjs-sentry'
 import { APP_FILTER } from '@nestjs/core'
 import { SentryAppExceptionsFilter } from './app.sentry'
+import { GraphQLModule } from '@nestjs/graphql'
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 
 @Module({
   imports: [
@@ -29,6 +31,9 @@ import { SentryAppExceptionsFilter } from './app.sentry'
       environment: process.env.NODE_ENV ?? 'development',
       tracesSampleRate: 1.0,
       enabled: true,
+    }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
     }),
   ],
   controllers: [AppController],
