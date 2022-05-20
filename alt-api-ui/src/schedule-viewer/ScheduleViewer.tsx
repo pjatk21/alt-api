@@ -18,6 +18,9 @@ import { Settings } from './Settings'
 import { ExperimentalTutorPicker } from './pickers/TutorPicker'
 import { ChoicePicker, ModeChoice } from './pickers/ChoicePicker'
 
+import type { SettingsOptions } from './Settings'
+import { useReadLocalStorage } from 'usehooks-ts'
+
 export type AltapiQueryOptions = Partial<{
   groups: string[]
   tutors: string[]
@@ -78,6 +81,8 @@ export function ScheduleViewer() {
     localStorage.removeItem('groups')
   }
 
+  const settings = useReadLocalStorage<SettingsOptions>('settings')
+
   const { groups, tutors } = queryOptions
 
   const [choicePickerVisible, setChoicePickerVisible] = useState(
@@ -108,57 +113,115 @@ export function ScheduleViewer() {
       }).toString(),
     })
 
-  return (
-    <Container xs>
-      <Text h2>Plan zajęć</Text>
-      <Card>
-        <DateNavigator date={activeDate} />
-        {activeDate.isValid && (
-          <>
-            <Text style={{ textAlign: 'center' }}>
-              {activeDate.toLocaleString({ weekday: 'long' })}
-            </Text>
-          </>
-        )}
-      </Card>
-      <Spacer />
-      <ScheduleTimeline date={activeDate} queryData={groups ?? tutors ?? []} choice={choice} />
-      <Spacer />
-      <Button.Group bordered>
-        <Button auto onClick={() => setChoicePickerVisible(true)}>
-          Zmień grupy / prowadzącego
-        </Button>
-        <Button
-          auto
-          onClick={() => setSettingsVisible(true)}
-          icon={<FontAwesomeIcon icon={faCogs} />}
+  if(settings?.cyprianMode) {
+    return (
+      <Container xs>
+        <Text h2>Plan z̶n̶i̶e̶w̶o̶l̶e̶n̶i̶a̶ zajęć</Text>
+        <Card>
+          <DateNavigator date={activeDate} />
+          {activeDate.isValid && (
+            <>
+              <Text style={{ textAlign: 'center' }}>
+                {activeDate.toLocaleString({ weekday: 'long' })}
+              </Text>
+            </>
+          )}
+        </Card>
+        <Spacer />
+        <ScheduleTimeline date={activeDate} queryData={groups ?? tutors ?? []} choice={choice} />
+        <Spacer />
+        <Button.Group bordered>
+          <Button auto onClick={() => setChoicePickerVisible(true)}>
+            Zmień ⛓️ grupy ⛓️ / 👮 wodza 👮
+          </Button>
+          <Button
+            auto
+            onClick={() => setSettingsVisible(true)}
+            icon={<FontAwesomeIcon icon={faCogs} />}
+          />
+        </Button.Group>
+        <Spacer />
+        <ExperimentalGroupPicker
+          groups={queryOptions.groups ?? []}
+          setGroups={(groups) => setQueryOptions({ groups })}
+          visible={groupsPickerVisible}
+          setVisible={setGroupsPickerVisible}
         />
-      </Button.Group>
-      <Spacer />
-      <ExperimentalGroupPicker
-        groups={queryOptions.groups ?? []}
-        setGroups={(groups) => setQueryOptions({ groups })}
-        visible={groupsPickerVisible}
-        setVisible={setGroupsPickerVisible}
-      />
-      <ExperimentalTutorPicker
-        tutors={queryOptions.tutors ?? []}
-        setTutors={(tutors) => setQueryOptions({ tutors })}
-        visible={tutorsPickerVisible}
-        setVisible={setTutorsPickerVisible}
-      />
-      <ChoicePicker
-        choice={choice ?? ModeChoice.UNDEFINED}
-        setChoice={(choice) => {
-          setChoice(choice)
-          setGroupsPickerVisible(choice === ModeChoice.STUDENT)
-          setTutorsPickerVisible(choice === ModeChoice.TUTOR)
-        }}
-        visible={choicePickerVisible}
-        setVisible={setChoicePickerVisible}
-      />
-      <Settings visible={settingsVisible} setVisible={setSettingsVisible} />
-      <Disclaimer />
-    </Container>
-  )
+        <ExperimentalTutorPicker
+          tutors={queryOptions.tutors ?? []}
+          setTutors={(tutors) => setQueryOptions({ tutors })}
+          visible={tutorsPickerVisible}
+          setVisible={setTutorsPickerVisible}
+        />
+        <ChoicePicker
+          choice={choice ?? ModeChoice.UNDEFINED}
+          setChoice={(choice) => {
+            setChoice(choice)
+            setGroupsPickerVisible(choice === ModeChoice.STUDENT)
+            setTutorsPickerVisible(choice === ModeChoice.TUTOR)
+          }}
+          visible={choicePickerVisible}
+          setVisible={setChoicePickerVisible}
+        />
+        <Settings visible={settingsVisible} setVisible={setSettingsVisible} />
+        <Disclaimer />
+      </Container>
+    )
+  }
+  else {
+    return (
+      <Container xs>
+        <Text h2>Plan zajęć</Text>
+        <Card>
+          <DateNavigator date={activeDate} />
+          {activeDate.isValid && (
+            <>
+              <Text style={{ textAlign: 'center' }}>
+                {activeDate.toLocaleString({ weekday: 'long' })}
+              </Text>
+            </>
+          )}
+        </Card>
+        <Spacer />
+        <ScheduleTimeline date={activeDate} queryData={groups ?? tutors ?? []} choice={choice} />
+        <Spacer />
+        <Button.Group bordered>
+          <Button auto onClick={() => setChoicePickerVisible(true)}>
+            Zmień grupy / prowadzącego
+          </Button>
+          <Button
+            auto
+            onClick={() => setSettingsVisible(true)}
+            icon={<FontAwesomeIcon icon={faCogs} />}
+          />
+        </Button.Group>
+        <Spacer />
+        <ExperimentalGroupPicker
+          groups={queryOptions.groups ?? []}
+          setGroups={(groups) => setQueryOptions({ groups })}
+          visible={groupsPickerVisible}
+          setVisible={setGroupsPickerVisible}
+        />
+        <ExperimentalTutorPicker
+          tutors={queryOptions.tutors ?? []}
+          setTutors={(tutors) => setQueryOptions({ tutors })}
+          visible={tutorsPickerVisible}
+          setVisible={setTutorsPickerVisible}
+        />
+        <ChoicePicker
+          choice={choice ?? ModeChoice.UNDEFINED}
+          setChoice={(choice) => {
+            setChoice(choice)
+            setGroupsPickerVisible(choice === ModeChoice.STUDENT)
+            setTutorsPickerVisible(choice === ModeChoice.TUTOR)
+          }}
+          visible={choicePickerVisible}
+          setVisible={setChoicePickerVisible}
+        />
+        <Settings visible={settingsVisible} setVisible={setSettingsVisible} />
+        <Disclaimer />
+      </Container>
+    )
+  }
+  
 }

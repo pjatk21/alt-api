@@ -5,6 +5,7 @@ import { useLocalStorage } from 'usehooks-ts'
 export type SettingsOptions = Partial<{
   disableSentry: boolean
   olaMode: boolean // everyone need some positivity in theirs live
+  cyprianMode: boolean // why are we still here? Just to suffer?
 }>
 
 type SettingsProps = {
@@ -56,6 +57,7 @@ export function Settings({ visible, setVisible }: SettingsProps) {
         <SettingsSwitch settingsKey={'disableSentry'} description={'Wyłącz Sentry SDK'} />
         <h4>✨Specials✨</h4>
         <SettingsSwitch settingsKey={'olaMode'} description={'✨Ola mode✨'} />
+        <SettingsSwitch settingsKey={'cyprianMode'} description={'🤡Cyprian / !Life mode💀'} />
         <h4>Pomoc</h4>
         <Link href={'https://github.com/pjatk21/alt-api/wiki/Install-PWA'}>
           Jak zainstalować aplikację PWA
