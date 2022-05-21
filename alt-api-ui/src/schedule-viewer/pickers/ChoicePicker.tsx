@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Modal, Text } from '@nextui-org/react'
 import React from 'react'
 
-import type { SettingsOptions } from './Settings'
+import type { SettingsOptions } from '../Settings'
 import { useReadLocalStorage } from 'usehooks-ts'
 
 export enum ModeChoice {
