@@ -91,3 +91,8 @@ docker-compose -f docker-compose.prod.yml up -d
  - Zmiany wprowadzone przez spoełeczność nie muszą (ale mogą) być wspierane przez autorów
  - Wymagane jest używanie yarn
  - Można dodawać koeljne dependecies do package.json i do docker-compose.yml
+
+### Frontend devel
+```
+VITE_API_BASE="https://altapi.kpostek.dev/" yarn dev
+```
