@@ -64,10 +64,28 @@ export function DateNavigator({ date }: DateNavigatorProps) {
   )
 }
 
+function useNaviValidation() {
+  const [params] = useSearchParams()
+  const dateRaw = params.get('date')
+
+  const navi = useNavigate()
+
+  const activeDate = dateRaw ? DateTime.fromISO(dateRaw) : DateTime.now()
+  if (!dateRaw || !activeDate.isValid)
+    navi({
+      pathname: '/app/',
+      search: createSearchParams({
+        date: DateTime.now().toISODate(),
+      }).toString(),
+    })
+
+  return activeDate
+}
+
 export function ScheduleViewer() {
   // TODO: Why positioning of `useLocalStorage()` can impact avaliablitity of this function?
   const [choice, setChoice] = useLocalStorage<ModeChoice>('choice', ModeChoice.UNDEFINED)
-  const [queryOptions, setQueryOptions] = useLocalStorage<AltapiQueryOptions>(
+  const [{groups, tutors}, setQueryOptions] = useLocalStorage<AltapiQueryOptions>(
     'queryOptions',
     {},
   )
@@ -78,7 +96,7 @@ export function ScheduleViewer() {
     localStorage.removeItem('groups')
   }
 
-  const { groups, tutors } = queryOptions
+  // const { groups, tutors } = queryOptions
 
   const [choicePickerVisible, setChoicePickerVisible] = useState(
     (groups ?? []).length === 0 &&
@@ -94,19 +112,7 @@ export function ScheduleViewer() {
 
   const [settingsVisible, setSettingsVisible] = useState(false)
 
-  const [params] = useSearchParams()
-  const dateRaw = params.get('date')
-
-  const navi = useNavigate()
-
-  const activeDate = dateRaw ? DateTime.fromISO(dateRaw) : DateTime.now()
-  if (!dateRaw || !activeDate.isValid)
-    navi({
-      pathname: '/app/',
-      search: createSearchParams({
-        date: DateTime.now().toISODate(),
-      }).toString(),
-    })
+  const activeDate = useNaviValidation()
 
   return (
     <Container xs>
@@ -136,13 +142,13 @@ export function ScheduleViewer() {
       </Button.Group>
       <Spacer />
       <ExperimentalGroupPicker
-        groups={queryOptions.groups ?? []}
+        groups={groups ?? []}
         setGroups={(groups) => setQueryOptions({ groups })}
         visible={groupsPickerVisible}
         setVisible={setGroupsPickerVisible}
       />
       <ExperimentalTutorPicker
-        tutors={queryOptions.tutors ?? []}
+        tutors={tutors ?? []}
         setTutors={(tutors) => setQueryOptions({ tutors })}
         visible={tutorsPickerVisible}
         setVisible={setTutorsPickerVisible}
