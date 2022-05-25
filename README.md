@@ -101,5 +101,5 @@ VITE_API_BASE="https://altapi.kpostek.dev/" yarn dev
 
 posh
 ```
-$VITE_API_BASE="https://altapi.kpostek.dev/"; yarn dev
+$env:VITE_API_BASE = "https://altapi.kpostek.dev/"; yarn dev
 ```
