@@ -93,6 +93,13 @@ docker-compose -f docker-compose.prod.yml up -d
  - Można dodawać koeljne dependecies do package.json i do docker-compose.yml
 
 ### Frontend devel
+
+bash/zsh
 ```
 VITE_API_BASE="https://altapi.kpostek.dev/" yarn dev
+```
+
+posh
+```
+$VITE_API_BASE="https://altapi.kpostek.dev/"; yarn dev
 ```
