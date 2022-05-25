@@ -23,6 +23,7 @@ export type AltapiQueryOptions = Partial<{
   tutors: string[]
 }>
 import { Link } from 'react-router-dom'
+import NavLikeBar from '../components/NavLikeBar'
 
 type DateNaviButtonProps = {
   icon: IconDefinition
@@ -85,7 +86,7 @@ function useNaviValidation() {
 export function ScheduleViewer() {
   // TODO: Why positioning of `useLocalStorage()` can impact avaliablitity of this function?
   const [choice, setChoice] = useLocalStorage<ModeChoice>('choice', ModeChoice.UNDEFINED)
-  const [{groups, tutors}, setQueryOptions] = useLocalStorage<AltapiQueryOptions>(
+  const [{ groups, tutors }, setQueryOptions] = useLocalStorage<AltapiQueryOptions>(
     'queryOptions',
     {},
   )
@@ -116,7 +117,9 @@ export function ScheduleViewer() {
 
   return (
     <Container xs>
-      <Text h2>Plan zajęć</Text>
+      <NavLikeBar>
+        <Text h2>Plan zajęć</Text>
+      </NavLikeBar>
       <Card>
         <DateNavigator date={activeDate} />
         {activeDate.isValid && (

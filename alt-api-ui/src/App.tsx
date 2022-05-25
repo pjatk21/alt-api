@@ -8,6 +8,7 @@ import { DevPage } from './dev/DevPage'
 import { ScheduleViewer } from './schedule-viewer/ScheduleViewer'
 import { useState } from 'react'
 import Toolbox from './toolbox/Toolbox'
+import GroupFinder from './toolbox/GroupFinder'
 
 const queryClient = new QueryClient()
 
@@ -37,6 +38,7 @@ export default function App() {
             <Route path="/scrappers/" element={<Scrappers />} />
             <Route path="/app/" element={<ScheduleViewer />} />
             <Route path="/app/toolbox" element={<Toolbox />} />
+            <Route path="/app/toolbox/group-finder" element={<GroupFinder />} />
             <Route path="/dev/" element={<DevPage />} />
             <Route path="/*" element={<NotFound />} />
           </Routes>
