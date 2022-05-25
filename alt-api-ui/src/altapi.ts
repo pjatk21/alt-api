@@ -6,9 +6,7 @@ import { AltapiQueryOptions } from './schedule-viewer/ScheduleViewer'
 
 export function useIsConfigured() {
   const choice = useReadLocalStorage<ModeChoice>('choice')
-  const queryOptions = useReadLocalStorage<AltapiQueryOptions>(
-    'queryOptions'
-  )
+  const queryOptions = useReadLocalStorage<AltapiQueryOptions>('queryOptions')
   return !!choice && !!queryOptions
 }
 
