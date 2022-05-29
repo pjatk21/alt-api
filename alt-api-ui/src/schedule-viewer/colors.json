@@ -8,5 +8,31 @@
       "type": "Wykład",
       "color": "#69c294"
     }
+  ],
+  "specialisedColors": [
+    {
+      "type": "Wykład Programowanie",
+      "color": "#ad05a2"
+    },
+    {
+      "type": "Ćwiczenia Programowanie",
+      "color": "#d629cb"
+    },
+    {
+      "type":"Wykład Matematyka",
+      "color": "#b58560"
+    },
+    {
+      "type": "Ćwiczenia Matematyka",
+      "color": "#f7c9a6"
+    },
+    {
+      "type": "Wykład Bazy Danych",
+      "color": "#3b5e1e"
+    },
+    {
+      "type": "Ćwiczenia Bazy Danych",
+      "color": "#639e33"
+    }
   ]
 }

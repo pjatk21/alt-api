@@ -8,6 +8,9 @@ import { faRoute } from '@fortawesome/free-solid-svg-icons'
 import { AltapiScheduleEntry } from '../altapi'
 import { ModeChoice } from './pickers/ChoicePicker'
 
+import type { SettingsOptions } from './Settings'
+import { useReadLocalStorage } from 'usehooks-ts'
+
 type ScheduleBlockProps = {
   data: AltapiScheduleEntry
   operationMode: ModeChoice
@@ -17,16 +20,34 @@ type ScheduleBlockProps = {
   }
 }
 
+const settings = useReadLocalStorage<SettingsOptions>('settings')
+
 export function ScheduleBlock({ data, operationMode, displayRanges }: ScheduleBlockProps) {
   const { begin, end } = data
   const timeBegin = begin.startOf('day').plus({ hours: displayRanges.begin })
   const offset = begin.diff(timeBegin).as('hours')
   const heightByDuration = end.diff(begin).as('hours')
 
+  // TODO: change bgColorByType to use specialisedColors if cyprianMode is enabled
+  // Example: PPJ, GUI, SOP, etc. use same color (shade of violet, depending on if it's a lecture or a lab)
+  // While math classes (like AM, MAD, ALG, etc.) use shades of yellow as in colors.json
+  // So if cyprianMode is enabled, we should use specialisedColors instead of colors (from colors.json)
+  // Color groups: Programming Classes, Math Classes, Databases Classes, etc.
+
+  // TODO: add different icons for different types of classes (at the beginning of the classes names) if cyprianMode is enabled
+  // Example: PPJ, GUI, SOP, etc. use same icon (computer)
+  // While math classes (like AM, MAD, ALG, etc.) use different icons (notebook, pencil, or something similar)
+  // So if cyprianMode is enabled, we should add icons for different types of classes
+  // Icon groups: Programming Classes, Math Classes, Databases Classes, etc.
+
+  // Icon groups nad color groups are the same, so we can use the same icon and color for all specified classes
+
   const bgColorByType = colors.filter((c) => c.type === data.type)[0]?.color ?? '#0000FF'
 
   const [modalVisible, setModalVisible] = useState(false)
   const location = buildings.filter((b) => b.name === data.building)[0]
+
+  
 
   // WARNING
   // Check ScheduleTimeline.module.sass for sizes

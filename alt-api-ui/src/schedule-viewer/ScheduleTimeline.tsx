@@ -57,6 +57,21 @@ function describeDayPositively(entries: AltapiScheduleEntry[]) {
   return `na ten dzień są zaplanowane jedynie ✨${entries.length}✨ zajęcia`
 }
 
+function describeDayWithoutAnyHopeForABetterFuture(entries: AltapiScheduleEntry[]) {
+  if (entries.length === 0) return 'Nie ma zaplanowanych zajęć na ten dzień...\nMożesz usiąść do komputera i udawać że zrobisz dziś coś produktywnego - ale powiedzmy sobie szczerze, i tak za dużo Ci się pewnie nie uda...'
+  const begin = entries[0].begin
+  const end = entries.slice(-1)[0].end
+  const duration = end.diff(begin).shiftTo('hours')
+
+  return `O, wspaniale - w tym irytującym dniu masz już zaplanowane jakieś zajęcia...\nNa ten dzień ̶j̶e̶s̶t̶e̶ś̶ ̶s̶k̶a̶z̶a̶n̶y̶ ̶n̶a̶  zaplanowano ${
+    entries.length
+  } p̶r̶a̶c̶e̶ ̶p̶r̶z̶y̶m̶u̶s̶o̶w̶e̶  zajęcia, w godzinach ${begin.toLocaleString({
+    timeStyle: 'short',
+  })} - ${end.toLocaleString({
+    timeStyle: 'short',
+  })} trwające łącznie ${duration.toHuman()}\nCo za wspaniały czas by ̶c̶i̶e̶r̶p̶i̶e̶ć̶  cieszyć się życiem!`
+}
+
 function describeDay(entries: AltapiScheduleEntry[]) {
   if (entries.length === 0) return 'Nie ma zaplanowanych zajęć na ten dzień.'
   const begin = entries[0].begin
@@ -137,7 +152,7 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
       {data && (
         <>
           <Text blockquote>
-            {settings?.olaMode ? describeDayPositively(data) : describeDay(data)}
+            {settings?.olaMode ? describeDayPositively(data) : (settings?.cyprianMode ? describeDayWithoutAnyHopeForABetterFuture(data) : describeDay(data))}
           </Text>
           {data.find((x) => x.isActive) && (
             <>
