@@ -76,7 +76,7 @@ export function TutorFinder() {
           {tutorSchedule &&
             tutorSchedule.entries.slice(0, 30).map((entry) => {
               return (
-                <Grid xs={6}>
+                <Grid md={4} sm={6} xs={12}>
                   <TutorBriefEntry entry={entry} />
                 </Grid>
               )
