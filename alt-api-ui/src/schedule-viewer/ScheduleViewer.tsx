@@ -65,20 +65,11 @@ export function DateNavigator({ date }: DateNavigatorProps) {
   )
 }
 
-function useNaviValidation() {
+function useNaviValidation(): DateTime {
   const [params] = useSearchParams()
   const dateRaw = params.get('date')
 
-  const navi = useNavigate()
-
   const activeDate = dateRaw ? DateTime.fromISO(dateRaw) : DateTime.now()
-  if (!dateRaw || !activeDate.isValid)
-    navi({
-      pathname: '/app/',
-      search: createSearchParams({
-        date: DateTime.now().toISODate(),
-      }).toString(),
-    })
 
   return activeDate
 }
