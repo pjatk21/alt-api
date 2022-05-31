@@ -9,6 +9,7 @@ import { ScheduleViewer } from './schedule-viewer/ScheduleViewer'
 import { useState } from 'react'
 import Toolbox from './toolbox/Toolbox'
 import GroupFinder from './toolbox/GroupFinder'
+import { TutorFinder } from './toolbox/TutorFinder'
 
 const queryClient = new QueryClient()
 
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/app/" element={<ScheduleViewer />} />
             <Route path="/app/toolbox" element={<Toolbox />} />
             <Route path="/app/toolbox/group-finder" element={<GroupFinder />} />
+            <Route path="/app/toolbox/tutor-finder" element={<TutorFinder />} />
             <Route path="/dev/" element={<DevPage />} />
             <Route path="/*" element={<NotFound />} />
           </Routes>

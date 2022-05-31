@@ -12,14 +12,14 @@ export default function NavLikeBar(props: NavLikeBarProps) {
     <>
       <Spacer />
       <Grid.Container alignItems={'center'}>
-        <Grid>
+        {/* <Grid>
           <Button
             auto
             light
             icon={<FontAwesomeIcon icon={faArrowLeft} />}
             onClick={props.backButtonOverrideAction ?? (() => window.history.back())}
           />
-        </Grid>
+        </Grid> */}
         <Grid>{props.children ?? null}</Grid>
       </Grid.Container>
       <Spacer />

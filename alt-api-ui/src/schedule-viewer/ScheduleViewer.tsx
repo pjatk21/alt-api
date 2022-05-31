@@ -9,6 +9,7 @@ import {
   faArrowLeft,
   faArrowRight,
   faCogs,
+  faToolbox,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
 import { ExperimentalGroupPicker } from './pickers/GroupPicker'
@@ -125,6 +126,9 @@ export function ScheduleViewer() {
       <ScheduleTimeline date={activeDate} queryData={groups ?? tutors ?? []} choice={choice} />
       <Spacer />
       <Button.Group bordered>
+        <Link to={'/app/toolbox'}>
+          <Button auto icon={<FontAwesomeIcon icon={faToolbox} />} />
+        </Link>
         <Button auto onClick={() => setChoicePickerVisible(true)}>
           Zmień grupy / prowadzącego
         </Button>
