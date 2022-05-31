@@ -28,7 +28,7 @@ export default function Toolbox() {
         <Grid xs={4} justify={'flex-end'}>
           <Text>Potrzebuję...</Text>
         </Grid>
-        <Grid xs={8}>
+        <Grid md={8}>
           <Grid.Container gap={2} direction={'column'}>
             <Grid>
               <Link to={'/app/toolbox/tutor-finder'}>
