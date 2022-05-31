@@ -9,6 +9,7 @@ import {
   faArrowLeft,
   faArrowRight,
   faCogs,
+  faToolbox,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
 import { ExperimentalGroupPicker } from './pickers/GroupPicker'
@@ -23,6 +24,7 @@ export type AltapiQueryOptions = Partial<{
   tutors: string[]
 }>
 import { Link } from 'react-router-dom'
+import NavLikeBar from '../components/NavLikeBar'
 
 type DateNaviButtonProps = {
   icon: IconDefinition
@@ -64,10 +66,19 @@ export function DateNavigator({ date }: DateNavigatorProps) {
   )
 }
 
+function useNaviValidation(): DateTime {
+  const [params] = useSearchParams()
+  const dateRaw = params.get('date')
+
+  const activeDate = dateRaw ? DateTime.fromISO(dateRaw) : DateTime.now()
+
+  return activeDate
+}
+
 export function ScheduleViewer() {
   // TODO: Why positioning of `useLocalStorage()` can impact avaliablitity of this function?
   const [choice, setChoice] = useLocalStorage<ModeChoice>('choice', ModeChoice.UNDEFINED)
-  const [queryOptions, setQueryOptions] = useLocalStorage<AltapiQueryOptions>(
+  const [{ groups, tutors }, setQueryOptions] = useLocalStorage<AltapiQueryOptions>(
     'queryOptions',
     {},
   )
@@ -78,7 +89,7 @@ export function ScheduleViewer() {
     localStorage.removeItem('groups')
   }
 
-  const { groups, tutors } = queryOptions
+  // const { groups, tutors } = queryOptions
 
   const [choicePickerVisible, setChoicePickerVisible] = useState(
     (groups ?? []).length === 0 &&
@@ -94,23 +105,13 @@ export function ScheduleViewer() {
 
   const [settingsVisible, setSettingsVisible] = useState(false)
 
-  const [params] = useSearchParams()
-  const dateRaw = params.get('date')
-
-  const navi = useNavigate()
-
-  const activeDate = dateRaw ? DateTime.fromISO(dateRaw) : DateTime.now()
-  if (!dateRaw || !activeDate.isValid)
-    navi({
-      pathname: '/app/',
-      search: createSearchParams({
-        date: DateTime.now().toISODate(),
-      }).toString(),
-    })
+  const activeDate = useNaviValidation()
 
   return (
     <Container xs>
-      <Text h2>Plan zajęć</Text>
+      <NavLikeBar>
+        <Text h2>Plan zajęć</Text>
+      </NavLikeBar>
       <Card>
         <DateNavigator date={activeDate} />
         {activeDate.isValid && (
@@ -125,6 +126,9 @@ export function ScheduleViewer() {
       <ScheduleTimeline date={activeDate} queryData={groups ?? tutors ?? []} choice={choice} />
       <Spacer />
       <Button.Group bordered>
+        <Link to={'/app/toolbox'}>
+          <Button auto icon={<FontAwesomeIcon icon={faToolbox} />} />
+        </Link>
         <Button auto onClick={() => setChoicePickerVisible(true)}>
           Zmień grupy / prowadzącego
         </Button>
@@ -136,13 +140,13 @@ export function ScheduleViewer() {
       </Button.Group>
       <Spacer />
       <ExperimentalGroupPicker
-        groups={queryOptions.groups ?? []}
+        groups={groups ?? []}
         setGroups={(groups) => setQueryOptions({ groups })}
         visible={groupsPickerVisible}
         setVisible={setGroupsPickerVisible}
       />
       <ExperimentalTutorPicker
-        tutors={queryOptions.tutors ?? []}
+        tutors={tutors ?? []}
         setTutors={(tutors) => setQueryOptions({ tutors })}
         visible={tutorsPickerVisible}
         setVisible={setTutorsPickerVisible}
