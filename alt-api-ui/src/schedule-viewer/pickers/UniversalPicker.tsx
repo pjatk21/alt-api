@@ -92,7 +92,7 @@ export default function UniversalPicker(props: UniversalPickerProps<string>) {
           auto
           id={'addTutorButton'}
           icon={<FontAwesomeIcon icon={faAdd} />}
-          disabled={!formik.isValid}
+          disabled={!formik.isValid || (props.values.length > 0 && props.operationMode == ModeChoice.TUTOR)}
           onClick={() => formik.handleSubmit()}
         >
           Dodaj
