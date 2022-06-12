@@ -49,6 +49,7 @@ export function ScheduleBlock({ data, operationMode, displayRanges }: ScheduleBl
         od {begin.toLocaleString({ timeStyle: 'short' })} do{' '}
         {end.toLocaleString({ timeStyle: 'short' })}
       </span>
+      <span className={styles.groups}>{data.groups.join(', ')}</span>
       <Modal
         preventClose
         closeButton
