@@ -7,7 +7,7 @@ export default function Toolbox() {
   const isConf = useIsConfigured()
 
   if (!isConf) {
-    ;<Container xs>
+    <Container xs>
       <Text h3>Zanim uzyskasz dostęp do narzędzi, musisz skonfigurować aplikację.</Text>
       <Button>Dokonasz tego tutaj</Button> {/* TODO: dodać link */}
     </Container>
