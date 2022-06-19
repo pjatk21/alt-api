@@ -62,7 +62,7 @@ const tasks: TaskDisposition[] = [
     priority: 60,
     runNewAfter: { weeks: 4 },
     argsFactory: () => ({
-      scrapStart: DateTime.now().plus({ months: 5 }).toJSDate(),
+      scrapStart: DateTime.now().minus({ months: 5 }).toJSDate(),
       scrapUntil: DateTime.now().toJSDate(),
     }),
   },
