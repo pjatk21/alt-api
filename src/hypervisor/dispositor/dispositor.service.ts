@@ -58,6 +58,15 @@ const tasks: TaskDisposition[] = [
     }),
   },
   {
+    name: 'fetch backlog',
+    priority: 60,
+    runNewAfter: { weeks: 4 },
+    argsFactory: () => ({
+      scrapStart: DateTime.now().plus({ months: 5 }).toJSDate(),
+      scrapUntil: DateTime.now().toJSDate(),
+    }),
+  },
+  {
     name: 'fetch to the end of the 2022',
     priority: 10,
     runNewAfter: { day: 1 },
