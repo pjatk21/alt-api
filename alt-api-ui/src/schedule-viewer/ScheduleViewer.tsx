@@ -117,9 +117,9 @@ export function ScheduleViewer() {
         <DateNavigator date={activeDate} />
       </Card>
       <Spacer />
-      <Grid.Container justify="space-evenly">
+      <Grid.Container justify="space-evenly" gap={1}>
         <Grid xs={12} sm={6} md={4}>
-          <Container>
+          <Container css={{ padding: 0 }}>
             <Text css={{ textAlign: 'center' }}>
               {activeDate.toLocaleString({ dateStyle: 'full' })}
             </Text>
@@ -132,7 +132,7 @@ export function ScheduleViewer() {
           </Container>
         </Grid>
         <Grid xs={0} sm={6} md={4}>
-          <Container>
+          <Container css={{ padding: 0 }}>
             <Text css={{ textAlign: 'center' }}>
               {activeDate.plus({ day: 1 }).toLocaleString({ dateStyle: 'full' })}
             </Text>
@@ -145,7 +145,7 @@ export function ScheduleViewer() {
           </Container>
         </Grid>
         <Grid xs={0} md={4}>
-          <Container>
+          <Container css={{ padding: 0 }}>
             <Text css={{ textAlign: 'center' }}>
               {activeDate.plus({ day: 2 }).toLocaleString({ dateStyle: 'full' })}
             </Text>
