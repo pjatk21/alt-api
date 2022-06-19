@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Button, Card, Container, Grid, Input, Spacer, Text } from '@nextui-org/react'
 import { ScheduleTimeline } from './ScheduleTimeline'
 import { DateTime } from 'luxon'
-import { useLocalStorage } from 'usehooks-ts'
+import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts'
 import './ScheduleViewer.sass'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -15,7 +15,7 @@ import {
 import { ExperimentalGroupPicker } from './pickers/GroupPicker'
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { Disclaimer } from './Disclaimer'
-import { Settings } from './Settings'
+import { Settings, SettingsOptions } from './Settings'
 import { ExperimentalTutorPicker } from './pickers/TutorPicker'
 import { ChoicePicker, ModeChoice } from './pickers/ChoicePicker'
 
@@ -82,6 +82,7 @@ export function ScheduleViewer() {
     'queryOptions',
     {},
   )
+  const settings = useReadLocalStorage<SettingsOptions>('settings')
 
   // migration stuff
   if (localStorage.getItem('groups')) {
@@ -108,22 +109,56 @@ export function ScheduleViewer() {
   const activeDate = useNaviValidation()
 
   return (
-    <Container xs>
+    <Container md>
       <NavLikeBar>
         <Text h2>Plan zajęć</Text>
       </NavLikeBar>
       <Card>
         <DateNavigator date={activeDate} />
-        {activeDate.isValid && (
-          <>
-            <Text style={{ textAlign: 'center' }}>
-              {activeDate.toLocaleString({ weekday: 'long' })}
-            </Text>
-          </>
-        )}
       </Card>
       <Spacer />
-      <ScheduleTimeline date={activeDate} queryData={groups ?? tutors ?? []} choice={choice} />
+      <Grid.Container justify="space-evenly">
+        <Grid xs={12} sm={6} md={4}>
+          <Container>
+            <Text css={{ textAlign: 'center' }}>
+              {activeDate.toLocaleString({ dateStyle: 'full' })}
+            </Text>
+            <ScheduleTimeline
+              dontPrintSummary={!settings?.enableSummaries}
+              date={activeDate}
+              queryData={groups ?? tutors ?? []}
+              choice={choice}
+            />
+          </Container>
+        </Grid>
+        <Grid xs={0} sm={6} md={4}>
+          <Container>
+            <Text css={{ textAlign: 'center' }}>
+              {activeDate.plus({ day: 1 }).toLocaleString({ dateStyle: 'full' })}
+            </Text>
+            <ScheduleTimeline
+              dontPrintSummary={!settings?.enableSummaries}
+              date={activeDate.plus({ day: 1 })}
+              queryData={groups ?? tutors ?? []}
+              choice={choice}
+            />
+          </Container>
+        </Grid>
+        <Grid xs={0} md={4}>
+          <Container>
+            <Text css={{ textAlign: 'center' }}>
+              {activeDate.plus({ day: 2 }).toLocaleString({ dateStyle: 'full' })}
+            </Text>
+            <ScheduleTimeline
+              dontPrintSummary={!settings?.enableSummaries}
+              date={activeDate.plus({ day: 2 })}
+              queryData={groups ?? tutors ?? []}
+              choice={choice}
+            />
+          </Container>
+        </Grid>
+      </Grid.Container>
+
       <Spacer />
       <Button.Group bordered>
         <Link to={'/app/toolbox'}>

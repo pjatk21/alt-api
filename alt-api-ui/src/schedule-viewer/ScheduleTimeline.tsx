@@ -17,6 +17,7 @@ type ScheduleTimelineProps = {
   date: DateTime
   queryData: string[]
   choice: ModeChoice
+  dontPrintSummary?: boolean
 }
 
 function timepointerOffset(begin: number) {
@@ -51,9 +52,9 @@ function getSchedule(
 }
 
 function describeDayPositively(entries: AltapiScheduleEntry[]) {
-  if (entries.length === 0) return 'ten dzień jest wolny od zajęć 😌'
+  if (entries.length === 0) return 'ten dzień jest wolny od zajęć'
   if (entries.filter((x) => x.type === 'Ćwiczenia').length === 0)
-    return 'dziś można spokojnie zostać w domku 😌'
+    return 'tego dnia można spokojnie zostać w domku'
   return `na ten dzień są zaplanowane jedynie ✨${entries.length}✨ zajęcia`
 }
 
@@ -78,7 +79,12 @@ function useTimePointer(begin: number) {
   return timePointer
 }
 
-export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelineProps) {
+export function ScheduleTimeline({
+  date,
+  queryData,
+  choice,
+  dontPrintSummary,
+}: ScheduleTimelineProps) {
   const { hour, minute, second } = DateTime.now().toObject()
   const mockedTime = DateTime.fromObject({ ...date.toObject(), hour, minute, second })
 
@@ -136,9 +142,11 @@ export function ScheduleTimeline({ date, queryData, choice }: ScheduleTimelinePr
     <>
       {data && (
         <>
-          <Text blockquote>
-            {settings?.olaMode ? describeDayPositively(data) : describeDay(data)}
-          </Text>
+          {!dontPrintSummary && (
+            <Text blockquote>
+              {settings?.olaMode ? describeDayPositively(data) : describeDay(data)}
+            </Text>
+          )}
           {data.find((x) => x.isActive) && (
             <>
               <Spacer />
