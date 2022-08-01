@@ -18,6 +18,7 @@ type ScheduleTimelineProps = {
   queryData: string[]
   choice: ModeChoice
   dontPrintSummary?: boolean
+  dontPrintHours: boolean
 }
 
 function timepointerOffset(begin: number) {
@@ -64,13 +65,12 @@ function describeDay(entries: AltapiScheduleEntry[]) {
   const end = entries.slice(-1)[0].end
   const duration = end.diff(begin).shiftTo('hours')
 
-  return `Na ten dzień zaplanowano ${
-    entries.length
-  } zajęcia, w godzinach ${begin.toLocaleString({
-    timeStyle: 'short',
-  })} - ${end.toLocaleString({
-    timeStyle: 'short',
-  })} trwające łącznie ${duration.toHuman()}`
+  return `Na ten dzień zaplanowano ${entries.length
+    } zajęcia, w godzinach ${begin.toLocaleString({
+      timeStyle: 'short',
+    })} - ${end.toLocaleString({
+      timeStyle: 'short',
+    })} trwające łącznie ${duration.toHuman()}`
 }
 
 function useTimePointer(begin: number) {
@@ -84,6 +84,7 @@ export function ScheduleTimeline({
   queryData,
   choice,
   dontPrintSummary,
+  dontPrintHours,
 }: ScheduleTimelineProps) {
   const { hour, minute, second } = DateTime.now().toObject()
   const mockedTime = DateTime.fromObject({ ...date.toObject(), hour, minute, second })
@@ -99,14 +100,21 @@ export function ScheduleTimeline({
     select: (x) => x.entries,
   })
 
+  // preload previous day
+  useQuery(['schedule', date.minus({ day: 1 }), queryData, choice], () =>
+    getSchedule(date.minus({ day: 1 }), queryData, choice),
+  )
+
   // preload next day
   useQuery(['schedule', date.plus({ day: 1 }), queryData, choice], () =>
     getSchedule(date.plus({ day: 1 }), queryData, choice),
   )
 
   const displayRanges = {
-    begin: Math.min(...(data ?? []).map((x) => x.begin.hour)),
-    end: Math.max(...(data ?? []).map((x) => x.end.hour)) + 2,
+    begin: 8,
+    // Math.min(...(data ?? []).map((x) => x.begin.hour)),
+    end: 22 + 2,
+    // Math.max(...(data ?? []).map((x) => x.end.hour)) + 2,
   }
 
   const timePointer = useTimePointer(displayRanges.begin)
@@ -127,16 +135,19 @@ export function ScheduleTimeline({
 
   if (isLoading || !data)
     return (
-      <Card>
-        <Loading color={'primary'} textColor={'primary'}>
-          Pobieranie planu zajęć
-        </Loading>
-      </Card>
+      <div className={styles.timelineContainer}>
+        <Spacer />
+        <div className={styles.backgroundLoading}>
+          <Loading type="gradient" color={'primary'} textColor={'primary'}>
+            Pobieranie planu zajęć
+          </Loading>
+        </div>
+      </div>
     )
 
-  if (data.length === 0) {
-    return <Card>Brak zajęć tego dnia</Card>
-  }
+  // if (data.length === 0) {
+  //   return <Card>Brak zajęć tego dnia</Card>
+  // }
 
   return (
     <>
@@ -160,11 +171,14 @@ export function ScheduleTimeline({
         <div className={styles.background}>
           {[...Array(displayRanges.end - displayRanges.begin)].map((x, y) => {
             const h = DateTime.fromObject({ hour: displayRanges.begin + y })
+
             return (
               <div key={y} className={styles.line}>
-                <div>
-                  <span>{h.toLocaleString({ timeStyle: 'short', hourCycle: 'h24' })}</span>
-                </div>
+                {dontPrintHours ? null : (
+                  <div>
+                    <span>{h.toLocaleString({ timeStyle: 'short', hourCycle: 'h24' })}</span>
+                  </div>
+                )}
                 <hr />
               </div>
             )
@@ -186,6 +200,11 @@ export function ScheduleTimeline({
               <hr style={{ top: timePointer * 55 + 1 }} />
             </div>
           )}
+        {displayRanges.begin < mockedTime.hour && displayRanges.end > mockedTime.hour && (
+          <div className={styles.timePointerOtherDay}>
+            <hr style={{ top: timePointer * 55 + 1 }} />
+          </div>
+        )}
       </div>
     </>
   )

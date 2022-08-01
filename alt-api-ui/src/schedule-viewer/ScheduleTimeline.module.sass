@@ -1,6 +1,6 @@
 .timelineContainer
   --timeline-padding-vertical: 10px
-  --timeline-padding-horizontal: 20px
+  --timeline-padding-horizontal: 10px
   --timeline-hour-height: 55px
   --timeline-time-width: 45px
 
@@ -8,9 +8,20 @@
   border: none
   flex-direction: column
 
-  .background
+  .day
+    display: absolute
+    margin: 1em
+    padding: 0.25em
+    width: 1.75em
+    height: 1.75em
+    border-radius: 10px
+    background-color: red
+  .backgroundLoading
     padding: var(--timeline-padding-vertical) var(--timeline-padding-horizontal)
-    border-radius: var(--timeline-padding-horizontal)
+    display: flex
+    justify-content: center
+    background-color: #c9c9c91a
+  .background
     background-color: #c9c9c91a
     z-index: 10
 
@@ -22,17 +33,17 @@
       height: var(--timeline-hour-height)
 
       span
-        display: block
+        //display: block
         font-family: 'JetBrains Mono', monospace
         font-size: 9pt
-        margin: 0
+        padding-left: 1em
+        padding-right: 1em
         width: var(--timeline-time-width)
         user-select: none
         -moz-user-select: none
         -webkit-user-select: none
 
       hr
-        margin: 0
         width: 100%
         border-color: #6b6b6b75
 
@@ -42,11 +53,19 @@
 
 
   .timePointer
-    z-index: 30
-
     hr
+      z-index: 40
       position: absolute
       width: 100%
       border-color: red
       background-color: red
+      height: 0.1em
+
+  .timePointerOtherDay
+    hr
+      z-index: 0
+      position: absolute
+      width: 100%
+      border-color: grey
+      border-style: dashed
       height: 0.1em

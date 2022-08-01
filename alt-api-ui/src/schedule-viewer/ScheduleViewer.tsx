@@ -25,6 +25,7 @@ export type AltapiQueryOptions = Partial<{
 }>
 import { Link } from 'react-router-dom'
 import NavLikeBar from '../components/NavLikeBar'
+import { ScheduleTimelineHeader } from './ScheduleTimelineHeader'
 
 type DateNaviButtonProps = {
   icon: IconDefinition
@@ -43,7 +44,7 @@ export function DateNavigator({ date }: DateNavigatorProps) {
   const navi = useNavigate()
 
   return (
-    <Grid.Container gap={1} justify={'center'}>
+    <Grid.Container gap={1}>
       <Grid>
         <Link to={'/app/?date=' + date.minus({ day: 1 }).toISODate()}>
           <DateNaviButton icon={faArrowLeft} />
@@ -94,8 +95,8 @@ export function ScheduleViewer() {
 
   const [choicePickerVisible, setChoicePickerVisible] = useState(
     (groups ?? []).length === 0 &&
-      (tutors ?? []).length === 0 &&
-      choice === ModeChoice.UNDEFINED,
+    (tutors ?? []).length === 0 &&
+    choice === ModeChoice.UNDEFINED,
   )
   const [groupsPickerVisible, setGroupsPickerVisible] = useState(
     (groups ?? []).length === 0 && choice === ModeChoice.STUDENT,
@@ -107,72 +108,67 @@ export function ScheduleViewer() {
   const [settingsVisible, setSettingsVisible] = useState(false)
 
   const activeDate = useNaviValidation()
-
+  const activeWeek = []
+  for (let i = 0; i < 7; i++) activeWeek.push(activeDate.plus({ day: i }))
   return (
-    <Container md>
-      <NavLikeBar>
-        <Text h2>Plan zajęć</Text>
-      </NavLikeBar>
-      <Card>
-        <DateNavigator date={activeDate} />
-      </Card>
-      <Spacer />
-      <Grid.Container justify="space-evenly" gap={1}>
-        <Grid xs={12} sm={6} md={4}>
-          <Container css={{ padding: 0 }}>
-            <Text css={{ textAlign: 'center' }}>
-              {activeDate.toLocaleString({ dateStyle: 'full' })}
-            </Text>
-            <ScheduleTimeline
-              dontPrintSummary={!settings?.enableSummaries}
-              date={activeDate}
-              queryData={groups ?? tutors ?? []}
-              choice={choice}
-            />
-          </Container>
+    <Container xl>
+      <Grid.Container gap={0} justify="space-between">
+        <Grid>
+          <Text h2 margin={0}>
+            Plan zajęć
+          </Text>
         </Grid>
-        <Grid xs={0} sm={6} md={4}>
-          <Container css={{ padding: 0 }}>
-            <Text css={{ textAlign: 'center' }}>
-              {activeDate.plus({ day: 1 }).toLocaleString({ dateStyle: 'full' })}
-            </Text>
-            <ScheduleTimeline
-              dontPrintSummary={!settings?.enableSummaries}
-              date={activeDate.plus({ day: 1 })}
-              queryData={groups ?? tutors ?? []}
-              choice={choice}
-            />
-          </Container>
-        </Grid>
-        <Grid xs={0} md={4}>
-          <Container css={{ padding: 0 }}>
-            <Text css={{ textAlign: 'center' }}>
-              {activeDate.plus({ day: 2 }).toLocaleString({ dateStyle: 'full' })}
-            </Text>
-            <ScheduleTimeline
-              dontPrintSummary={!settings?.enableSummaries}
-              date={activeDate.plus({ day: 2 })}
-              queryData={groups ?? tutors ?? []}
-              choice={choice}
-            />
-          </Container>
+        <Grid>
+          <Grid.Container gap={2} justify="center">
+            <Grid>
+              <DateNavigator date={activeDate} />
+            </Grid>
+            <Grid>
+              <Button.Group bordered>
+                <Link to={'/app/toolbox'}>
+                  <Button auto icon={<FontAwesomeIcon icon={faToolbox} />} />
+                </Link>
+                <Button auto onClick={() => setChoicePickerVisible(true)}>
+                  Zmień grupy / prowadzącego
+                </Button>
+                <Button
+                  auto
+                  onClick={() => setSettingsVisible(true)}
+                  icon={<FontAwesomeIcon icon={faCogs} />}
+                />
+              </Button.Group>
+            </Grid>
+          </Grid.Container>
         </Grid>
       </Grid.Container>
-
       <Spacer />
-      <Button.Group bordered>
-        <Link to={'/app/toolbox'}>
-          <Button auto icon={<FontAwesomeIcon icon={faToolbox} />} />
-        </Link>
-        <Button auto onClick={() => setChoicePickerVisible(true)}>
-          Zmień grupy / prowadzącego
-        </Button>
-        <Button
-          auto
-          onClick={() => setSettingsVisible(true)}
-          icon={<FontAwesomeIcon icon={faCogs} />}
-        />
-      </Button.Group>
+
+      <Grid.Container gap={0} justify="space-between">
+        <Grid>
+          <Text h2>{activeDate.monthLong}</Text>
+        </Grid>
+        <Grid>
+          <Text h1>{activeDate.year}</Text>
+        </Grid>
+      </Grid.Container>
+      <Container style={{ borderRadius: '5px' }}>
+        <Grid.Container justify="space-evenly" gap={0}>
+          {activeWeek.map((date, index) => (
+            <Grid md key={date.toISODate()}>
+              <Container css={{ padding: 0 }}>
+                <ScheduleTimelineHeader activeDate={date} />
+                <ScheduleTimeline
+                  dontPrintSummary={!settings?.enableSummaries}
+                  date={date}
+                  queryData={groups ?? tutors ?? []}
+                  choice={choice}
+                  dontPrintHours={index !== 0}
+                />
+              </Container>
+            </Grid>
+          ))}
+        </Grid.Container>
+      </Container>
       <Spacer />
       <ExperimentalGroupPicker
         groups={groups ?? []}
