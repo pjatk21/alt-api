@@ -72,7 +72,7 @@ const tasks: TaskDisposition[] = [
     runNewAfter: { day: 1 },
     argsFactory: () => ({
       scrapStart: DateTime.now().plus({ days: 21 }).toJSDate(),
-      scrapUntil: DateTime.fromObject({ year: 2022, month: 6, day: 30 }).toJSDate(),
+      scrapUntil: DateTime.fromObject({ year: 2023, month: 2, day: 14 }).toJSDate(),
     }),
   },
 ]
