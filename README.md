@@ -12,7 +12,7 @@
   
   > *Status projektu:* __maintenance__ <br/>
   > *Nowy projekt: [Puppy](https://github.com/pjatk21/puppy-api)* <br/>
-  > *Obecny projekt będzie wciąż utrzymywany do lutego 2025, jednakże nie będzie aktywnie rozwijany*
+  > *Obecny projekt będzie wciąż utrzymywany do lutego 2023, jednakże nie będzie aktywnie rozwijany*
   
 </div>
 
