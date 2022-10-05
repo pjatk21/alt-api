@@ -33,19 +33,11 @@ type TaskDisposition = {
 
 const tasks: TaskDisposition[] = [
   {
-    name: 'fetch to the end of the week',
+    name: 'fetch next 7 days',
     priority: 50,
-    runNewAfter: { minutes: 45 },
+    runNewAfter: { hour: 2 },
     argsFactory: () => ({
-      scrapUntil: DateTime.now().endOf('week').toJSDate(),
-    }),
-  },
-  {
-    name: 'fetch next 5 days',
-    priority: 45,
-    runNewAfter: { hour: 6 },
-    argsFactory: () => ({
-      scrapUntil: DateTime.now().plus({ days: 5 }).toJSDate(),
+      scrapUntil: DateTime.now().plus({ days: 6 }).toJSDate(),
     }),
   },
   {
@@ -53,13 +45,13 @@ const tasks: TaskDisposition[] = [
     priority: 40,
     runNewAfter: { hour: 12 },
     argsFactory: () => ({
-      scrapStart: DateTime.now().plus({ days: 5 }).toJSDate(),
+      scrapStart: DateTime.now().plus({ days: 7 }).toJSDate(),
       scrapUntil: DateTime.now().plus({ days: 21 }).toJSDate(),
     }),
   },
   {
     name: 'fetch backlog',
-    priority: 60,
+    priority: 5,
     runNewAfter: { weeks: 4 },
     argsFactory: () => ({
       scrapStart: DateTime.now().minus({ months: 5 }).toJSDate(),
@@ -68,7 +60,7 @@ const tasks: TaskDisposition[] = [
   },
   {
     name: 'fetch to the end of the 2022',
-    priority: 10,
+    priority: 20,
     runNewAfter: { day: 1 },
     argsFactory: () => ({
       scrapStart: DateTime.now().plus({ days: 21 }).toJSDate(),
