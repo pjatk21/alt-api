@@ -1,3 +1,9 @@
+> **Warning**
+>
+> Ten projekt został porzucony, nie jest oficjalnie hostowany i nie będzie rozwijany.
+>
+> Jego następcą został [CaaTS](https://caats.app/).
+
 <div align="center">
   <img width="340" alt="AltapiHeading" src="https://user-images.githubusercontent.com/30326322/156919789-c4132a16-dc5d-4d17-a13d-02d74a8360f8.png">
   <p>Twórz zapytania do planu zajęć PJATK w ciągu milisekund. Dobra alternatywa dla oryginalnej strony z 2010.</p>
